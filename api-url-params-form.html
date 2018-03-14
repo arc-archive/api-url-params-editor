@@ -1,0 +1,252 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../marked-element/marked-element.html">
+<link rel="import" href="../api-property-form-item/api-property-form-item.html">
+
+<dom-module id="api-url-params-form">
+  <template strip-whitespace>
+    <style>
+    :host {
+      display: block;
+      @apply --raml-request-parameters-form;
+
+      --paper-input-container-label: {
+        color: var(--raml-request-parameters-editor-input-label-color, rgba(0, 0, 0, 0.48));
+      }
+    }
+
+    .param-value {
+      @apply --raml-request-parameters-editor-row;
+    }
+
+    .param-value.optional {
+      display: none;
+    }
+
+    .param-value.required {
+    }
+
+    .param-value.optional.with-optional {
+      display: block;
+    }
+
+    .param-value .input {
+      @apply --layout-horizontal;
+      @apply --layout-flex;
+    }
+
+    .docs {
+      @apply --arc-font-common-base;
+      font-size: 13px !important;
+      font-weight: 200;
+      line-height: 24px;
+      color: var(--inline-documentation-color, rgba(0, 0, 0, 0.87));
+    }
+
+    .markdown-html * {
+      font-size: 13px !important;
+    }
+
+    .markdown-html p:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .markdown-html p:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .help-icon {
+      color: var(--accent-color, rgba(0, 0, 0, 0.74));
+      transition: opacity 0.2s ease-in-out;
+      opacity: 0.54;
+    }
+
+    .help-icon:hover {
+      opacity: 0.74;
+    }
+
+    .value-input {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+      @apply --layout-flex;
+    }
+
+    .value-input.is-array {
+      @apply --layout-end;
+      @apply --raml-request-parameters-form-array-paramtere;
+    }
+
+    .optional-toggle-button {
+      font-size: 13px;
+      @apply --raml-request-parameters-form-optional-toggle-button;
+    }
+
+    api-property-form-item {
+      @apply --layout-flex;
+      margin-bottom: 8px;
+    }
+
+    api-property-form-item[is-array] {
+      margin-top: 8px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+    </style>
+    <iron-form>
+      <form enctype="application/json">
+        <dom-repeat items="{{model}}" items-repeater>
+          <template>
+            <div class$="[[_computeRowClass(item, optionalOpened)]]">
+              <div class$="value-input [[_computeTypeClass(item.isArray)]]">
+                <span>
+                  <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
+                </span>
+                <api-property-form-item
+                  model="[[item]]"
+                  name="[[item.name]]"
+                  value="{{item.value}}"
+                  required$="[[item.schema.required]]"></api-property-form-item>
+                <template is="dom-if" if="[[item.hasDescription]]">
+                  <span>
+                    <paper-icon-button class="help-icon" suffix icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
+                  </span>
+                </template>
+              </div>
+              <template is="dom-if" if="[[item.hasDescription]]">
+                <div class="docs">
+                  <iron-collapse>
+                    <marked-element markdown="[[item.description]]">
+                      <div class="markdown-html markdown-body"></div>
+                    </marked-element>
+                  </iron-collapse>
+                </div>
+              </template>
+            </div>
+          </template>
+        </dom-repeat>
+      </form>
+    </iron-form>
+  </template>
+  <script>
+  /**
+   *
+   *
+   *
+   * @customElement
+   * @polymer
+   * @demo demo/index.html
+   * @memberof ApiElements
+   * @appliesMixin Polymer.IronValidatableBehavior
+   */
+  class ApiUrlParamsForm extends Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
+    static get is() {
+      return 'api-url-params-form';
+    }
+    static get properties() {
+      return {
+        /**
+         * View model to use to render the form.
+         * See `api-url-params-editor` element for more information.
+         */
+        model: Array,
+        /**
+         * Set to true to show optional parameters (not required by the API)
+         */
+        optionalOpened: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * The form can display query or URI parameters. When anything change in the form
+         * it will send a corresponding custom event (`query-parameter-changed` or
+         * `uri-parameter-changed`). To make this happen set the value of this property to
+         * either `query` or `uri`.
+         */
+        formType: String
+      };
+    }
+    /**
+     * Computes class name for each row depending on the item.
+     *
+     * @param {Object} item Model item
+     * @param {Boolean} optionalOpened True if optional parameters are rendered.
+     * @return {String}
+     */
+    _computeRowClass(item, optionalOpened) {
+      let clazz = 'param-value';
+      if (item.required) {
+        clazz += ' required';
+      } else {
+        clazz += ' optional';
+      }
+      if (optionalOpened) {
+        clazz += ' with-optional';
+      }
+      return clazz;
+    }
+
+    /**
+     * Computes array class for the input element.
+     */
+    _computeTypeClass(isArray) {
+      return isArray ? 'is-array' : '';
+    }
+
+    /**
+     * Toggles visibility of optional parameters.
+     */
+    toggleOptionalParams() {
+      this.optionalOpened = !this.optionalOpened;
+    }
+    /**
+     * Returns a reference to the form element, if the DOM is ready.
+     *
+     * @return {IronForm} Iron form element
+     */
+    _getForm() {
+      if (!this.$) {
+        this.$ = {};
+      }
+      if (!this.$.form && this.shadowRoot) {
+        this.$.form = this.shadowRoot.querySelector('iron-form');
+      }
+      return this.$.form;
+    }
+
+    // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
+    // attribute automatically, which should be used for styling.
+    _getValidity() {
+      return this._getForm().validate();
+    }
+    // Link to the form's serialize function.
+    serializeForm() {
+      return this._getForm().serializeForm();
+    }
+    // Opens the documentation for item.
+    _openDocs(e) {
+      const form = this._getForm();
+      const template = form.querySelector('[items-repeater]');
+      const model = template.modelForElement(e.target);
+      const collapse = form.querySelector('.param-value:nth-child(' + (model.index + 1) +
+        ') iron-collapse');
+      if (!collapse) {
+        return;
+      }
+      collapse.opened = !collapse.opened;
+    }
+  }
+
+  window.customElements.define(ApiUrlParamsForm.is, ApiUrlParamsForm);
+  </script>
+</dom-module>
