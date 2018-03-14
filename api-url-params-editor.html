@@ -14,25 +14,6 @@
       @apply --api-url-params-editor;
     }
 
-    h3 {
-      @apply --raml-request-parameters-editor-subheader;
-      @apply --api-url-params-editor-editor-subheader;
-    }
-
-    .params-title {
-      @apply --layout-horizontal;
-      @apply --layout-center;
-    }
-
-    .params-title h3 {
-      display: inline-block;
-      margin-right: 12px;
-    }
-
-    .params-title paper-checkbox {
-      --paper-checkbox-label-color: var(--api-url-params-editor-optional-checkbox-label-color, rgba(0, 0, 0, 0.54));
-    }
-
     .empty-message {
       @apply --raml-request-parameters-editor-no-params;
       @apply --api-url-params-editor-no-params;
@@ -52,19 +33,12 @@
     </section>
     <template is="dom-if" if="[[hasUriParameters]]">
       <section>
-        <h3>URI parameters</h3>
-        <api-url-params-form id="uriParametersForm" form-type="uri" model="{{uriModel}}" optional-opened></api-url-params-form>
+        <api-url-params-form id="uriParametersForm" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened></api-url-params-form>
       </section>
     </template>
     <template is="dom-if" if="[[hasQueryParameters]]">
       <section>
-        <div class="params-title">
-          <h3>Query parameters</h3>
-          <template is="dom-if" if="[[hasOptional]]">
-            <paper-checkbox hidden$="[[!hasOptional]]" checked="{{optionalOpened}}">Show optional parameters</paper-checkbox>
-          </template>
-        </div>
-        <api-url-params-form id="queryParametersForm" form-type="query" optional-opened="[[optionalOpened]]" model="{{queryModel}}"></api-url-params-form>
+        <api-url-params-form id="queryParametersForm" form-title="Query parameters" allow-hide-optional form-type="query" model="{{queryModel}}"></api-url-params-form>
       </section>
     </template>
   </template>
@@ -113,7 +87,8 @@
      * @memberof ApiElements
      * @appliesMixin Polymer.IronValidatableBehavior
      */
-    class ApiUrlParamsEditor extends Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
+    class ApiUrlParamsEditor extends
+      Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
       static get is() { return 'api-url-params-editor'; }
       static get properties() {
         return {
@@ -153,17 +128,6 @@
             type: Boolean,
             computed: '_computeHasParameters(hasQueryParameters, hasUriParameters)'
           },
-          /**
-           * Computed value. True if current query parameters set has any
-           * optional value.
-           */
-          hasOptional: {
-            type: Boolean,
-            computed: '_computeHasOptionalParameters(queryModel.*)',
-            notify: true
-          },
-          // If true the optional query parameters will be displayed in the table.
-          optionalOpened: Boolean,
           // regexp to match query parameters model change
           _queryModelMatcher: {
             type: Object,
@@ -233,21 +197,6 @@
           validUrl = this.shadowRoot.querySelector('#queryParametersForm').validate();
         }
         return validUri && validUrl;
-      }
-      /**
-       * Computes if any of the query parameters are required.
-       */
-      _computeHasOptionalParameters(record) {
-        if (!record || !record.base || !record.base.length) {
-          return false;
-        }
-        let list = record.base;
-        for (let i = 0, len = list.length; i < len; i++) {
-          if (!list[i].required) {
-            return true;
-          }
-        }
-        return false;
       }
       /**
        * Handler for query model change in path.
@@ -330,7 +279,11 @@
         });
         this.dispatchEvent(ev);
       }
-
+      /**
+       * Update generated value for a model.
+       * @param {String} type Data model type. `query` or `uri`
+       * @param {Object} item Model item
+       */
       _updateValue(type, item) {
         const path = type + 'Value';
         const enabled = item.schema && item.schema.enabled;
@@ -344,7 +297,10 @@
         }
         this.set(path, result);
       }
-
+      /**
+       * Updates value for entire model.
+       * @param {String} type Data model type. `query` or `uri`
+       */
       _updateModelValue(type) {
         const path = type + 'Value';
         const model = type === 'uri' ? this.uriModel : this.queryModel;

@@ -16,14 +16,12 @@
     :host {
       display: block;
       @apply --raml-request-parameters-form;
-
-      --paper-input-container-label: {
-        color: var(--raml-request-parameters-editor-input-label-color, rgba(0, 0, 0, 0.48));
-      }
+      @apply --api-url-params-form;
     }
 
     .param-value {
       @apply --raml-request-parameters-editor-row;
+      @apply --api-url-params-form-row;
     }
 
     .param-value.optional {
@@ -31,6 +29,7 @@
     }
 
     .param-value.required {
+      @apply --api-url-params-form-required;
     }
 
     .param-value.optional.with-optional {
@@ -47,6 +46,7 @@
       font-size: 13px !important;
       font-weight: 200;
       line-height: 24px;
+      margin-left: 24px;
       color: var(--inline-documentation-color, rgba(0, 0, 0, 0.87));
     }
 
@@ -65,18 +65,18 @@
     }
 
     .help-icon {
-      color: var(--accent-color, rgba(0, 0, 0, 0.74));
-      transition: opacity 0.2s ease-in-out;
-      opacity: 0.54;
+      margin-top: 16px;
+      color: var(--from-row-action-icon-color, var(--icon-button-color, rgba(0, 0, 0, 0.74)));
+      transition: color 0.2s linear;
     }
 
     .help-icon:hover {
-      opacity: 0.74;
+      color: var(--from-row-action-icon-color-hover, var(--accent-color, rgba(0, 0, 0, 0.74)));
     }
 
     .value-input {
       @apply --layout-horizontal;
-      @apply --layout-center;
+      @apply --layout-start;
       @apply --layout-flex;
     }
 
@@ -102,12 +102,42 @@
     [hidden] {
       display: none !important;
     }
+
+    .enable-checkbox {
+      margin-top: 32px;
+      margin-right: 8px;
+    }
+
+    h3 {
+      @apply --raml-request-parameters-editor-subheader;
+      @apply --api-url-params-editor-editor-subheader;
+    }
+
+    .params-title {
+      @apply --layout-horizontal;
+      @apply --layout-center;
+    }
+
+    .params-title h3 {
+      display: inline-block;
+      margin-right: 12px;
+    }
+
+    .params-title paper-checkbox {
+      --paper-checkbox-label-color: var(--api-url-params-editor-optional-checkbox-label-color, rgba(0, 0, 0, 0.54));
+    }
     </style>
+    <div class="params-title">
+      <h3 id$="[[_titleId]]">[[formTitle]]</h3>
+      <template is="dom-if" if="[[_renderOptionalCheckbox]]">
+        <paper-checkbox checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
+      </template>
+    </div>
     <iron-form>
       <form enctype="application/json">
         <dom-repeat items="{{model}}" items-repeater>
           <template>
-            <div class$="[[_computeRowClass(item, optionalOpened)]]">
+            <div class$="[[_computeRowClass(item, allowHideOptional, optionalOpened)]]">
               <div class$="value-input [[_computeTypeClass(item.isArray)]]">
                 <span>
                   <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
@@ -116,7 +146,7 @@
                   model="[[item]]"
                   name="[[item.name]]"
                   value="{{item.value}}"
-                  required$="[[item.schema.required]]"></api-property-form-item>
+                  required$="[[item.required]]"></api-property-form-item>
                 <template is="dom-if" if="[[item.hasDescription]]">
                   <span>
                     <paper-icon-button class="help-icon" suffix icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
@@ -139,6 +169,14 @@
     </iron-form>
   </template>
   <script>
+  if (!window.ArcBehaviors) {
+    window.ArcBehaviors = {};
+  }
+  if (!window.ArcBehaviors.DomHelper) {
+    window.ArcBehaviors.DomHelper = {
+      NextID: 1
+    };
+  }
   /**
    *
    *
@@ -161,7 +199,7 @@
          */
         model: Array,
         /**
-         * Set to true to show optional parameters (not required by the API)
+         * Computed value, set to true to show optional parameters (not required by the API)
          */
         optionalOpened: {
           type: Boolean,
@@ -173,21 +211,65 @@
          * `uri-parameter-changed`). To make this happen set the value of this property to
          * either `query` or `uri`.
          */
-        formType: String
+        formType: String,
+        /**
+         * Computed value. True if current query parameters set has any
+         * optional value.
+         */
+        hasOptional: {
+          type: Boolean,
+          computed: '_computeHasOptionalParameters(allowHideOptional, model)',
+          notify: true
+        },
+        /**
+         * If set it computes `hasOptional` property and shows checkbox
+         * to show / hide optional properties.
+         */
+        allowHideOptional: Boolean,
+        /**
+         * Computed flag to determine if optional checkbox can be rendered
+         */
+        _renderOptionalCheckbox: {
+          type: Boolean,
+          computed: '_computeRenderCheckbox(allowHideOptional, hasOptional)'
+        },
+        /**
+         * Title do render
+         */
+        formTitle: String,
+        // Generated ID of the title element.
+        _titleId: String
       };
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+      this._generateTitleId();
+      this._ensureAttribute('role', 'form');
+      this._ensureAttribute('aria-labelledby', this._titleId);
+    }
+    /**
+     * Generates ``
+     * @return {[type]} [description]
+     */
+    _generateTitleId() {
+      if (!this._titleId || this._titleId === '') {
+        this._titleId =  'arc-id-' + window.ArcBehaviors.DomHelper.NextID++;
+      }
     }
     /**
      * Computes class name for each row depending on the item.
      *
      * @param {Object} item Model item
+     * @param {Boolean} allowHideOptional
      * @param {Boolean} optionalOpened True if optional parameters are rendered.
      * @return {String}
      */
-    _computeRowClass(item, optionalOpened) {
+    _computeRowClass(item, allowHideOptional, optionalOpened) {
       let clazz = 'param-value';
       if (item.required) {
         clazz += ' required';
-      } else {
+      } else if (allowHideOptional) {
         clazz += ' optional';
       }
       if (optionalOpened) {
@@ -244,6 +326,24 @@
         return;
       }
       collapse.opened = !collapse.opened;
+    }
+    /**
+     * Computes if any of the query parameters are required.
+     */
+    _computeHasOptionalParameters(allowHideOptional, model) {
+      if (!allowHideOptional || !model) {
+        return false;
+      }
+      for (let i = 0, len = model.length; i < len; i++) {
+        if (!model[i].required) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    _computeRenderCheckbox(render, has) {
+      return render && has;
     }
   }
 
