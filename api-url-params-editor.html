@@ -28,18 +28,14 @@
       display: none !important;
     }
     </style>
-    <section hidden$="[[hasParameters]]" class="empty-message">
+    <section hidden$="[[hasParameters]]" role="region" class="empty-message">
       <p>This endpoint doesn't require to declare query or URI parameters.</p>
     </section>
     <template is="dom-if" if="[[hasUriParameters]]">
-      <section>
-        <api-url-params-form id="uriParametersForm" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened></api-url-params-form>
-      </section>
+      <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened></api-url-params-form>
     </template>
     <template is="dom-if" if="[[hasQueryParameters]]">
-      <section>
-        <api-url-params-form id="queryParametersForm" form-title="Query parameters" allow-hide-optional form-type="query" model="{{queryModel}}"></api-url-params-form>
-      </section>
+      <api-url-params-form id="queryParametersForm" role="region" form-title="Query parameters" allow-hide-optional form-type="query" model="{{queryModel}}"></api-url-params-form>
     </template>
   </template>
   <script>
@@ -80,6 +76,26 @@
      * manually, without using `api-url-input`. If not, then it's easier to
      * use `api-request-editor` and an element tah bound all request editors
      * togeter and produce commong HTTP request object.
+     *
+     * ## Example
+     *
+     * See demo page for full example, including AMF model to view model
+     * transformation.
+     *
+     * ```html
+     * <!-- Inside Polymer element / app -->
+     * <api-view-model-transformer amf-model="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
+     * <api-view-model-transformer amf-model="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
+     * <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]"></api-url-params-editor>
+     * ```
+     *
+     * ## Styling
+     *
+     * Custom property | Description | Default
+     * ----------------|-------------|----------
+     * `--api-url-params-editor` | Mixin applied to this element | `{}`
+     * `--api-url-params-editor-no-params` | Mixin applied to "empty info" message container | `{}`
+     * `--api-url-params-editor-no-params-message` | Mixin applied to "empty info" container | `{}`
      *
      * @customElement
      * @polymer
@@ -172,7 +188,7 @@
        * @return {Boolean}
        */
       _computeHasData(model) {
-        return !!(model && model.length);
+        return !!(model instanceof Array && model.length);
       }
       /**
        * Computes value for `hasParameters` property.
@@ -182,7 +198,7 @@
        * @return {Boolean} True if any of the arguments is true
        */
       _computeHasParameters(qp, up) {
-        return qp || up;
+        return !!(qp || up);
       }
 
       // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
@@ -264,7 +280,7 @@
        */
       _notifyChange(type, model) {
         let enabled = model.schema && model.schema.enabled;
-        if (typeof enabled === 'boolean') {
+        if (typeof enabled !== 'boolean') {
           enabled = true;
         }
         const ev = new CustomEvent(type + '-parameter-changed', {

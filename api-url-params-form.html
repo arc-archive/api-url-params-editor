@@ -42,26 +42,15 @@
     }
 
     .docs {
-      @apply --arc-font-common-base;
-      font-size: 13px !important;
-      font-weight: 200;
-      line-height: 24px;
-      margin-left: 24px;
+      @apply --arc-font-body1;
       color: var(--inline-documentation-color, rgba(0, 0, 0, 0.87));
+      margin-left: 32px;
+      margin-right: 40px;
     }
 
-    .markdown-html * {
-      font-size: 13px !important;
-    }
-
-    .markdown-html p:first-child {
-      margin-top: 0;
-      padding-top: 0;
-    }
-
-    .markdown-html p:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
+    marked-element {
+      background-color: #FFF3E0;
+      padding: 4px;
     }
 
     .help-icon {
@@ -139,24 +128,20 @@
           <template>
             <div class$="[[_computeRowClass(item, allowHideOptional, optionalOpened)]]">
               <div class$="value-input [[_computeTypeClass(item.isArray)]]">
-                <span>
-                  <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
-                </span>
+                <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
                 <api-property-form-item
                   model="[[item]]"
                   name="[[item.name]]"
                   value="{{item.value}}"
                   required$="[[item.required]]"></api-property-form-item>
-                <template is="dom-if" if="[[item.hasDescription]]">
-                  <span>
-                    <paper-icon-button class="help-icon" suffix icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
-                  </span>
+                <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
+                  <paper-icon-button class="help-icon" suffix icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
                 </template>
               </div>
-              <template is="dom-if" if="[[item.hasDescription]]">
+              <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
                 <div class="docs">
                   <iron-collapse>
-                    <marked-element markdown="[[item.description]]">
+                    <marked-element markdown="[[_computeDocumentation(item)]]">
                       <div class="markdown-html markdown-body"></div>
                     </marked-element>
                   </iron-collapse>
@@ -187,7 +172,8 @@
    * @memberof ApiElements
    * @appliesMixin Polymer.IronValidatableBehavior
    */
-  class ApiUrlParamsForm extends Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
+  class ApiUrlParamsForm extends
+  Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
     static get is() {
       return 'api-url-params-form';
     }
@@ -289,6 +275,9 @@
      * Toggles visibility of optional parameters.
      */
     toggleOptionalParams() {
+      if (!this.allowHideOptional) {
+        return;
+      }
       this.optionalOpened = !this.optionalOpened;
     }
     /**
@@ -344,6 +333,51 @@
 
     _computeRenderCheckbox(render, has) {
       return render && has;
+    }
+    /**
+     * Computes documentation as a markdown to be placed in the `marked-element`
+     * @param {Object} item View model
+     */
+    _computeDocumentation(item) {
+      let docs = '';
+      if (item.description) {
+        docs += item.description;
+      }
+      if (!item.schema) {
+        return docs;
+      }
+      const schema = item.schema;
+      docs += '\n\n\n';
+      if (schema.pattern) {
+        docs += '- Pattern: `' + schema.pattern + '`\n';
+      }
+      if (schema.examples && schema.examples.length) {
+        schema.examples.forEach((item) => {
+          docs += '- Example';
+          if (item.hasName) {
+            docs += ' ' + item.name;
+          }
+          docs += ': `' + item.value + '`\n';
+        });
+      }
+      return docs;
+    }
+
+    _computeHasDocumentation(item) {
+      if (item.hasDescription) {
+        return true;
+      }
+      if (!item.schema) {
+        return false;
+      }
+      const schema = item.schema;
+      if (schema.pattern) {
+        return true;
+      }
+      if (schema.examples && schema.examples.length) {
+        return true;
+      }
+      return false;
     }
   }
 
