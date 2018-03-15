@@ -13,8 +13,22 @@
   <link rel="import" href="../api-url-params-editor.html">
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
+    :root {
+      --arc-font-body1: {
+        @apply --paper-font-body1;
+      }
+    }
+
+    h1 {
+      @apply --paper-font-headline;
+    }
+
     h2 {
       @apply --paper-font-title;
+    }
+
+    h3 {
+      @apply --paper-font-subhead;
     }
 
     output {
@@ -26,18 +40,24 @@
   </custom-style>
 </head>
 <body>
+  <header>
+    <h1>API URL params editor<h1>
+  </header>
   <dom-bind id="demo">
     <template is="dom-bind">
       <api-view-model-transformer amf-model="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
       <api-view-model-transformer amf-model="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
-      <div class="vertical-section-container">
+      <div class="vertical-section-container" role="main">
         <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]" on-query-value-changed="_queryValueChanged" on-uri-value-changed="_uriValueChanged"></api-url-params-editor>
-        <h2>Query parametrs</h2>
+      </div>
+      <div class="vertical-section-container" role="region" aria-labelledby="outputTitle">
+        <h2 id="outputTitle">Produced output</h2>
+        <p>Element produces <code>queryValue</code>, <code>uriValue</code> properties and dispatches change events.</p>
+        <h3>Query parametrs</h3>
         <output>[[queryValueString]]</output>
-        <h2>URI parametrs</h2>
+        <h3>URI parametrs</h3>
         <output>[[uriValueString]]</output>
-
-        <h2>Events log</h2>
+        <h3>Events log</h3>
         <div>
           <paper-button raised on-tap="clearEventsLog">Clear log</paper-button><br/>
           <output>[[eventsLog]]</output>
