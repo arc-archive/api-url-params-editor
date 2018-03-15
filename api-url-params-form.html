@@ -9,10 +9,11 @@
 <link rel="import" href="../iron-collapse/iron-collapse.html">
 <link rel="import" href="../marked-element/marked-element.html">
 <link rel="import" href="../api-property-form-item/api-property-form-item.html">
+<link rel="import" href="../markdown-styles/markdown-styles.html">
 
 <dom-module id="api-url-params-form">
   <template strip-whitespace>
-    <style>
+    <style include="markdown-styles">
     :host {
       display: block;
       @apply --raml-request-parameters-form;
@@ -141,8 +142,8 @@
               <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
                 <div class="docs">
                   <iron-collapse>
-                    <marked-element markdown="[[_computeDocumentation(item)]]">
-                      <div class="markdown-html markdown-body"></div>
+                    <marked-element markdown="[[_computeDocumentation(item)]]" disabled>
+                      <div slot="markdown-html" class="markdown-body"></div>
                     </marked-element>
                   </iron-collapse>
                 </div>
