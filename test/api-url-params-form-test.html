@@ -15,8 +15,34 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="withTitle">
+      <template>
+        <api-url-params-form form-title="test-title"></api-url-params-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="allowHideOptional">
+      <template>
+        <api-url-params-form allow-hide-optional></api-url-params-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="uriModel">
+      <template>
+        <api-url-params-form></api-url-params-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="queryModel">
+      <template>
+        <api-url-params-form allow-hide-optional></api-url-params-form>
+      </template>
+    </test-fixture>
+
     <script>
       suite('api-url-params-form', () => {
+
+        a11ySuite('basic');
 
         suite('_generateTitleId()', () => {
           let element;
@@ -29,8 +55,9 @@
             assert.isTrue(element._titleId.indexOf('arc-id-') === 0);
           });
 
-          test('Increqases helper value', () => {
+          test('Increases helper value', () => {
             const before = ArcBehaviors.DomHelper.NextID;
+            element._titleId = undefined;
             element._generateTitleId();
             assert.equal(ArcBehaviors.DomHelper.NextID, before + 1);
           });
@@ -59,7 +86,7 @@
 
           test('Returns optional name', () => {
             let result = element._computeRowClass({required: false}, true);
-            assert.equal(result, 'param-value required');
+            assert.equal(result, 'param-value optional');
           });
 
           test('Ignores optional if can\'t has optional', () => {
@@ -69,7 +96,7 @@
 
           test('Has opened class', () => {
             let result = element._computeRowClass({}, true, true);
-            assert.equal(result, 'param-value required with-optional');
+            assert.equal(result, 'param-value optional with-optional');
           });
         });
 
@@ -113,203 +140,164 @@
         });
 
         suite('Basics', () => {
-          let element;
-          setup(() => {
-            element = fixture('basic');
-          });
-
           test('_getForm() returns form handler', () => {
+            const element = fixture('basic');
             const result = element._getForm();
             assert.isOk(result);
           });
 
-          test('Empty info is rendered', () => {
-            const section = element.shadowRoot.querySelector('.empty-message');
-            const display = getComputedStyle(section).display;
-            assert.notEqual(display, 'none');
+          test('optionalOpened is false by default', () => {
+            const element = fixture('basic');
+            assert.isFalse(element.optionalOpened);
           });
 
-          test('uriValue is undefined', () => {
-            assert.isUndefined(element.uriValue);
+          test('Renders title', () => {
+            const element = fixture('withTitle');
+            const header = element.shadowRoot.querySelector('h3');
+            assert.equal(header.innerText, 'test-title');
           });
 
-          test('queryValue is undefined', () => {
-            assert.isUndefined(element.queryValue);
+          test('Renders optional checkbox', (done) => {
+            const element = fixture('allowHideOptional');
+            element.model = [{
+              binding: 'query',
+              name: 'access_token',
+              hasDescription: true,
+              description: 'test',
+              required: false,
+              schema: {
+                enabled: true,
+                type: 'string',
+                inputLabel: 'access_token',
+                isEnum: false,
+                isArray: false,
+                isBool: false,
+                inputType: 'text'
+              },
+              value: 'access_token-value'
+            }];
+            flush(() => {
+              const node = element.shadowRoot.querySelector('.toggle-checkbox');
+              assert.ok(node);
+              done();
+            });
           });
         });
 
         suite('With model', () => {
-          const uriModel = {
-            binding: 'query',
-            name: 'file',
-            hasDescription: true,
-            description: 'test',
-            required: true,
-            schema: {
-              enabled: true,
-              type: 'string',
-              inputLabel: 'file',
-              isEnum: false,
-              isArray: false,
-              isBool: false,
-              inputType: 'text'
-            },
-            value: 'file-test-value'
-          };
-          const queryModel = {
-            binding: 'query',
-            name: 'access_token',
-            hasDescription: true,
-            description: 'test',
-            required: true,
-            schema: {
-              enabled: true,
-              type: 'string',
-              inputLabel: 'access_token',
-              isEnum: false,
-              isArray: false,
-              isBool: false,
-              inputType: 'text'
-            },
-            value: 'access_token-value'
-          };
-          let element;
-          setup(() => {
-            element = fixture('BasicTestFixture');
-          });
+          // let queryModel;
+          suite('Basics', () => {
+            let element;
+            let uriModel;
+            setup((done) => {
+              uriModel = {
+                binding: 'query',
+                name: 'file',
+                hasDescription: true,
+                description: 'test',
+                required: true,
+                schema: {
+                  enabled: true,
+                  type: 'string',
+                  inputLabel: 'file',
+                  isEnum: false,
+                  isArray: false,
+                  isBool: false,
+                  inputType: 'text'
+                },
+                value: 'file-test-value'
+              };
+              // queryModel = {
+              //   binding: 'query',
+              //   name: 'access_token',
+              //   hasDescription: true,
+              //   description: 'test',
+              //   required: true,
+              //   schema: {
+              //     enabled: true,
+              //     type: 'string',
+              //     inputLabel: 'access_token',
+              //     isEnum: false,
+              //     isArray: false,
+              //     isBool: false,
+              //     inputType: 'text'
+              //   },
+              //   value: 'access_token-value'
+              // };
 
-          test('Computes hasUriParameters', () => {
-            element.uriModel = [Object.assign({}, uriModel)];
-            assert.isTrue(element.hasUriParameters);
-          });
+              element = fixture('uriModel');
+              element.model = [uriModel];
+              flush(() => done());
+            });
 
-          test('Computes hasParameters when uri model is set', () => {
-            element.uriModel = [Object.assign({}, uriModel)];
-            assert.isTrue(element.hasParameters);
-          });
-
-          test('Renders uri parameters form', (done) => {
-            element.uriModel = [Object.assign({}, uriModel)];
-            flush(() => {
-              const form = element.shadowRoot.querySelector('api-url-params-form[form-type="uri"]');
-              assert.ok(form);
-              done();
+            test('Renders form elements', () => {
+              const nodes = element.shadowRoot.querySelectorAll('.param-value');
+              assert.equal(nodes.length, 1);
             });
           });
 
-          test('Computes hasQueryParameters', () => {
-            element.queryModel = [Object.assign({}, queryModel)];
-            assert.isTrue(element.hasQueryParameters);
-          });
+          suite('Optional parameters', () => {
+            let element;
+            let queryModel;
+            setup((done) => {
+              queryModel = [{
+                binding: 'query',
+                name: 'access_token',
+                hasDescription: true,
+                description: 'test',
+                required: true,
+                schema: {
+                  enabled: true,
+                  type: 'string',
+                  inputLabel: 'access_token',
+                  isEnum: false,
+                  isArray: false,
+                  isBool: false,
+                  inputType: 'text'
+                },
+                value: 'access_token-value'
+              }, {
+                binding: 'query',
+                name: 'access_token2',
+                hasDescription: true,
+                description: 'test',
+                required: false,
+                schema: {
+                  enabled: true,
+                  type: 'string',
+                  inputLabel: 'access_token',
+                  isEnum: false,
+                  isArray: false,
+                  isBool: false,
+                  inputType: 'text'
+                },
+                value: 'access_token-value-2'
+              }];
 
-          test('Computes hasParameters when query model is set', () => {
-            element.queryModel = [Object.assign({}, queryModel)];
-            assert.isTrue(element.hasParameters);
-          });
-
-          test('Renders query parameters form', (done) => {
-            element.queryModel = [Object.assign({}, queryModel)];
-            flush(() => {
-              const form = element.shadowRoot.querySelector('api-url-params-form[form-type="query"]');
-              assert.ok(form);
-              done();
+              element = fixture('queryModel');
+              element.model = queryModel;
+              flush(() => done());
             });
-          });
 
-          test('Dispatches change event when uri params are set', (done) => {
-            element.addEventListener('uri-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'file', 'name is set');
-              assert.equal(e.detail.value, 'file-test-value', 'value is set');
-              assert.isTrue(e.detail.enabled, 'enabled is set');
-              done();
+            test('Renders form elements', () => {
+              const nodes = element.shadowRoot.querySelectorAll('.param-value');
+              assert.equal(nodes.length, 2);
             });
-            element.uriModel = [Object.assign({}, uriModel)];
-          });
 
-          test('Dispatches change event when uri value change', (done) => {
-            element.uriModel = [Object.assign({}, uriModel)];
-            element.addEventListener('uri-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'file', 'name is set');
-              assert.equal(e.detail.value, 'changed-value', 'value is set');
-              assert.isTrue(e.detail.enabled, 'enabled is set');
-              done();
+            test('Second is hidden', () => {
+              const nodes = element.shadowRoot.querySelectorAll('.param-value');
+              const display = getComputedStyle(nodes[1]).display;
+              assert.equal(display, 'none');
             });
-            element.set(['uriModel', 0, 'value'], 'changed-value');
-          });
 
-          test('Dispatches change event when uri enabled change', (done) => {
-            element.uriModel = [Object.assign({}, uriModel)];
-            element.addEventListener('uri-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'file', 'name is set');
-              // assert.isUndefined(e.detail.value, 'value is undefined');
-              assert.isFalse(e.detail.enabled, 'enabled is set');
-              done();
+            test('Renders hidden when optional not allowed', () => {
+              element.allowHideOptional = false;
+              const nodes = element.shadowRoot.querySelectorAll('.param-value');
+              const display = getComputedStyle(nodes[1]).display;
+              assert.notEqual(display, 'none');
             });
-            element.set('uriModel.0.schema.enabled', false);
-          });
-
-          test('Dispatches change event when query params are set', (done) => {
-            element.addEventListener('query-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'access_token', 'name is set');
-              assert.equal(e.detail.value, 'access_token-value', 'value is set');
-              assert.isTrue(e.detail.enabled, 'enabled is set');
-              done();
-            });
-            element.queryModel = [Object.assign({}, queryModel)];
-          });
-
-          test('Dispatches change event when query value change', (done) => {
-            element.queryModel = [Object.assign({}, queryModel)];
-            element.addEventListener('query-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'access_token', 'name is set');
-              assert.equal(e.detail.value, 'changed-value', 'value is set');
-              assert.isTrue(e.detail.enabled, 'enabled is set');
-              done();
-            });
-            element.set(['queryModel', 0, 'value'], 'changed-value');
-          });
-
-          test('Dispatches change event when query enabled change', (done) => {
-            element.queryModel = [Object.assign({}, queryModel)];
-            element.addEventListener('query-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'access_token', 'name is set');
-              // assert.isUndefined(e.detail.value, 'value is undefined');
-              assert.isFalse(e.detail.enabled, 'enabled is set');
-              done();
-            });
-            element.set('queryModel.0.schema.enabled', false);
-          });
-
-          test('uriValue is computed', () => {
-            uriModel.schema.enabled = true;
-            element.uriModel = [Object.assign({}, uriModel)];
-            assert.typeOf(element.uriValue, 'object');
-            assert.equal(element.uriValue.file, 'file-test-value');
-          });
-
-          test('Not enabled uri parameters are not included', () => {
-            uriModel.schema.enabled = false;
-            element.uriModel = [Object.assign({}, uriModel)];
-            assert.typeOf(element.uriValue, 'object');
-            assert.isUndefined(element.uriValue.file);
-          });
-
-          test('queryValue is computed', () => {
-            queryModel.schema.enabled = true;
-            element.queryModel = [Object.assign({}, queryModel)];
-            assert.typeOf(element.queryValue, 'object');
-            assert.equal(element.queryValue.access_token, 'access_token-value');
-          });
-
-          test('Not enabled query parameters are not included', () => {
-            queryModel.schema.enabled = false;
-            element.queryModel = [Object.assign({}, queryModel)];
-            assert.typeOf(element.queryValue, 'object');
-            assert.isUndefined(element.queryValue.access_token);
           });
         });
-
-        a11ySuite('BasicTestFixture');
       });
     </script>
 

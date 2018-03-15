@@ -109,14 +109,14 @@
       margin-right: 12px;
     }
 
-    .params-title paper-checkbox {
+    .toggle-checkbox {
       --paper-checkbox-label-color: var(--api-url-params-editor-optional-checkbox-label-color, rgba(0, 0, 0, 0.74));
     }
     </style>
     <div class="params-title">
       <h3 id$="[[_titleId]]">[[formTitle]]</h3>
       <template is="dom-if" if="[[_renderOptionalCheckbox]]">
-        <paper-checkbox checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
+        <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
       </template>
     </div>
     <iron-form>
@@ -260,7 +260,6 @@
       super.connectedCallback();
       this._generateTitleId();
       this._ensureAttribute('role', 'form');
-      this._ensureAttribute('aria-labelledby', this._titleId);
     }
     /**
      * Generates ``
