@@ -48,7 +48,7 @@
       <api-view-model-transformer amf-model="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
       <api-view-model-transformer amf-model="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
       <div class="vertical-section-container" role="main">
-        <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]" on-query-value-changed="_queryValueChanged" on-uri-value-changed="_uriValueChanged"></api-url-params-editor>
+        <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]" on-query-value-changed="_queryValueChanged" on-uri-value-changed="_uriValueChanged" allow-custom></api-url-params-editor>
       </div>
       <div class="vertical-section-container" role="region" aria-labelledby="outputTitle">
         <h2 id="outputTitle">Produced output</h2>

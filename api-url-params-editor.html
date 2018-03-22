@@ -3,6 +3,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../events-target-behavior/events-target-behavior.html">
 <link rel="import" href="api-url-params-form.html">
 
 <dom-module id="api-url-params-editor">
@@ -35,7 +36,7 @@
       <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened></api-url-params-form>
     </template>
     <template is="dom-if" if="[[hasQueryParameters]]">
-      <api-url-params-form id="queryParametersForm" role="region" form-title="Query parameters" allow-hide-optional form-type="query" model="{{queryModel}}"></api-url-params-form>
+      <api-url-params-form id="queryParametersForm" role="region" form-title="Query parameters" allow-hide-optional allow-disable-params allow-custom="[[allowCustom]]" form-type="query" model="{{queryModel}}" narrow="[[narrow]]"></api-url-params-form>
     </template>
   </template>
   <script>
@@ -96,15 +97,18 @@
      * `--api-url-params-editor` | Mixin applied to this element | `{}`
      * `--api-url-params-editor-no-params` | Mixin applied to "empty info" message container | `{}`
      * `--api-url-params-editor-no-params-message` | Mixin applied to "empty info" container | `{}`
+     * `--api-request-parameters-editor-row` | Mixin applied to custom parameter form row | `{}`
+     * `--api-request-parameters-editor-row-narrow` | Mixin applied to custom parameter form row when narrow | `{}`
      *
      * @customElement
      * @polymer
      * @demo demo/index.html
+     * @demo demo/custom.html Cutom parameters
      * @memberof ApiElements
      * @appliesMixin Polymer.IronValidatableBehavior
      */
     class ApiUrlParamsEditor extends
-      Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
+      Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], ArcBehaviors.EventsTargetBehavior(Polymer.Element)) {
       static get is() { return 'api-url-params-editor'; }
       static get properties() {
         return {
@@ -120,7 +124,7 @@
            */
           hasQueryParameters: {
             type: Boolean,
-            computed: '_computeHasData(queryModel)'
+            computed: '_computeHasData(queryModel, allowCustom)'
           },
           /**
            * Computed by `api-view-model-transformer` URI parameters model.
@@ -142,7 +146,7 @@
            */
           hasParameters: {
             type: Boolean,
-            computed: '_computeHasParameters(hasQueryParameters, hasUriParameters)'
+            computed: '_computeHasParameters(hasQueryParameters, hasUriParameters, allowCustom)'
           },
           // regexp to match query parameters model change
           _queryModelMatcher: {
@@ -171,7 +175,16 @@
           queryValue: {
             type: Object,
             notify: true
-          }
+          },
+          /**
+           * When set, renders add custom parameter button in query parameters
+           * form
+           */
+          allowCustom: Boolean,
+          /**
+           * Renders forms in "narrow" view
+           */
+          narrow: Boolean
         };
       }
 
@@ -181,14 +194,74 @@
           '_uriModelChanged(uriModel.*)'
         ];
       }
+
+      constructor() {
+        super();
+        this._queryParamChangeHandler = this._queryParamChangeHandler.bind(this);
+        this._uriParamChangeHandler = this._uriParamChangeHandler.bind(this);
+      }
+
+      _attachListeners(node) {
+        node.addEventListener('uri-parameter-changed', this._uriParamChangeHandler);
+        node.addEventListener('query-parameter-changed', this._queryParamChangeHandler);
+      }
+
+      _detachListeners(node) {
+        node.removeEventListener('uri-parameter-changed', this._uriParamChangeHandler);
+        node.removeEventListener('query-parameter-changed', this._queryParamChangeHandler);
+      }
+      /**
+       * Handler for the `query-parameter-changed` custom event.
+       * Updates model value from the event
+       *
+       * @param {CustomEvent} e
+       */
+      _queryParamChangeHandler(e) {
+        if (e.target === this || e.defaultPrevented) {
+          return;
+        }
+        const model = this.queryModel;
+        this._appyEventValues(e.detail, model, 'query');
+      }
+
+      _uriParamChangeHandler(e) {
+        if (e.target === this || e.defaultPrevented) {
+          return;
+        }
+        const model = this.uriModel;
+        this._appyEventValues(e.detail, model, 'uri');
+      }
+      /**
+       * Applies values from the change event to a model.
+       *
+       * @param {Object} detail Detail event object
+       * @param {Array} model Target model
+       * @param {String} source `uri` or `query`
+       */
+      _appyEventValues(detail, model, source) {
+        if (!model || !model.length) {
+          return;
+        }
+        const index = model.findIndex((item) => item.name === detail.name);
+        if (index === -1) {
+          return;
+        }
+        this.__cancelChangeEvent = true;
+        this.set([source + 'Model', index, 'value'], detail.value);
+        this.__cancelChangeEvent = false;
+        const schema = model[index].schema;
+        if (schema && schema.enabled === false) {
+          this.set([source + 'Model', index, 'schema', 'enabled'], true);
+        }
+      }
       /**
        * Computes boolean value if the argument exists and has items.
        *
        * @param {Array} model Current url model.
        * @return {Boolean}
        */
-      _computeHasData(model) {
-        return !!(model instanceof Array && model.length);
+      _computeHasData(model, allowCustom) {
+        return !!(model instanceof Array && model.length) || allowCustom;
       }
       /**
        * Computes value for `hasParameters` property.
@@ -197,8 +270,8 @@
        * @param {Boolean} up State of `hasUriParameters`
        * @return {Boolean} True if any of the arguments is true
        */
-      _computeHasParameters(qp, up) {
-        return !!(qp || up);
+      _computeHasParameters(qp, up, allowCustom) {
+        return !!(qp || up) || allowCustom;
       }
 
       // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
@@ -246,7 +319,17 @@
         if (record.path === 'uriModel' || record.path === 'queryModel') {
           this._renotifyModelChange(type);
           this._updateModelValue(type);
-        } else if (['model.length', 'model.splices'].indexOf(record.path) !== -1) {
+        } else if (record.path === 'queryModel.splices') {
+          const splices = record.value.indexSplices;
+          if (!splices || !splices[0]) {
+            return;
+          }
+          if (splices[0].removed && splices[0].removed.length) {
+            this._syncValues(true);
+            this._notifyChange('query', splices[0].removed[0], true);
+          }
+          return;
+        } else if (record.path === 'queryModel.length') {
           return;
         } else {
           const re = type === 'uri' ? this._uriModelMatcher :
@@ -257,6 +340,9 @@
           }
           const item = this.get([type + 'Model', Number(matches[1])]);
           this._notifyChange(type, item);
+          if (record.path.indexOf('name') !== -1) {
+            this._syncValues();
+          }
           this._updateValue(type, item);
         }
       }
@@ -278,22 +364,51 @@
        * @param {String} type Data model type. `query` or `uri`
        * @param {Object} model Model item.
        */
-      _notifyChange(type, model) {
+      _notifyChange(type, model, removed) {
+        if (this.__cancelChangeEvent) {
+          return;
+        }
         let enabled = model.schema && model.schema.enabled;
         if (typeof enabled !== 'boolean') {
           enabled = true;
         }
+        const detail = {
+          name: model.name
+        };
+        if (removed) {
+          detail.removed = true;
+        } else {
+          detail.value = model.value;
+          detail.enabled = enabled;
+        }
         const ev = new CustomEvent(type + '-parameter-changed', {
-          detail: {
-            name: model.name,
-            value: model.value,
-            enabled: enabled
-          },
+          detail: detail,
           cancelable: true,
           bubbles: true,
           composed: true
         });
         this.dispatchEvent(ev);
+      }
+      /**
+       * Sunchronizes `queryValues` with current model.
+       * It is nescesary when model name property change to detect this change.
+       */
+      _syncValues(forceReset) {
+        const model = this.queryModel;
+        const values = this.queryValue;
+        if (!model || !values) {
+          return;
+        }
+        Object.keys(values).forEach((key) => {
+          const index = model.findIndex((item) => item.name === key);
+          if (index === -1) {
+            delete this.queryValue[key];
+          }
+        });
+        if (forceReset) {
+          this.queryValue = undefined;
+          this.set('queryValue', values);
+        }
       }
       /**
        * Update generated value for a model.
@@ -348,8 +463,10 @@
        *
        * @event query-parameter-changed
        * @param {String} name The name of the parameter
-       * @param {String} value The value of the parameter
-       * @param {Boolean} enabled True if the parameter is enabled in the form.
+       * @param {?String} value The value of the parameter
+       * @param {?Boolean} enabled True if the parameter is enabled in the form.
+       * @param {?Boolean} removed True when custom header has been removed.
+       * When set `value` and `emabled` properties are not set.
        */
     }
 

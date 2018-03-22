@@ -10,7 +10,7 @@
   },
   "private": false,
   "scripts": {
-    "lint": "polymer lint api-url-params-editor.html api-url-params-form.html",
+    "lint": "api-url-params-editor.html api-url-params-custom-input.html api-url-params-form.html",
     "test-sauce": "polymer test --plugin sauce --job-name \"api-url-params-editor:local-test\"",
     "test": "polymer test --plugin local",
     "update-types": "gen-typescript-declarations --deleteExisting --outDir ."
