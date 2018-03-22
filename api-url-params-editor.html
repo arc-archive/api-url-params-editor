@@ -261,7 +261,7 @@
        * @return {Boolean}
        */
       _computeHasData(model, allowCustom) {
-        return !!(model instanceof Array && model.length) || allowCustom;
+        return !!(model instanceof Array && model.length) || !!allowCustom;
       }
       /**
        * Computes value for `hasParameters` property.
@@ -271,7 +271,7 @@
        * @return {Boolean} True if any of the arguments is true
        */
       _computeHasParameters(qp, up, allowCustom) {
-        return !!(qp || up) || allowCustom;
+        return !!(qp || up) || !!allowCustom;
       }
 
       // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`

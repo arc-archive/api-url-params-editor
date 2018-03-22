@@ -6,6 +6,7 @@
     <title>api-url-params-editor test</title>
     <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <link rel="import" href="../api-url-params-form.html">
   </head>
   <body>
@@ -39,7 +40,14 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="custom">
+      <template>
+        <api-url-params-form allow-custom></api-url-params-form>
+      </template>
+    </test-fixture>
+
     <script>
+      /* global MockInteractions, a11ySuite */
       suite('api-url-params-form', () => {
 
         a11ySuite('basic');
@@ -295,6 +303,45 @@
               const nodes = element.shadowRoot.querySelectorAll('.param-value');
               const display = getComputedStyle(nodes[1]).display;
               assert.notEqual(display, 'none');
+            });
+          });
+        });
+
+        suite('Custom parameters', () => {
+          let element;
+          setup((done) => {
+            element = fixture('custom');
+            flush(() => done());
+          });
+
+          test('Renders add parameter button', () => {
+            const button = element.shadowRoot.querySelector('.add-action');
+            assert.isOk(button);
+          });
+
+          test('addCustom() adds new item', () => {
+            element.addCustom();
+            assert.typeOf(element.model, 'array');
+            assert.lengthOf(element.model, 1);
+          });
+
+          test('Clicking on the button adds new viewd', (done) => {
+            const button = element.shadowRoot.querySelector('.add-action .action-button');
+            MockInteractions.tap(button);
+            flush(() => {
+              const custom = element.shadowRoot.querySelector('api-url-params-custom-input');
+              assert.ok(custom);
+              done();
+            });
+          });
+
+          test('Delete icon removes the parameter', (done) => {
+            element.addCustom();
+            flush(() => {
+              const button = element.shadowRoot.querySelector('.delete-icon');
+              MockInteractions.tap(button);
+              assert.lengthOf(element.model, 0);
+              done();
             });
           });
         });

@@ -44,6 +44,11 @@
             const result = element._computeHasData([{}]);
             assert.isTrue(result);
           });
+
+          test('Returns true if custom parameters are alolowed', () => {
+            const result = element._computeHasData(undefined, true);
+            assert.isTrue(result);
+          });
         });
 
         suite('_computeHasParameters()', () => {
@@ -72,6 +77,11 @@
             result = element._computeHasParameters(true, undefined);
             assert.isTrue(result);
             result = element._computeHasParameters(true, false);
+            assert.isTrue(result);
+          });
+
+          test('Returns true if custom parameters are alolowed', () => {
+            const result = element._computeHasParameters(false, false, true);
             assert.isTrue(result);
           });
         });
