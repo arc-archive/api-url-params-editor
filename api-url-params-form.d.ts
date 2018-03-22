@@ -19,9 +19,53 @@
 /// <reference path="../iron-collapse/iron-collapse.d.ts" />
 /// <reference path="../marked-element/marked-element.d.ts" />
 /// <reference path="../api-property-form-item/api-property-form-item.d.ts" />
+/// <reference path="../markdown-styles/markdown-styles.d.ts" />
+/// <reference path="../paper-button/paper-button.d.ts" />
+/// <reference path="../arc-icons/arc-icons.d.ts" />
+/// <reference path="../iron-icon/iron-icon.d.ts" />
+/// <reference path="api-url-params-custom-input.d.ts" />
 
 declare namespace ApiElements {
 
+  /**
+   * Renders form and input elements for query / uri model.
+   *
+   * Handles creation of form elements, validation, and rendering documentation.
+   *
+   * This element **requires** you to set `form-type` attribute to either
+   * `uri` or `query` to distinguish type of form. Also, set `form-title`
+   * property to render a title. It is useful when adding two forms right after
+   * each other.
+   *
+   * ## Optional parameters
+   *
+   * By default the element renders all form valus. For better user experience,
+   * set `allow-hide-optional` attribute to hide parameters that are optional.
+   * It also renders checkbox to toggle optional parameters.
+   *
+   * Styling
+   *
+   * Custom property | Description | Default
+   * ----------------|-------------|----------
+   * `--api-url-params-form` | Mixin applied to this element | `{}`
+   * `--api-url-params-form-row` | Mixin applied to each form row | `{}`
+   * `--api-url-params-form-required` | Mixin applied to a form row that is required | `{}`
+   * `--inline-documentation-color` | Color of the documentation when opened. | `rgba(0, 0, 0, 0.87)`
+   * `--from-row-action-icon-color` | Color of the documentation icon | `--icon-button-color` or `rgba(0, 0, 0, 0.74)`
+   * `--from-row-action-icon-color-hover` | Color of the documentation icon when hovering. Please, consider devices that do not support hovers. | `--accent-color` or `rgba(0, 0, 0, 0.74)`
+   * `--inline-documentation-background-color` | Background color of opened documentation. | `#FFF3E0`
+   * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
+   * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
+   * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
+   * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
+   * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
+   * `--icon-button` | Mixin applied to all icon buttons | `{}`
+   * `--icon-button-hover` | Mixin applied to all icon buttons when hovering | `{}`
+   *
+   * You can also style inputs as defined in
+   * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
+   * element documentation.
+   */
   class ApiUrlParamsForm extends
     Polymer.IronValidatableBehavior(
     Polymer.Element) {
@@ -71,6 +115,21 @@ declare namespace ApiElements {
      * Generated ID of the title element.
      */
     _titleId: string|null|undefined;
+
+    /**
+     * If set, enable / disable param checkbox is rendered.
+     */
+    allowDisableParams: boolean|null|undefined;
+
+    /**
+     * When set, renders add custom parameter button
+     */
+    allowCustom: boolean|null|undefined;
+
+    /**
+     * Renders items in "narrow" view
+     */
+    narrow: boolean|null|undefined;
     connectedCallback(): void;
 
     /**
@@ -123,8 +182,34 @@ declare namespace ApiElements {
     /**
      * Computes if any of the query parameters are required.
      */
-    _computeHasOptionalParameters(allowHideOptional: any, model: any): any;
+    _computeHasOptionalParameters(allowHideOptional: any, record: any): any;
     _computeRenderCheckbox(render: any, has: any): any;
+
+    /**
+     * Computes documentation as a markdown to be placed in the `marked-element`
+     *
+     * @param item View model
+     */
+    _computeDocumentation(item: object|null): any;
+
+    /**
+     * Computes if model item has documentation to display.
+     *
+     * @param item Model item
+     * @returns True if documentation can be rendered.
+     */
+    _computeHasDocumentation(item: object|null): Boolean|null;
+    _computeIsCustom(schema: any): any;
+
+    /**
+     * Adds custom property to the list.
+     */
+    addCustom(): void;
+
+    /**
+     * Removed custom item from the UI.
+     */
+    _removeCustom(e: CustomEvent|null): void;
   }
 }
 

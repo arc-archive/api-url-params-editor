@@ -13,6 +13,7 @@
 /// <reference path="../iron-flex-layout/iron-flex-layout.d.ts" />
 /// <reference path="../iron-validatable-behavior/iron-validatable-behavior.d.ts" />
 /// <reference path="../paper-checkbox/paper-checkbox.d.ts" />
+/// <reference path="../events-target-behavior/events-target-behavior.d.ts" />
 /// <reference path="api-url-params-form.d.ts" />
 
 declare namespace ApiElements {
@@ -54,6 +55,28 @@ declare namespace ApiElements {
    * manually, without using `api-url-input`. If not, then it's easier to
    * use `api-request-editor` and an element tah bound all request editors
    * togeter and produce commong HTTP request object.
+   *
+   * ## Example
+   *
+   * See demo page for full example, including AMF model to view model
+   * transformation.
+   *
+   * ```html
+   * <!-- Inside Polymer element / app -->
+   * <api-view-model-transformer amf-model="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
+   * <api-view-model-transformer amf-model="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
+   * <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]"></api-url-params-editor>
+   * ```
+   *
+   * ## Styling
+   *
+   * Custom property | Description | Default
+   * ----------------|-------------|----------
+   * `--api-url-params-editor` | Mixin applied to this element | `{}`
+   * `--api-url-params-editor-no-params` | Mixin applied to "empty info" message container | `{}`
+   * `--api-url-params-editor-no-params-message` | Mixin applied to "empty info" container | `{}`
+   * `--api-request-parameters-editor-row` | Mixin applied to custom parameter form row | `{}`
+   * `--api-request-parameters-editor-row-narrow` | Mixin applied to custom parameter form row when narrow | `{}`
    */
   class ApiUrlParamsEditor extends
     Polymer.IronValidatableBehavior(
@@ -112,11 +135,40 @@ declare namespace ApiElements {
     queryValue: object|null|undefined;
 
     /**
+     * When set, renders add custom parameter button in query parameters
+     * form
+     */
+    allowCustom: boolean|null|undefined;
+
+    /**
+     * Renders forms in "narrow" view
+     */
+    narrow: boolean|null|undefined;
+    _attachListeners(node: any): void;
+    _detachListeners(node: any): void;
+
+    /**
+     * Handler for the `query-parameter-changed` custom event.
+     * Updates model value from the event
+     */
+    _queryParamChangeHandler(e: CustomEvent|null): void;
+    _uriParamChangeHandler(e: any): void;
+
+    /**
+     * Applies values from the change event to a model.
+     *
+     * @param detail Detail event object
+     * @param model Target model
+     * @param source `uri` or `query`
+     */
+    _appyEventValues(detail: object|null, model: any[]|null, source: String|null): void;
+
+    /**
      * Computes boolean value if the argument exists and has items.
      *
      * @param model Current url model.
      */
-    _computeHasData(model: any[]|null): Boolean|null;
+    _computeHasData(model: any[]|null, allowCustom: any): Boolean|null;
 
     /**
      * Computes value for `hasParameters` property.
@@ -125,7 +177,7 @@ declare namespace ApiElements {
      * @param up State of `hasUriParameters`
      * @returns True if any of the arguments is true
      */
-    _computeHasParameters(qp: Boolean|null, up: Boolean|null): Boolean|null;
+    _computeHasParameters(qp: Boolean|null, up: Boolean|null, allowCustom: any): Boolean|null;
 
     /**
      * attribute automatically, which should be used for styling.
@@ -166,7 +218,13 @@ declare namespace ApiElements {
      * @param type Data model type. `query` or `uri`
      * @param model Model item.
      */
-    _notifyChange(type: String|null, model: object|null): void;
+    _notifyChange(type: String|null, model: object|null, removed: any): void;
+
+    /**
+     * Sunchronizes `queryValues` with current model.
+     * It is nescesary when model name property change to detect this change.
+     */
+    _syncValues(forceReset: any): void;
 
     /**
      * Update generated value for a model.
