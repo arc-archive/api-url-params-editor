@@ -1,21 +1,31 @@
-# \<api-url-params-editor\>
+[![Build Status](https://travis-ci.org/advanced-rest-client/auth-methods.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/api-url-params-editor)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/api-url-params-editor)
 
-An element to render query / uri parameters form from AMF schema
+## &lt;api-url-params-editor&gt;
 
-## Install the Polymer-CLI
+An element to render query / uri parameters form from AMF schema.
+It also allows to create custom query parameters list, outside schema definition.
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
+It works with `advanced-rest-client/api-view-model-transformer` to generate
+view model from [AMF](https://github.com/mulesoft/amf) json/ld model.
 
-## Viewing Your Element
+It cooperates with `advanced-rest-client/api-url-editor` to build
+HTTP request final URL.
 
+<!---
 ```
-$ polymer serve
+<custom-element-demo>
+  <template>
+    <link rel="import" href="api-url-params-editor.html">
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
+```html
+<api-url-params-editor allow-custom></api-url-params-editor>
 ```
 
-## Running Tests
+### API components
 
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+This components is a part of API components ecosystem: https://elements.advancedrestclient.com/
