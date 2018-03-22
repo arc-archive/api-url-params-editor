@@ -49,8 +49,11 @@
     .docs {
       @apply --arc-font-body1;
       color: var(--inline-documentation-color, rgba(0, 0, 0, 0.87));
-      margin-left: 32px;
       margin-right: 40px;
+    }
+
+    .has-enable-button .docs {
+      margin-left: 32px;
     }
 
     marked-element {
@@ -132,6 +135,7 @@
     }
 
     .hint-icon {
+      margin-top: 16px;
       color: var(--hint-trigger-color, rgba(0, 0, 0, 0.74));
       transition: color 0.25s linear;
       @apply --icon-button;
@@ -165,7 +169,7 @@
       <form enctype="application/json">
         <dom-repeat items="{{model}}" items-repeater>
           <template>
-            <div class$="[[_computeRowClass(item, allowHideOptional, optionalOpened)]]">
+            <div class$="[[_computeRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
               <div class$="value-input [[_computeTypeClass(item.isArray)]]">
                 <template is="dom-if" if="[[allowDisableParams]]">
                   <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
@@ -195,7 +199,7 @@
               <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
                 <div class="docs">
                   <iron-collapse>
-                    <marked-element markdown="[[_computeDocumentation(item)]]" disabled>
+                    <marked-element markdown="[[_computeDocumentation(item)]]">
                       <div slot="markdown-html" class="markdown-body"></div>
                     </marked-element>
                   </iron-collapse>
@@ -360,9 +364,10 @@
      * @param {Object} item Model item
      * @param {Boolean} allowHideOptional
      * @param {Boolean} optionalOpened True if optional parameters are rendered.
+     * @param {Boolean} allowDisableParams
      * @return {String}
      */
-    _computeRowClass(item, allowHideOptional, optionalOpened) {
+    _computeRowClass(item, allowHideOptional, optionalOpened, allowDisableParams) {
       let clazz = 'param-value';
       if (item.required) {
         clazz += ' required';
@@ -371,6 +376,9 @@
       }
       if (optionalOpened) {
         clazz += ' with-optional';
+      }
+      if (allowDisableParams) {
+        clazz += ' has-enable-button';
       }
       return clazz;
     }
