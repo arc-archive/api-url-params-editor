@@ -13,10 +13,13 @@
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../arc-icons/arc-icons.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../api-form-mixin/api-form-mixin.html">
+<link rel="import" href="../api-form-mixin/api-form-styles.html">
 <link rel="import" href="api-url-params-custom-input.html">
 
 <dom-module id="api-url-params-form">
   <template strip-whitespace>
+    <style include="api-form-styles"></style>
     <style include="markdown-styles">
     :host {
       display: block;
@@ -46,19 +49,8 @@
       @apply --layout-flex;
     }
 
-    .docs {
-      @apply --arc-font-body1;
-      color: var(--inline-documentation-color, rgba(0, 0, 0, 0.87));
-      margin-right: 40px;
-    }
-
     .has-enable-button .docs {
       margin-left: 32px;
-    }
-
-    marked-element {
-      background-color: var(--inline-documentation-background-color, #FFF3E0);
-      padding: 4px;
     }
 
     .value-input {
@@ -111,58 +103,13 @@
       --paper-checkbox-label-color: var(--api-url-params-editor-optional-checkbox-label-color, rgba(0, 0, 0, 0.74));
     }
 
-    .action-button {
-      margin: 0;
-      color: var(--api-url-params-form-action-button-color, var(--secondary-button-color, var(--accent-color)));
-      background: var(--raml-headers-form-action-button-background, var(--secondary-button-background, #fff));
-      @apply --secondary-button;
-      @apply --raml-headers-form-action-button;
-    }
-
-    .action-button:hover {
-      color: var(--raml-headers-form-action-button-color-hover, var(--secondary-button-color, var(--accent-color)));
-      background: var(--raml-headers-form-action-button-background-hover, var(--secondary-button-background, #fff));
-      @apply --secondary-button-hover;
-      @apply --raml-headers-form-action-button-hover;
-    }
-
-    .action-button .action-icon {
-      margin-right: 12px;
-      color: var(--api-url-params-form-action-button-color, var(--secondary-button-color, var(--accent-color)));
-    }
-
-    .action-button:hover .action-icon {
-      color: var(--raml-headers-form-action-button-color-hover, var(--secondary-button-color, var(--accent-color)));
-    }
-
-    .hint-icon {
-      margin-top: 16px;
-      color: var(--hint-trigger-color, rgba(0, 0, 0, 0.74));
-      transition: color 0.25s linear;
-      @apply --icon-button;
-    }
-
-    .hint-icon:hover {
-      color: var(--hint-trigger-hover-color, var(--accent-color, rgba(0, 0, 0, 0.88)));
-      @apply --icon-button-hover;
-    }
-
-    .action-icon {
-      color: var(--from-row-action-icon-color, var(--icon-button-color, rgba(0, 0, 0, 0.74)));
-      transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
-    }
-
-    .action-icon:hover {
-      color: var(--from-row-action-icon-color-hover, var(--accent-color, rgba(0, 0, 0, 0.88)));
-    }
-
-    .delete-icon {
+    .param-value paper-icon-button {
       margin-top: 16px;
     }
     </style>
     <div class="params-title">
       <h3 id$="[[_titleId]]">[[formTitle]]</h3>
-      <template is="dom-if" if="[[_renderOptionalCheckbox]]">
+      <template is="dom-if" if="[[renderOptionalCheckbox]]">
         <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
       </template>
     </div>
@@ -170,7 +117,7 @@
       <form enctype="application/json">
         <dom-repeat items="{{model}}" items-repeater>
           <template>
-            <div class$="[[_computeRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
+            <div class$="[[computeFormRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
               <div class$="value-input [[_computeTypeClass(item.isArray)]]">
                 <template is="dom-if" if="[[allowDisableParams]]">
                   <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
@@ -191,6 +138,7 @@
                     narrow="[[narrow]]"></api-url-params-custom-input>
                 </template>
                 <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
+                  <!-- TODO: The documentation should be computed on a transformer level. -->
                   <paper-icon-button class="hint-icon" icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
                 </template>
                 <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
@@ -213,8 +161,8 @@
     </iron-form>
     <template is="dom-if" if="[[allowCustom]]">
       <div class="add-action">
-        <paper-button class="action-button" on-tap="addCustom">
-          <iron-icon class="action-icon" icon="arc:add-circle-outline"></iron-icon>
+        <paper-button class="action-button" on-tap="add" title="Adds new query parameter to the form">
+          <iron-icon class="action-icon" icon="arc:add-circle-outline" alt="Add query parameter icon"></iron-icon>
           Add query parameter
         </paper-button>
       </div>
@@ -273,29 +221,13 @@
    * @demo demo/index.html
    * @memberof ApiElements
    * @appliesMixin Polymer.IronValidatableBehavior
+   * @appliesMixin ArcBehaviors.ApiFormMixin
    */
   class ApiUrlParamsForm extends
-  Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
-    static get is() {
-      return 'api-url-params-form';
-    }
+  Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], ArcBehaviors.ApiFormMixin(Polymer.Element)) {
+    static get is() { return 'api-url-params-form'; }
     static get properties() {
       return {
-        /**
-         * View model to use to render the form.
-         * See `api-url-params-editor` element for more information.
-         */
-        model: {
-          type: Array,
-          notify: true
-        },
-        /**
-         * Computed value, set to true to show optional parameters (not required by the API)
-         */
-        optionalOpened: {
-          type: Boolean,
-          value: false
-        },
         /**
          * The form can display query or URI parameters. When anything change in the form
          * it will send a corresponding custom event (`query-parameter-changed` or
@@ -304,44 +236,11 @@
          */
         formType: String,
         /**
-         * Computed value. True if current query parameters set has any
-         * optional value.
-         */
-        hasOptional: {
-          type: Boolean,
-          computed: '_computeHasOptionalParameters(allowHideOptional, model.*)',
-          notify: true
-        },
-        /**
-         * If set it computes `hasOptional` property and shows checkbox
-         * to show / hide optional properties.
-         */
-        allowHideOptional: Boolean,
-        /**
-         * Computed flag to determine if optional checkbox can be rendered
-         */
-        _renderOptionalCheckbox: {
-          type: Boolean,
-          computed: '_computeRenderCheckbox(allowHideOptional, hasOptional)'
-        },
-        /**
          * Title do render
          */
         formTitle: String,
         // Generated ID of the title element.
-        _titleId: String,
-        /**
-         * If set, enable / disable param checkbox is rendered.
-         */
-        allowDisableParams: Boolean,
-        /**
-         * When set, renders add custom parameter button
-         */
-        allowCustom: Boolean,
-        /**
-         * Renders items in "narrow" view
-         */
-        narrow: Boolean
+        _titleId: String
       };
     }
 
@@ -360,69 +259,10 @@
       }
     }
     /**
-     * Computes class name for each row depending on the item.
-     *
-     * @param {Object} item Model item
-     * @param {Boolean} allowHideOptional
-     * @param {Boolean} optionalOpened True if optional parameters are rendered.
-     * @param {Boolean} allowDisableParams
-     * @return {String}
-     */
-    _computeRowClass(item, allowHideOptional, optionalOpened, allowDisableParams) {
-      let clazz = 'param-value';
-      if (item.required) {
-        clazz += ' required';
-      } else if (allowHideOptional) {
-        clazz += ' optional';
-      }
-      if (optionalOpened) {
-        clazz += ' with-optional';
-      }
-      if (allowDisableParams) {
-        clazz += ' has-enable-button';
-      }
-      return clazz;
-    }
-
-    /**
      * Computes array class for the input element.
      */
     _computeTypeClass(isArray) {
       return isArray ? 'is-array' : '';
-    }
-
-    /**
-     * Toggles visibility of optional parameters.
-     */
-    toggleOptionalParams() {
-      if (!this.allowHideOptional) {
-        return;
-      }
-      this.optionalOpened = !this.optionalOpened;
-    }
-    /**
-     * Returns a reference to the form element, if the DOM is ready.
-     *
-     * @return {IronForm} Iron form element
-     */
-    _getForm() {
-      if (!this.$) {
-        this.$ = {};
-      }
-      if (!this.$.form && this.shadowRoot) {
-        this.$.form = this.shadowRoot.querySelector('iron-form');
-      }
-      return this.$.form;
-    }
-
-    // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
-    // attribute automatically, which should be used for styling.
-    _getValidity() {
-      return this._getForm().validate();
-    }
-    // Link to the form's serialize function.
-    serializeForm() {
-      return this._getForm().serializeForm();
     }
     // Opens the documentation for item.
     _openDocs(e) {
@@ -435,28 +275,6 @@
         return;
       }
       collapse.opened = !collapse.opened;
-    }
-    /**
-     * Computes if any of the query parameters are required.
-     */
-    _computeHasOptionalParameters(allowHideOptional, record) {
-      if (!allowHideOptional || !record.base || !record.path) {
-        return false;
-      }
-      if (record.path !== 'model' && record.path !== 'model.splices') {
-        return this.hasOptional;
-      }
-
-      for (let i = 0, len = record.base.length; i < len; i++) {
-        if (!record.base[i].required) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    _computeRenderCheckbox(render, has) {
-      return render && has;
     }
     /**
      * Computes documentation as a markdown to be placed in the `marked-element`
@@ -518,30 +336,8 @@
     /**
      * Adds custom property to the list.
      */
-    addCustom() {
-      const e = this.fire('api-property-model-build', {
-        name: '',
-        value: '',
-        binding: 'query',
-        schema: {
-          enabled: true,
-          isCustom: true
-        }
-      });
-      if (this.model) {
-        this.push('model', e.detail);
-      } else {
-        this.set('model', [e.detail]);
-      }
-      this.optionalOpened = true;
-    }
-    /**
-     * Removed custom item from the UI.
-     *
-     * @param {CustomEvent} e
-     */
-    _removeCustom(e) {
-      this.splice('model', e.model.get('index'), 1);
+    add() {
+      this.addCustom('query');
     }
   }
 

@@ -71,43 +71,6 @@
           });
         });
 
-        suite('_computeRowClass()', () => {
-          let element;
-          suiteSetup(() => {
-            element = fixture('basic');
-          });
-
-          test('Returns only container class', () => {
-            let result = element._computeRowClass({});
-            assert.equal(result, 'param-value');
-          });
-
-          test('Returns class for required', () => {
-            let result = element._computeRowClass({required: true});
-            assert.equal(result, 'param-value required');
-          });
-
-          test('If required then not optional', () => {
-            let result = element._computeRowClass({required: true}, true);
-            assert.equal(result, 'param-value required');
-          });
-
-          test('Returns optional name', () => {
-            let result = element._computeRowClass({required: false}, true);
-            assert.equal(result, 'param-value optional');
-          });
-
-          test('Ignores optional if can\'t has optional', () => {
-            let result = element._computeRowClass({required: false}, false);
-            assert.equal(result, 'param-value');
-          });
-
-          test('Has opened class', () => {
-            let result = element._computeRowClass({}, true, true);
-            assert.equal(result, 'param-value optional with-optional');
-          });
-        });
-
         suite('_computeTypeClass()', () => {
           let element;
           suiteSetup(() => {
@@ -125,28 +88,6 @@
           });
         });
 
-        suite('toggleOptionalParams()', () => {
-          let element;
-          suiteSetup(() => {
-            element = fixture('basic');
-          });
-
-          test('Ignores the state when allowHideOptional is not set', () => {
-            element.toggleOptionalParams();
-            assert.isFalse(element.optionalOpened);
-            element.toggleOptionalParams();
-            assert.isFalse(element.optionalOpened);
-          });
-
-          test('Toggles property when allowed', () => {
-            element.allowHideOptional = true;
-            element.toggleOptionalParams();
-            assert.isTrue(element.optionalOpened);
-            element.toggleOptionalParams();
-            assert.isFalse(element.optionalOpened);
-          });
-        });
-
         suite('Basics', () => {
           test('_getForm() returns form handler', () => {
             const element = fixture('basic');
@@ -154,9 +95,9 @@
             assert.isOk(result);
           });
 
-          test('optionalOpened is false by default', () => {
+          test('optionalOpened is undefined by default', () => {
             const element = fixture('basic');
-            assert.isFalse(element.optionalOpened);
+            assert.isUndefined(element.optionalOpened);
           });
 
           test('Renders title', () => {
