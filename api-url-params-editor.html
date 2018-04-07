@@ -232,7 +232,7 @@
        * @param {CustomEvent} e
        */
       _queryParamChangeHandler(e) {
-        if (e.target === this || e.defaultPrevented) {
+        if (e.composedPath()[0] === this || e.defaultPrevented) {
           return;
         }
         const model = this.queryModel;
@@ -240,7 +240,7 @@
       }
 
       _uriParamChangeHandler(e) {
-        if (e.target === this || e.defaultPrevented) {
+        if (e.composedPath()[0] === this || e.defaultPrevented) {
           return;
         }
         const model = this.uriModel;
