@@ -80,7 +80,7 @@
     }
 
     .enable-checkbox {
-      margin-top: 32px;
+      margin-top: var(--api-url-params-form-enable-checkbox-margin-top, 32px);
       margin-right: 8px;
     }
 
@@ -104,7 +104,7 @@
     }
 
     .param-value paper-icon-button {
-      margin-top: 16px;
+      margin-top: var(--api-url-params-form-hint-icon-margin-top, 16px;);
     }
     </style>
     <div class="params-title">
@@ -207,6 +207,8 @@
    * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
    * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
    * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
+   * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
+   * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
    * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
    * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
    * `--icon-button` | Mixin applied to all icon buttons | `{}`
