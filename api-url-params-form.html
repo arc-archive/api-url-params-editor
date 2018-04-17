@@ -84,6 +84,10 @@
       margin-right: 8px;
     }
 
+    .enable-checkbox[data-array] {
+      margin-top: var(--api-url-params-form-enable-checkbox-array-margin-top, 40px);
+    }
+
     h3 {
       @apply --raml-request-parameters-editor-subheader;
       @apply --api-url-params-editor-editor-subheader;
@@ -106,6 +110,10 @@
     .param-value paper-icon-button {
       margin-top: var(--api-url-params-form-hint-icon-margin-top, 16px);
     }
+
+    .param-value paper-icon-button[data-array] {
+      margin-top: var(--api-url-params-form-hint-icon-array-margin-top, 24px);
+    }
     </style>
     <div class="params-title">
       <h3 id$="[[_titleId]]">[[formTitle]]</h3>
@@ -120,7 +128,7 @@
             <div class$="[[computeFormRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
               <div class$="value-input [[_computeTypeClass(item.isArray)]]">
                 <template is="dom-if" if="[[allowDisableParams]]">
-                  <paper-checkbox class="enable-checkbox" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
+                  <paper-checkbox class="enable-checkbox" data-array$="[[item.schema.isArray]]" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
                 </template>
                 <template is="dom-if" if="[[!_computeIsCustom(item.schema)]]">
                   <api-property-form-item
@@ -139,10 +147,10 @@
                 </template>
                 <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
                   <!-- TODO: The documentation should be computed on a transformer level. -->
-                  <paper-icon-button class="hint-icon" icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
+                  <paper-icon-button class="hint-icon" data-array$="[[item.schema.isArray]]" icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
                 </template>
                 <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <paper-icon-button title="Remove parameter" class="delete-icon action-icon" icon="arc:remove-circle-outline" on-tap="_removeCustom"></paper-icon-button>
+                  <paper-icon-button title="Remove parameter" data-array$="[[item.schema.isArray]]" class="delete-icon action-icon" icon="arc:remove-circle-outline" on-tap="_removeCustom"></paper-icon-button>
                 </template>
               </div>
               <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
@@ -208,7 +216,9 @@
    * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
    * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
    * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
+   * `--api-url-params-form-enable-checkbox-array-margin-top` | Margin top of the toggle checkbox when the item is an array | `40px`
    * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
+   * `--api-url-params-form-hint-icon-array-margin-top` | Margin top of the "help" icon when the item is an array| `24px`
    * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
    * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
    * `--icon-button` | Mixin applied to all icon buttons | `{}`
