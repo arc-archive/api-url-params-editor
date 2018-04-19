@@ -45,8 +45,8 @@
   </header>
   <dom-bind id="demo">
     <template is="dom-bind">
-      <api-view-model-transformer amf-model="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
-      <api-view-model-transformer amf-model="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
+      <api-view-model-transformer amf-model="[[amfModel]]" shape="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
+      <api-view-model-transformer amf-model="[[amfModel]]" shape="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
       <div class="vertical-section-container" role="main">
         <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]" on-query-value-changed="_queryValueChanged" on-uri-value-changed="_uriValueChanged" allow-custom></api-url-params-editor>
       </div>
@@ -123,6 +123,7 @@
       fetch('./parameters-model.json')
       .then((response) => response.json())
       .then((data) => {
+        scope.amfModel = data;
         scope.queryAmfModel = extractQueryParameters(data);
         scope.uriAmfModel = extractUriParameters(data);
       });
