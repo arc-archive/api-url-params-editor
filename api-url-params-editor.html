@@ -292,13 +292,18 @@
       // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
       // attribute automatically, which should be used for styling.
       _getValidity() {
+        if (!this.shadowRoot) {
+          return true;
+        }
         let validUri = true;
         let validUrl = true;
         if (this.hasUriParameters) {
-          validUri = this.shadowRoot.querySelector('#uriParametersForm').validate();
+          const uriForm = this.shadowRoot.querySelector('#uriParametersForm');
+          validUri = uriForm ? uriForm.validate() : true;
         }
         if (this.hasQueryParameters) {
-          validUrl = this.shadowRoot.querySelector('#queryParametersForm').validate();
+          const urlForm = this.shadowRoot.querySelector('#queryParametersForm');
+          validUrl = urlForm ? urlForm.validate() : true;
         }
         return validUri && validUrl;
       }
@@ -334,6 +339,7 @@
         if (record.path === 'uriModel' || record.path === 'queryModel') {
           this._renotifyModelChange(type);
           this._updateModelValue(type);
+          this.validate();
         } else if (record.path === 'queryModel.splices') {
           const splices = record.value.indexSplices;
           if (!splices || !splices[0]) {
@@ -343,6 +349,7 @@
             this._syncValues(true);
             this._notifyChange('query', splices[0].removed[0], true);
           }
+          this.validate();
           return;
         } else if (record.path === 'queryModel.length') {
           return;
@@ -359,6 +366,7 @@
             this._syncValues();
           }
           this._updateValue(type, item);
+          this.validate();
         }
       }
       /**

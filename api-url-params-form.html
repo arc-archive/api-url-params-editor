@@ -351,6 +351,12 @@
     add() {
       this.addCustom('query');
     }
+
+    // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
+    // attribute automatically, which should be used for styling.
+    _getValidity() {
+      return this.shadowRoot.querySelector('iron-form').validate();
+    }
   }
 
   window.customElements.define(ApiUrlParamsForm.is, ApiUrlParamsForm);
