@@ -33,10 +33,10 @@
       <p>This endpoint doesn't require to declare query or URI parameters.</p>
     </section>
     <template is="dom-if" if="[[hasUriParameters]]">
-      <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened></api-url-params-form>
+      <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened no-docs="[[noDocs]]"></api-url-params-form>
     </template>
     <template is="dom-if" if="[[hasQueryParameters]]">
-      <api-url-params-form id="queryParametersForm" role="region" form-title="Query parameters" allow-hide-optional allow-disable-params allow-custom="[[allowCustom]]" form-type="query" model="{{queryModel}}" narrow="[[narrow]]"></api-url-params-form>
+      <api-url-params-form id="queryParametersForm" role="region" form-title="Query parameters" allow-hide-optional allow-disable-params allow-custom="[[allowCustom]]" form-type="query" model="{{queryModel}}" narrow="[[narrow]]" no-docs="[[noDocs]]"></api-url-params-form>
     </template>
   </template>
   <script>
@@ -199,7 +199,12 @@
           /**
            * Renders forms in "narrow" view
            */
-          narrow: Boolean
+          narrow: Boolean,
+          /**
+           * Prohibits rendering of the documentation (the icon and the
+           * description).
+           */
+          noDocs: Boolean
         };
       }
 

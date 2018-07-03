@@ -145,7 +145,7 @@
                     required$="[[item.required]]"
                     narrow="[[narrow]]"></api-url-params-custom-input>
                 </template>
-                <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
+                <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
                   <!-- TODO: The documentation should be computed on a transformer level. -->
                   <paper-icon-button class="hint-icon" data-array$="[[item.schema.isArray]]" icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
                 </template>
@@ -153,7 +153,7 @@
                   <paper-icon-button title="Remove parameter" data-array$="[[item.schema.isArray]]" class="delete-icon action-icon" icon="arc:remove-circle-outline" on-tap="_removeCustom"></paper-icon-button>
                 </template>
               </div>
-              <template is="dom-if" if="[[_computeHasDocumentation(item)]]">
+              <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
                 <div class="docs">
                   <iron-collapse>
                     <marked-element markdown="[[_computeDocumentation(item)]]">
@@ -252,7 +252,15 @@
          */
         formTitle: String,
         // Generated ID of the title element.
-        _titleId: String
+        _titleId: String,
+        /**
+         * Prohibits rendering of the documentation (the icon and the
+         * description).
+         */
+        noDocs: {
+          type: Boolean,
+          value: false
+        }
       };
     }
 
@@ -322,7 +330,10 @@
      * @param {Object} item Model item
      * @return {Boolean} True if documentation can be rendered.
      */
-    _computeHasDocumentation(item) {
+    _computeHasDocumentation(noDocs, item) {
+      if (noDocs) {
+        return false;
+      }
       if (item.hasDescription) {
         return true;
       }
