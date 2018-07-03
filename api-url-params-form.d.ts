@@ -23,6 +23,8 @@
 /// <reference path="../paper-button/paper-button.d.ts" />
 /// <reference path="../arc-icons/arc-icons.d.ts" />
 /// <reference path="../iron-icon/iron-icon.d.ts" />
+/// <reference path="../api-form-mixin/api-form-mixin.d.ts" />
+/// <reference path="../api-form-mixin/api-form-styles.d.ts" />
 /// <reference path="api-url-params-custom-input.d.ts" />
 
 declare namespace ApiElements {
@@ -57,6 +59,10 @@ declare namespace ApiElements {
    * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
    * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
    * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
+   * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
+   * `--api-url-params-form-enable-checkbox-array-margin-top` | Margin top of the toggle checkbox when the item is an array | `40px`
+   * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
+   * `--api-url-params-form-hint-icon-array-margin-top` | Margin top of the "help" icon when the item is an array| `24px`
    * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
    * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
    * `--icon-button` | Mixin applied to all icon buttons | `{}`
@@ -68,18 +74,8 @@ declare namespace ApiElements {
    */
   class ApiUrlParamsForm extends
     Polymer.IronValidatableBehavior(
-    Polymer.Element) {
-
-    /**
-     * View model to use to render the form.
-     * See `api-url-params-editor` element for more information.
-     */
-    model: any[]|null|undefined;
-
-    /**
-     * Computed value, set to true to show optional parameters (not required by the API)
-     */
-    optionalOpened: boolean|null|undefined;
+    ArcBehaviors.ApiFormMixin(
+    Polymer.Element)) {
 
     /**
      * The form can display query or URI parameters. When anything change in the form
@@ -88,23 +84,6 @@ declare namespace ApiElements {
      * either `query` or `uri`.
      */
     formType: string|null|undefined;
-
-    /**
-     * Computed value. True if current query parameters set has any
-     * optional value.
-     */
-    readonly hasOptional: boolean|null|undefined;
-
-    /**
-     * If set it computes `hasOptional` property and shows checkbox
-     * to show / hide optional properties.
-     */
-    allowHideOptional: boolean|null|undefined;
-
-    /**
-     * Computed flag to determine if optional checkbox can be rendered
-     */
-    readonly _renderOptionalCheckbox: boolean|null|undefined;
 
     /**
      * Title do render
@@ -117,19 +96,16 @@ declare namespace ApiElements {
     _titleId: string|null|undefined;
 
     /**
-     * If set, enable / disable param checkbox is rendered.
+     * Prohibits rendering of the documentation (the icon and the
+     * description).
      */
-    allowDisableParams: boolean|null|undefined;
+    noDocs: boolean|null|undefined;
 
     /**
-     * When set, renders add custom parameter button
+     * attribute automatically, which should be used for styling.
      */
-    allowCustom: boolean|null|undefined;
-
-    /**
-     * Renders items in "narrow" view
-     */
-    narrow: boolean|null|undefined;
+    _getValidity(): any;
+    _computeIsCustom(schema: any): any;
     connectedCallback(): void;
 
     /**
@@ -140,50 +116,14 @@ declare namespace ApiElements {
     _generateTitleId(): any;
 
     /**
-     * Computes class name for each row depending on the item.
-     *
-     * @param item Model item
-     * @param optionalOpened True if optional parameters are rendered.
-     */
-    _computeRowClass(item: object|null, allowHideOptional: Boolean|null, optionalOpened: Boolean|null): String|null;
-
-    /**
      * Computes array class for the input element.
      */
     _computeTypeClass(isArray: any): any;
 
     /**
-     * Toggles visibility of optional parameters.
-     */
-    toggleOptionalParams(): void;
-
-    /**
-     * Returns a reference to the form element, if the DOM is ready.
-     *
-     * @returns Iron form element
-     */
-    _getForm(): IronForm|null;
-
-    /**
-     * attribute automatically, which should be used for styling.
-     */
-    _getValidity(): any;
-
-    /**
-     * Link to the form's serialize function.
-     */
-    serializeForm(): any;
-
-    /**
      * Opens the documentation for item.
      */
     _openDocs(e: any): void;
-
-    /**
-     * Computes if any of the query parameters are required.
-     */
-    _computeHasOptionalParameters(allowHideOptional: any, record: any): any;
-    _computeRenderCheckbox(render: any, has: any): any;
 
     /**
      * Computes documentation as a markdown to be placed in the `marked-element`
@@ -198,18 +138,12 @@ declare namespace ApiElements {
      * @param item Model item
      * @returns True if documentation can be rendered.
      */
-    _computeHasDocumentation(item: object|null): Boolean|null;
-    _computeIsCustom(schema: any): any;
+    _computeHasDocumentation(noDocs: any, item: object|null): Boolean|null;
 
     /**
      * Adds custom property to the list.
      */
-    addCustom(): void;
-
-    /**
-     * Removed custom item from the UI.
-     */
-    _removeCustom(e: CustomEvent|null): void;
+    add(): void;
   }
 }
 

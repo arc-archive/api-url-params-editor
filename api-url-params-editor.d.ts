@@ -68,6 +68,19 @@ declare namespace ApiElements {
    * <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]"></api-url-params-editor>
    * ```
    *
+   * ## Custom mode
+   *
+   * The element allows the user to define custom set of query parameters.
+   * It renders a button to add query parameter that is not defined in
+   * AMF model.
+   *
+   * With this mode enabled it always shows query parameters form. Therefore
+   * it won't show message that the endpoint does not requires parameters.
+   *
+   * ```html
+   * <api-url-params-editor allow-custom></api-url-params-editor>
+   * ```
+   *
    * ## Styling
    *
    * Custom property | Description | Default
@@ -77,6 +90,8 @@ declare namespace ApiElements {
    * `--api-url-params-editor-no-params-message` | Mixin applied to "empty info" container | `{}`
    * `--api-request-parameters-editor-row` | Mixin applied to custom parameter form row | `{}`
    * `--api-request-parameters-editor-row-narrow` | Mixin applied to custom parameter form row when narrow | `{}`
+   *
+   * See styles for the form and custom input for more styling API.
    */
   class ApiUrlParamsEditor extends
     Polymer.IronValidatableBehavior(
@@ -144,6 +159,12 @@ declare namespace ApiElements {
      * Renders forms in "narrow" view
      */
     narrow: boolean|null|undefined;
+
+    /**
+     * Prohibits rendering of the documentation (the icon and the
+     * description).
+     */
+    noDocs: boolean|null|undefined;
     _attachListeners(node: any): void;
     _detachListeners(node: any): void;
 
