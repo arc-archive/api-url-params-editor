@@ -12,16 +12,7 @@ view model from [AMF](https://github.com/mulesoft/amf) json/ld model.
 It cooperates with `advanced-rest-client/api-url-editor` to build
 HTTP request final URL.
 
-<!---
-```
-<custom-element-demo>
-  <template>
-    <link rel="import" href="api-url-params-editor.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
+
 ```html
 <api-url-params-editor allow-custom></api-url-params-editor>
 ```
