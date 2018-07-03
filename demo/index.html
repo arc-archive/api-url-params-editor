@@ -51,10 +51,10 @@
     <template is="dom-bind">
       <api-view-model-transformer amf-model="[[amfModel]]" shape="[[queryAmfModel]]" view-model="{{queryModel}}"></api-view-model-transformer>
       <api-view-model-transformer amf-model="[[amfModel]]" shape="[[uriAmfModel]]" view-model="{{uriModel}}"></api-view-model-transformer>
-      <div class="vertical-section-container" role="main">
+      <div class="vertical-section-container centered" role="main">
         <api-url-params-editor query-model="[[queryModel]]" uri-model="[[uriModel]]" on-query-value-changed="_queryValueChanged" on-uri-value-changed="_uriValueChanged" allow-custom></api-url-params-editor>
       </div>
-      <div class="vertical-section-container" role="region" aria-labelledby="outputTitle">
+      <div class="vertical-section-container centered" role="region" aria-labelledby="outputTitle">
         <h2 id="outputTitle">Produced output</h2>
         <p>Element produces <code>queryValue</code>, <code>uriValue</code> properties and dispatches change events.</p>
         <h3>Query parametrs</h3>
@@ -71,6 +71,7 @@
   </dom-bind>
   <script>
   (function(scope) {
+    const ns = ApiElements.Amf.ns;
     scope._queryValueChanged = function(e) {
       let queryValue = e.detail.value;
       let result;
@@ -106,21 +107,21 @@
      * types, endpoint and method.
      */
     function extractQueryParameters(model) {
-      model = model[0]['http://raml.org/vocabularies/document#encodes'][0];
-      model = model['http://raml.org/vocabularies/http#endpoint'][0];
-      const op = model['http://www.w3.org/ns/hydra/core#supportedOperation'][0];
-      const expects = op['http://www.w3.org/ns/hydra/core#expects'][0];
-      let result = expects['http://raml.org/vocabularies/http#parameter'];
+      model = model[0][ns.raml.vocabularies.document + 'encodes'][0];
+      model = model[ns.raml.vocabularies.http + 'endpoint'][0];
+      const op = model[ns.w3.hydra.core + 'supportedOperation'][0];
+      const expects = op[ns.w3.hydra.core + 'expects'][0];
+      let result = expects[ns.raml.vocabularies.http + 'parameter'];
       return result;
     }
 
     function extractUriParameters(model) {
-      model = model[0]['http://raml.org/vocabularies/document#encodes'][0];
-      model = model['http://raml.org/vocabularies/http#endpoint'][0];
-      return model['http://raml.org/vocabularies/http#parameter'];
+      model = model[0][ns.raml.vocabularies.document + 'encodes'][0];
+      model = model[ns.raml.vocabularies.http + 'endpoint'][0];
+      return model[ns.raml.vocabularies.http + 'parameter'];
     }
     scope._load = function() {
-      fetch('./parameters-model.json')
+      fetch('./demo-api.json')
       .then((response) => response.json())
       .then((data) => {
         scope.amfModel = data;
