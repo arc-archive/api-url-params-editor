@@ -88,19 +88,9 @@
       margin-top: var(--api-url-params-form-enable-checkbox-array-margin-top, 40px);
     }
 
-    h3 {
-      @apply --raml-request-parameters-editor-subheader;
-      @apply --api-url-params-editor-editor-subheader;
-    }
-
     .params-title {
       @apply --layout-horizontal;
       @apply --layout-center;
-    }
-
-    .params-title h3 {
-      display: inline-block;
-      margin-right: 12px;
     }
 
     .toggle-checkbox {
@@ -114,9 +104,15 @@
     .param-value paper-icon-button[data-array] {
       margin-top: var(--api-url-params-form-hint-icon-array-margin-top, 24px);
     }
+
+    .params-title ::slotted(h3) {
+      display: inline-block;
+      margin-right: 12px;
+      @apply --api-url-params-editor-editor-subheader;
+    }
     </style>
     <div class="params-title">
-      <h3 id$="[[_titleId]]">[[formTitle]]</h3>
+      <slot name="title"></slot>
       <template is="dom-if" if="[[renderOptionalCheckbox]]">
         <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
       </template>
@@ -247,10 +243,6 @@
          * either `query` or `uri`.
          */
         formType: String,
-        /**
-         * Title do render
-         */
-        formTitle: String,
         // Generated ID of the title element.
         _titleId: String,
         /**

@@ -33,10 +33,14 @@
       <p>This endpoint doesn't require to declare query or URI parameters.</p>
     </section>
     <template is="dom-if" if="[[hasUriParameters]]">
-      <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" form-title="URI parameters" optional-opened no-docs="[[noDocs]]"></api-url-params-form>
+      <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" optional-opened no-docs="[[noDocs]]">
+        <h3 slot="title">URI parameters</h3>
+      </api-url-params-form>
     </template>
     <template is="dom-if" if="[[hasQueryParameters]]">
-      <api-url-params-form id="queryParametersForm" role="region" form-title="Query parameters" allow-hide-optional allow-disable-params allow-custom="[[allowCustom]]" form-type="query" model="{{queryModel}}" narrow="[[narrow]]" no-docs="[[noDocs]]"></api-url-params-form>
+      <api-url-params-form id="queryParametersForm" role="region" allow-hide-optional allow-disable-params allow-custom="[[allowCustom]]" form-type="query" model="{{queryModel}}" narrow="[[narrow]]" no-docs="[[noDocs]]">
+        <h3 slot="title">Query parameters</h3>
+      </api-url-params-form>
     </template>
   </template>
   <script>
