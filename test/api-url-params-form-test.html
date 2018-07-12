@@ -102,12 +102,6 @@
             assert.isUndefined(element.optionalOpened);
           });
 
-          test('Renders title', () => {
-            const element = fixture('withTitle');
-            const header = element.shadowRoot.querySelector('h3');
-            assert.equal(header.innerText, 'test-title');
-          });
-
           test('Renders optional checkbox', (done) => {
             const element = fixture('allowHideOptional');
             element.model = [{

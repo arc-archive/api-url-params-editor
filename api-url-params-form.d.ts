@@ -86,11 +86,6 @@ declare namespace ApiElements {
     formType: string|null|undefined;
 
     /**
-     * Title do render
-     */
-    formTitle: string|null|undefined;
-
-    /**
      * Generated ID of the title element.
      */
     _titleId: string|null|undefined;
