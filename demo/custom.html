@@ -47,7 +47,7 @@
     <template is="dom-bind">
       <api-view-model-transformer></api-view-model-transformer>
       <div class="vertical-section-container" role="main">
-        <api-url-params-editor on-query-value-changed="_queryValueChanged" allow-custom></api-url-params-editor>
+        <api-url-params-editor on-query-value-changed="_queryValueChanged" allow-custom invalid="{{invalid}}"></api-url-params-editor>
       </div>
       <div class="vertical-section-container" role="region" aria-labelledby="outputTitle">
         <h2 id="outputTitle">Produced output</h2>
@@ -58,6 +58,8 @@
           <paper-button raised on-tap="clearEventsLog">Clear log</paper-button><br/>
           <output>[[eventsLog]]</output>
         </div>
+        <h3>Validity</h3>
+        <p>Invalid: [[invalid]]</p>
       </div>
     </template>
   </dom-bind>
