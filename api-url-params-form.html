@@ -173,14 +173,6 @@
     </template>
   </template>
   <script>
-  if (!window.ArcBehaviors) {
-    window.ArcBehaviors = {};
-  }
-  if (!window.ArcBehaviors.DomHelper) {
-    window.ArcBehaviors.DomHelper = {
-      NextID: 1
-    };
-  }
   /**
    * Renders form and input elements for query / uri model.
    *
@@ -243,8 +235,6 @@
          * either `query` or `uri`.
          */
         formType: String,
-        // Generated ID of the title element.
-        _titleId: String,
         /**
          * Prohibits rendering of the documentation (the icon and the
          * description).
@@ -258,17 +248,7 @@
 
     connectedCallback() {
       super.connectedCallback();
-      this._generateTitleId();
       this._ensureAttribute('role', 'form');
-    }
-    /**
-     * Generates ``
-     * @return {[type]} [description]
-     */
-    _generateTitleId() {
-      if (!this._titleId || this._titleId === '') {
-        this._titleId =  'arc-id-' + window.ArcBehaviors.DomHelper.NextID++;
-      }
     }
     /**
      * Computes array class for the input element.
