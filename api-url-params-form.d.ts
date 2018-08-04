@@ -86,11 +86,6 @@ declare namespace ApiElements {
     formType: string|null|undefined;
 
     /**
-     * Generated ID of the title element.
-     */
-    _titleId: string|null|undefined;
-
-    /**
      * Prohibits rendering of the documentation (the icon and the
      * description).
      */
@@ -104,16 +99,9 @@ declare namespace ApiElements {
     connectedCallback(): void;
 
     /**
-     * Generates ``
-     *
-     * @returns [description]
-     */
-    _generateTitleId(): any;
-
-    /**
      * Computes array class for the input element.
      */
-    _computeTypeClass(isArray: any): any;
+    _computeTypeClass(isArray: Boolean|null): String|null;
 
     /**
      * Opens the documentation for item.
@@ -125,15 +113,16 @@ declare namespace ApiElements {
      *
      * @param item View model
      */
-    _computeDocumentation(item: object|null): any;
+    _computeDocumentation(item: object|null): String|null;
 
     /**
      * Computes if model item has documentation to display.
      *
+     * @param noDocs If set it always cancels docs
      * @param item Model item
      * @returns True if documentation can be rendered.
      */
-    _computeHasDocumentation(noDocs: any, item: object|null): Boolean|null;
+    _computeHasDocumentation(noDocs: Boolean|null, item: object|null): Boolean|null;
 
     /**
      * Adds custom property to the list.
