@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../polymer/lib/utils/render-status.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
@@ -363,7 +364,6 @@
         if (record.path === 'uriModel' || record.path === 'queryModel') {
           this._renotifyModelChange(type);
           this._updateModelValue(type);
-          this.validate();
         } else if (record.path === 'queryModel.splices') {
           const splices = record.value.indexSplices;
           if (!splices || !splices[0]) {
@@ -373,11 +373,6 @@
             this._syncValues(true);
             this._notifyChange('query', splices[0].removed[0], true);
           }
-          this.validate();
-          return;
-        } else if (record.path === 'queryModel.length') {
-          this.validate();
-          return;
         } else {
           const re = type === 'uri' ? this._uriModelMatcher :
             this._queryModelMatcher;
@@ -391,8 +386,10 @@
             this._syncValues();
           }
           this._updateValue(type, item);
-          this.validate();
         }
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.validate();
+        });
       }
       /**
        * Sends change notification when entire model change.
