@@ -10,6 +10,8 @@
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../paper-button/paper-button.html">
   <link rel="import" href="../../api-view-model-transformer/api-view-model-transformer.html">
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../paper-styles/shadow.html">
   <link rel="import" href="../api-url-params-editor.html">
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
@@ -17,6 +19,18 @@
       --arc-font-body1: {
         @apply --paper-font-body1;
       }
+    }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 12px 24px;
+      background-color: #C5E1A5;
+      @apply --layout-horizontal;
+      @apply --layout-center;
     }
 
     h1 {
@@ -36,31 +50,55 @@
       @apply --paper-font-code1;
       font-size: 16px;
     }
+
+    .spacer {
+      @apply --layout-flex;
+    }
+
+    .vertical-section-container {
+      background-color: #fff;
+      padding: 20px;
+      margin: 24px;
+      @apply --shadow-elevation-2dp;
+    }
+
+    api-url-params-editor {
+      padding: 8px;
+    }
+
+    api-url-params-editor[invalid] {
+      border: 1px red dashed;
+    }
     </style>
   </custom-style>
 </head>
 <body>
-  <header>
-    <h1>API URL params editor<h1>
-  </header>
+
   <dom-bind id="demo">
     <template is="dom-bind">
       <api-view-model-transformer></api-view-model-transformer>
-      <div class="vertical-section-container" role="main">
-        <api-url-params-editor on-query-value-changed="_queryValueChanged" allow-custom invalid="{{invalid}}"></api-url-params-editor>
-      </div>
-      <div class="vertical-section-container" role="region" aria-labelledby="outputTitle">
-        <h2 id="outputTitle">Produced output</h2>
-        <h3>Query parametrs</h3>
-        <output>[[queryValueString]]</output>
-        <h3>Events log</h3>
-        <div>
-          <paper-button raised on-tap="clearEventsLog">Clear log</paper-button><br/>
-          <output>[[eventsLog]]</output>
+
+      <header>
+        <h1>API URL params editor</h1>
+        <div class="spacer"></div>
+        <div class="options">
+          <paper-checkbox checked="{{narrow}}">Render narrow view</paper-checkbox>
         </div>
-        <h3>Validity</h3>
+      </header>
+
+      <section class="vertical-section-container" role="main">
+        <api-url-params-editor on-query-value-changed="_queryValueChanged" allow-custom narrow="{{narrow}}" invalid="{{invalid}}"></api-url-params-editor>
+      </section>
+
+      <section class="vertical-section-container" role="region" aria-labelledby="outputTitle">
+        <h2 id="outputTitle">Query parameters model</h2>
+        <output>[[queryValueString]]</output>
+      </section>
+
+      <section class="vertical-section-container" role="region" aria-labelledby="validityTitle">
+        <h2 id="validityTitle">Validity</h2>
         <p>Invalid: [[invalid]]</p>
-      </div>
+      </section>
     </template>
   </dom-bind>
   <script>
@@ -75,23 +113,23 @@
       }
       scope.set('queryValueString', result);
     };
-    scope._logEvent = function(type, name, value) {
-      let log = '[' + new Date().toGMTString() + ']: ';
-      log += type + ' model changed: ' + name + '=' + value + '\n';
-      let scopelog = scope.eventsLog;
-      if (!scopelog) {
-        scopelog = '';
-      }
-      scopelog += log;
-      scope.eventsLog = scopelog;
-    };
-    scope.clearEventsLog = function() {
-      scope.eventsLog = '';
-    };
-    window.addEventListener('query-parameter-changed', (e) => {
-      console.log('query-parameter-changed', e.detail.name, e.detail.value);
-      scope._logEvent('Query', e.detail.name, e.detail.value);
-    });
+    // scope._logEvent = function(type, name, value) {
+    //   let log = '[' + new Date().toGMTString() + ']: ';
+    //   log += type + ' model changed: ' + name + '=' + value + '\n';
+    //   let scopelog = scope.eventsLog;
+    //   if (!scopelog) {
+    //     scopelog = '';
+    //   }
+    //   scopelog += log;
+    //   scope.eventsLog = scopelog;
+    // };
+    // scope.clearEventsLog = function() {
+    //   scope.eventsLog = '';
+    // };
+    // window.addEventListener('query-parameter-changed', (e) => {
+    //   console.log('query-parameter-changed', e.detail.name, e.detail.value);
+    //   scope._logEvent('Query', e.detail.name, e.detail.value);
+    // });
   })(document.getElementById('demo'));
   </script>
 </body>
