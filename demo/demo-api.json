@@ -368,27 +368,21 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array",
+                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array/linked_1",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ArrayShape",
                               "http://www.w3.org/ns/shacl#Shape",
                               "http://a.ml/vocabularies/shapes#Shape",
                               "http://a.ml/vocabularies/document#DomainElement"
                             ],
-                            "http://a.ml/vocabularies/shapes#items": [
+                            "http://a.ml/vocabularies/document#link-target": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array/scalar/default-scalar",
-                                "@type": [
-                                  "http://a.ml/vocabularies/shapes#ScalarShape",
-                                  "http://www.w3.org/ns/shacl#Shape",
-                                  "http://a.ml/vocabularies/shapes#Shape",
-                                  "http://a.ml/vocabularies/document#DomainElement"
-                                ],
-                                "http://www.w3.org/ns/shacl#datatype": [
-                                  {
-                                    "@id": "http://www.w3.org/2001/XMLSchema#string"
-                                  }
-                                ]
+                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array"
+                              }
+                            ],
+                            "http://a.ml/vocabularies/document#link-label": [
+                              {
+                                "@value": "amf_inline_type_1"
                               }
                             ]
                           }
@@ -602,107 +596,6 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken",
-                        "@type": [
-                          "http://a.ml/vocabularies/http#Parameter",
-                          "http://a.ml/vocabularies/document#DomainElement"
-                        ],
-                        "http://schema.org/name": [
-                          {
-                            "@value": "nextPageToken"
-                          }
-                        ],
-                        "http://a.ml/vocabularies/http#paramName": [
-                          {
-                            "@value": "nextPageToken"
-                          }
-                        ],
-                        "http://schema.org/description": [
-                          {
-                            "@value": "The `nextPageToken` is a web safe encoded cursor to the next entry in the database.\nIt can be obtained by requesting paginated resource and used in next request to get\nnext results page.\n"
-                          }
-                        ],
-                        "http://www.w3.org/ns/hydra/core#required": [
-                          {
-                            "@value": true
-                          }
-                        ],
-                        "http://a.ml/vocabularies/http#binding": [
-                          {
-                            "@value": "query"
-                          }
-                        ],
-                        "http://a.ml/vocabularies/http#schema": [
-                          {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema",
-                            "@type": [
-                              "http://a.ml/vocabularies/shapes#ScalarShape",
-                              "http://www.w3.org/ns/shacl#Shape",
-                              "http://a.ml/vocabularies/shapes#Shape",
-                              "http://a.ml/vocabularies/document#DomainElement"
-                            ],
-                            "http://www.w3.org/ns/shacl#datatype": [
-                              {
-                                "@id": "http://www.w3.org/2001/XMLSchema#string"
-                              }
-                            ],
-                            "http://www.w3.org/ns/shacl#pattern": [
-                              {
-                                "@value": "^[a-zA-Z0-9]+$"
-                              }
-                            ],
-                            "http://www.w3.org/ns/shacl#name": [
-                              {
-                                "@value": "schema"
-                              }
-                            ],
-                            "http://schema.org/name": [
-                              {
-                                "@value": "Page token"
-                              }
-                            ],
-                            "http://schema.org/description": [
-                              {
-                                "@value": "The `nextPageToken` is a web safe encoded cursor to the next entry in the database.\nIt can be obtained by requesting paginated resource and used in next request to get\nnext results page.\n"
-                              }
-                            ],
-                            "http://a.ml/vocabularies/document#examples": [
-                              {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema/example/default-example",
-                                "@type": [
-                                  "http://a.ml/vocabularies/document#Example",
-                                  "http://a.ml/vocabularies/document#DomainElement"
-                                ],
-                                "http://a.ml/vocabularies/document#strict": [
-                                  {
-                                    "@value": true
-                                  }
-                                ],
-                                "http://a.ml/vocabularies/document#structuredValue": [
-                                  {
-                                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema/example/default-example/scalar_1",
-                                    "@type": [
-                                      "http://a.ml/vocabularies/data#Scalar"
-                                    ],
-                                    "http://a.ml/vocabularies/data#value": [
-                                      {
-                                        "@value": "CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA",
-                                        "@type": "http://www.w3.org/2001/XMLSchema#string"
-                                      }
-                                    ]
-                                  }
-                                ],
-                                "http://www.w3.org/ns/shacl#raw": [
-                                  {
-                                    "@value": "CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
                         "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/start",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
@@ -810,6 +703,107 @@
                                 "http://www.w3.org/ns/shacl#raw": [
                                   {
                                     "@value": "25"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken",
+                        "@type": [
+                          "http://a.ml/vocabularies/http#Parameter",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://schema.org/name": [
+                          {
+                            "@value": "nextPageToken"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/http#paramName": [
+                          {
+                            "@value": "nextPageToken"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "The `nextPageToken` is a web safe encoded cursor to the next entry in the database.\nIt can be obtained by requesting paginated resource and used in next request to get\nnext results page.\n"
+                          }
+                        ],
+                        "http://www.w3.org/ns/hydra/core#required": [
+                          {
+                            "@value": true
+                          }
+                        ],
+                        "http://a.ml/vocabularies/http#binding": [
+                          {
+                            "@value": "query"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/http#schema": [
+                          {
+                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#pattern": [
+                              {
+                                "@value": "^[a-zA-Z0-9]+$"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "schema"
+                              }
+                            ],
+                            "http://schema.org/name": [
+                              {
+                                "@value": "Page token"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "The `nextPageToken` is a web safe encoded cursor to the next entry in the database.\nIt can be obtained by requesting paginated resource and used in next request to get\nnext results page.\n"
+                              }
+                            ],
+                            "http://a.ml/vocabularies/document#examples": [
+                              {
+                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema/example/default-example",
+                                "@type": [
+                                  "http://a.ml/vocabularies/document#Example",
+                                  "http://a.ml/vocabularies/document#DomainElement"
+                                ],
+                                "http://a.ml/vocabularies/document#strict": [
+                                  {
+                                    "@value": true
+                                  }
+                                ],
+                                "http://a.ml/vocabularies/document#structuredValue": [
+                                  {
+                                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema/example/default-example/scalar_1",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/data#Scalar"
+                                    ],
+                                    "http://a.ml/vocabularies/data#value": [
+                                      {
+                                        "@value": "CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA",
+                                        "@type": "http://www.w3.org/2001/XMLSchema#string"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "http://www.w3.org/ns/shacl#raw": [
+                                  {
+                                    "@value": "CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA"
                                   }
                                 ]
                               }
@@ -1481,6 +1475,36 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array",
+        "@type": [
+          "http://a.ml/vocabularies/shapes#ArrayShape",
+          "http://www.w3.org/ns/shacl#Shape",
+          "http://a.ml/vocabularies/shapes#Shape",
+          "http://a.ml/vocabularies/document#DomainElement"
+        ],
+        "http://a.ml/vocabularies/shapes#items": [
+          {
+            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array/items/scalar/default-scalar",
+            "@type": [
+              "http://a.ml/vocabularies/shapes#ScalarShape",
+              "http://www.w3.org/ns/shacl#Shape",
+              "http://a.ml/vocabularies/shapes#Shape",
+              "http://a.ml/vocabularies/document#DomainElement"
+            ],
+            "http://www.w3.org/ns/shacl#datatype": [
+              {
+                "@id": "http://www.w3.org/2001/XMLSchema#string"
+              }
+            ]
+          }
+        ],
+        "http://www.w3.org/ns/shacl#name": [
+          {
+            "@value": "amf_inline_type_1"
           }
         ]
       }
