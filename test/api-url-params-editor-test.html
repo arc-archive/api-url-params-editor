@@ -20,7 +20,6 @@
 
     <script>
       suite('api-url-params-editor', () => {
-
         suite('_computeHasData()', () => {
           let element;
           suiteSetup(() => {
@@ -133,7 +132,7 @@
           };
           const queryModel = {
             binding: 'query',
-            name: 'access_token',
+            name: 'accesstoken',
             hasDescription: true,
             description: 'test',
             required: true,
@@ -185,7 +184,8 @@
           test('Renders query parameters form', (done) => {
             element.queryModel = [Object.assign({}, queryModel)];
             flush(() => {
-              const form = element.shadowRoot.querySelector('api-url-params-form[form-type="query"]');
+              const form = element.shadowRoot.
+              querySelector('api-url-params-form[form-type="query"]');
               assert.ok(form);
               done();
             });
@@ -225,7 +225,7 @@
 
           test('Dispatches change event when query params are set', (done) => {
             element.addEventListener('query-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'access_token', 'name is set');
+              assert.equal(e.detail.name, 'accesstoken', 'name is set');
               assert.equal(e.detail.value, 'access_token-value', 'value is set');
               assert.isTrue(e.detail.enabled, 'enabled is set');
               done();
@@ -236,7 +236,7 @@
           test('Dispatches change event when query value change', (done) => {
             element.queryModel = [Object.assign({}, queryModel)];
             element.addEventListener('query-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'access_token', 'name is set');
+              assert.equal(e.detail.name, 'accesstoken', 'name is set');
               assert.equal(e.detail.value, 'changed-value', 'value is set');
               assert.isTrue(e.detail.enabled, 'enabled is set');
               done();
@@ -247,7 +247,7 @@
           test('Dispatches change event when query enabled change', (done) => {
             element.queryModel = [Object.assign({}, queryModel)];
             element.addEventListener('query-parameter-changed', (e) => {
-              assert.equal(e.detail.name, 'access_token', 'name is set');
+              assert.equal(e.detail.name, 'accesstoken', 'name is set');
               // assert.isUndefined(e.detail.value, 'value is undefined');
               assert.isFalse(e.detail.enabled, 'enabled is set');
               done();
@@ -273,14 +273,133 @@
             queryModel.schema.enabled = true;
             element.queryModel = [Object.assign({}, queryModel)];
             assert.typeOf(element.queryValue, 'object');
-            assert.equal(element.queryValue.access_token, 'access_token-value');
+            assert.equal(element.queryValue.accesstoken, 'access_token-value');
           });
 
           test('Not enabled query parameters are not included', () => {
             queryModel.schema.enabled = false;
             element.queryModel = [Object.assign({}, queryModel)];
             assert.typeOf(element.queryValue, 'object');
-            assert.isUndefined(element.queryValue.access_token);
+            assert.isUndefined(element.queryValue.accesstoken);
+          });
+        });
+
+        suite('Validation', () => {
+          const uriModel = {
+            binding: 'query',
+            name: 'file',
+            hasDescription: true,
+            description: 'test',
+            required: true,
+            schema: {
+              enabled: true,
+              type: 'string',
+              inputLabel: 'file',
+              isEnum: false,
+              isArray: false,
+              isBool: false,
+              inputType: 'text'
+            },
+            value: ''
+          };
+          const queryModel = [{
+            binding: 'query',
+            name: 'accesstoken',
+            hasDescription: true,
+            description: 'test',
+            required: true,
+            schema: {
+              enabled: true,
+              type: 'string',
+              inputLabel: 'access_token',
+              isEnum: false,
+              isArray: false,
+              isBool: false,
+              inputType: 'text'
+            },
+            value: ''
+          }, {
+            binding: 'query',
+            name: 'accesstoken',
+            hasDescription: true,
+            description: 'test',
+            required: false,
+            schema: {
+              enabled: true,
+              type: 'string',
+              inputLabel: 'access_token',
+              isEnum: false,
+              isArray: false,
+              isBool: false,
+              inputType: 'text'
+            },
+            value: ''
+          }];
+
+          let element;
+
+          test('Validates without model', (done) => {
+            element = fixture('BasicTestFixture');
+            flush(() => {
+              assert.isTrue(element.validate());
+              done();
+            });
+          });
+
+          test('Not valid for required URI model', (done) => {
+            element = fixture('BasicTestFixture');
+            element.uriModel = [Object.assign({}, uriModel)];
+            flush(() => {
+              assert.isFalse(element.validate());
+              done();
+            });
+          });
+
+          test('Valid when URI model has value', (done) => {
+            element = fixture('BasicTestFixture');
+            element.uriModel = [Object.assign({}, uriModel)];
+            element.set('uriModel.0.value', 'test');
+            flush(() => {
+              assert.isTrue(element.validate());
+              done();
+            });
+          });
+
+          test('Not valid for required query model', (done) => {
+            element = fixture('BasicTestFixture');
+            element.queryModel = [Object.assign({}, queryModel[0])];
+            flush(() => {
+              assert.isFalse(element.validate());
+              done();
+            });
+          });
+
+          test('Valid when query model has value', (done) => {
+            element = fixture('BasicTestFixture');
+            element.queryModel = [Object.assign({}, queryModel[0])];
+            element.set('queryModel.0.value', 'test');
+            flush(() => {
+              assert.isTrue(element.validate());
+              done();
+            });
+          });
+
+          test('Valid for not required query model', (done) => {
+            element = fixture('BasicTestFixture');
+            element.queryModel = [Object.assign({}, queryModel[1])];
+            flush(() => {
+              assert.isTrue(element.validate());
+              done();
+            });
+          });
+
+          test('Not valid for required query model with not required', (done) => {
+            element = fixture('BasicTestFixture');
+            element.queryModel = queryModel.map((item) => Object.assign({}, item));
+            flush(() => {
+              assert.isFalse(element.validate());
+              done();
+            });
           });
         });
 
