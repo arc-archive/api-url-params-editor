@@ -54,25 +54,6 @@
 
         a11ySuite('basic');
 
-        suite('_generateTitleId()', () => {
-          let element;
-          suiteSetup(() => {
-            element = fixture('basic');
-          });
-
-          test('Creates property _titleId', () => {
-            element._generateTitleId();
-            assert.isTrue(element._titleId.indexOf('arc-id-') === 0);
-          });
-
-          test('Increases helper value', () => {
-            const before = ArcBehaviors.DomHelper.NextID;
-            element._titleId = undefined;
-            element._generateTitleId();
-            assert.equal(ArcBehaviors.DomHelper.NextID, before + 1);
-          });
-        });
-
         suite('_computeTypeClass()', () => {
           let element;
           suiteSetup(() => {
