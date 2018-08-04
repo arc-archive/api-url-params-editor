@@ -127,10 +127,13 @@
     // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
     // attribute automatically, which should be used for styling.
     _getValidity() {
+      if (!this.required) {
+        return true;
+      }
       if (!this.name) {
         return false;
       }
-      return !!(this.required && this.value);
+      return !!this.value;
     }
     /**
      * Computes css class name for narrow layout
