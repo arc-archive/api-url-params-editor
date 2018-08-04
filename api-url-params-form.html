@@ -224,8 +224,9 @@
    * @appliesMixin ArcBehaviors.ApiFormMixin
    */
   class ApiUrlParamsForm extends
-  Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], ArcBehaviors.ApiFormMixin(Polymer.Element)) {
-    static get is() { return 'api-url-params-form'; }
+  Polymer.mixinBehaviors(
+    [Polymer.IronValidatableBehavior], ArcBehaviors.ApiFormMixin(Polymer.Element)) {
+    static get is() {return 'api-url-params-form';}
     static get properties() {
       return {
         /**
@@ -252,6 +253,9 @@
     }
     /**
      * Computes array class for the input element.
+     *
+     * @param {Boolean} isArray
+     * @return {String}
      */
     _computeTypeClass(isArray) {
       return isArray ? 'is-array' : '';
@@ -271,6 +275,7 @@
     /**
      * Computes documentation as a markdown to be placed in the `marked-element`
      * @param {Object} item View model
+     * @return {String}
      */
     _computeDocumentation(item) {
       let docs = '';
@@ -298,7 +303,7 @@
     }
     /**
      * Computes if model item has documentation to display.
-     *
+     * @param {Boolean} noDocs If set it always cancels docs
      * @param {Object} item Model item
      * @return {Boolean} True if documentation can be rendered.
      */
