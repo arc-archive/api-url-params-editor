@@ -1,6 +1,6 @@
 [
   {
-    "@id": "file://demo/demo-api.raml",
+    "@id": "amf://id",
     "@type": [
       "http://a.ml/vocabularies/document#Document",
       "http://a.ml/vocabularies/document#Fragment",
@@ -9,7 +9,7 @@
     ],
     "http://a.ml/vocabularies/document#encodes": [
       {
-        "@id": "file://demo/demo-api.raml#/web-api",
+        "@id": "amf://id#4",
         "@type": [
           "http://schema.org/WebAPI",
           "http://a.ml/vocabularies/document#RootDomainElement",
@@ -22,7 +22,7 @@
         ],
         "http://a.ml/vocabularies/http#server": [
           {
-            "@id": "file://demo/demo-api.raml#/web-api/http%3A%2F%2F%7Bhost%7D.api.domain.com%3A8254%2F%7BapiVersion%7D%2F",
+            "@id": "amf://id#42",
             "@type": [
               "http://a.ml/vocabularies/http#Server",
               "http://a.ml/vocabularies/document#DomainElement"
@@ -34,7 +34,7 @@
             ],
             "http://a.ml/vocabularies/http#variable": [
               {
-                "@id": "file://demo/demo-api.raml#/web-api/http%3A%2F%2F%7Bhost%7D.api.domain.com%3A8254%2F%7BapiVersion%7D%2F/parameter/host",
+                "@id": "amf://id#43",
                 "@type": [
                   "http://a.ml/vocabularies/http#Parameter",
                   "http://a.ml/vocabularies/document#DomainElement"
@@ -66,7 +66,7 @@
                 ],
                 "http://a.ml/vocabularies/http#schema": [
                   {
-                    "@id": "file://demo/demo-api.raml#/web-api/http%3A%2F%2F%7Bhost%7D.api.domain.com%3A8254%2F%7BapiVersion%7D%2F/parameter/host/scalar/schema",
+                    "@id": "amf://id#44",
                     "@type": [
                       "http://a.ml/vocabularies/shapes#ScalarShape",
                       "http://www.w3.org/ns/shacl#Shape",
@@ -97,7 +97,7 @@
                 ]
               },
               {
-                "@id": "file://demo/demo-api.raml#/web-api/http%3A%2F%2F%7Bhost%7D.api.domain.com%3A8254%2F%7BapiVersion%7D%2F/parameter/apiVersion",
+                "@id": "amf://id#45",
                 "@type": [
                   "http://a.ml/vocabularies/http#Parameter",
                   "http://a.ml/vocabularies/document#DomainElement"
@@ -129,7 +129,7 @@
                 ],
                 "http://a.ml/vocabularies/http#schema": [
                   {
-                    "@id": "file://demo/demo-api.raml#/web-api/http%3A%2F%2F%7Bhost%7D.api.domain.com%3A8254%2F%7BapiVersion%7D%2F/parameter/apiVersion/scalar/schema",
+                    "@id": "amf://id#46",
                     "@type": [
                       "http://a.ml/vocabularies/shapes#ScalarShape",
                       "http://www.w3.org/ns/shacl#Shape",
@@ -158,21 +158,48 @@
                     ],
                     "http://www.w3.org/ns/shacl#in": [
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/http%3A%2F%2F%7Bhost%7D.api.domain.com%3A8254%2F%7BapiVersion%7D%2F/parameter/apiVersion/scalar/schema/list",
+                        "@id": "amf://id#46/list",
                         "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
                         "http://www.w3.org/2000/01/rdf-schema#_1": [
                           {
-                            "@value": "1"
+                            "@id": "amf://id#47",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "1",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
                           }
                         ],
                         "http://www.w3.org/2000/01/rdf-schema#_2": [
                           {
-                            "@value": "2"
+                            "@id": "amf://id#48",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "2",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
                           }
                         ],
                         "http://www.w3.org/2000/01/rdf-schema#_3": [
                           {
-                            "@value": "3"
+                            "@id": "amf://id#49",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "3",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
                           }
                         ]
                       }
@@ -190,7 +217,7 @@
         ],
         "http://a.ml/vocabularies/http#endpoint": [
           {
-            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D",
+            "@id": "amf://id#5",
             "@type": [
               "http://a.ml/vocabularies/http#EndPoint",
               "http://a.ml/vocabularies/document#DomainElement"
@@ -202,7 +229,7 @@
             ],
             "http://www.w3.org/ns/hydra/core#supportedOperation": [
               {
-                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get",
+                "@id": "amf://id#7",
                 "@type": [
                   "http://www.w3.org/ns/hydra/core#Operation",
                   "http://a.ml/vocabularies/document#DomainElement"
@@ -214,14 +241,14 @@
                 ],
                 "http://www.w3.org/ns/hydra/core#expects": [
                   {
-                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request",
+                    "@id": "amf://id#8",
                     "@type": [
                       "http://a.ml/vocabularies/http#Request",
                       "http://a.ml/vocabularies/document#DomainElement"
                     ],
                     "http://a.ml/vocabularies/http#parameter": [
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/limit",
+                        "@id": "amf://id#9",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -253,7 +280,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/limit/scalar/schema",
+                            "@id": "amf://id#10",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -287,7 +314,7 @@
                             ],
                             "http://www.w3.org/ns/shacl#defaultValue": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/limit/scalar/schema/scalar_1",
+                                "@id": "amf://id#11",
                                 "@type": [
                                   "http://a.ml/vocabularies/data#Scalar"
                                 ],
@@ -306,7 +333,7 @@
                             ],
                             "http://a.ml/vocabularies/document#examples": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/limit/scalar/schema/example/default-example",
+                                "@id": "amf://id#12",
                                 "@type": [
                                   "http://a.ml/vocabularies/document#Example",
                                   "http://a.ml/vocabularies/document#DomainElement"
@@ -318,7 +345,7 @@
                                 ],
                                 "http://a.ml/vocabularies/document#structuredValue": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/limit/scalar/schema/example/default-example/scalar_1",
+                                    "@id": "amf://id#13",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -334,6 +361,28 @@
                                   {
                                     "@value": "100"
                                   }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "amf://id#12/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#tracked-element": [
+                                      {
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "amf://id#12"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "amf://id#14"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
                                 ]
                               }
                             ]
@@ -341,7 +390,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items",
+                        "@id": "amf://id#15",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -368,7 +417,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array/linked_1",
+                            "@id": "amf://id#16/linked_1",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ArrayShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -377,7 +426,7 @@
                             ],
                             "http://a.ml/vocabularies/document#link-target": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array"
+                                "@id": "amf://id#16"
                               }
                             ],
                             "http://a.ml/vocabularies/document#link-label": [
@@ -389,7 +438,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/paramString",
+                        "@id": "amf://id#18",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -416,7 +465,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/paramString/scalar/schema",
+                            "@id": "amf://id#19",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -442,7 +491,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/param_number",
+                        "@id": "amf://id#20",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -469,7 +518,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/param_number/scalar/schema",
+                            "@id": "amf://id#21",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -500,7 +549,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/a",
+                        "@id": "amf://id#22",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -527,7 +576,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/a/scalar/schema",
+                            "@id": "amf://id#23",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -548,7 +597,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/b",
+                        "@id": "amf://id#24",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -575,7 +624,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/b/scalar/schema",
+                            "@id": "amf://id#25",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -596,7 +645,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/start",
+                        "@id": "amf://id#26",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -628,7 +677,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/start/scalar/schema",
+                            "@id": "amf://id#27",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -657,7 +706,7 @@
                             ],
                             "http://www.w3.org/ns/shacl#defaultValue": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/start/scalar/schema/scalar_1",
+                                "@id": "amf://id#28",
                                 "@type": [
                                   "http://a.ml/vocabularies/data#Scalar"
                                 ],
@@ -676,7 +725,7 @@
                             ],
                             "http://a.ml/vocabularies/document#examples": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/start/scalar/schema/example/default-example",
+                                "@id": "amf://id#29",
                                 "@type": [
                                   "http://a.ml/vocabularies/document#Example",
                                   "http://a.ml/vocabularies/document#DomainElement"
@@ -688,7 +737,7 @@
                                 ],
                                 "http://a.ml/vocabularies/document#structuredValue": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/start/scalar/schema/example/default-example/scalar_1",
+                                    "@id": "amf://id#30",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -704,6 +753,28 @@
                                   {
                                     "@value": "25"
                                   }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "amf://id#29/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#tracked-element": [
+                                      {
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "amf://id#29"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "amf://id#31"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
                                 ]
                               }
                             ]
@@ -711,7 +782,7 @@
                         ]
                       },
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken",
+                        "@id": "amf://id#32",
                         "@type": [
                           "http://a.ml/vocabularies/http#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -743,7 +814,7 @@
                         ],
                         "http://a.ml/vocabularies/http#schema": [
                           {
-                            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema",
+                            "@id": "amf://id#33",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://www.w3.org/ns/shacl#Shape",
@@ -777,7 +848,7 @@
                             ],
                             "http://a.ml/vocabularies/document#examples": [
                               {
-                                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema/example/default-example",
+                                "@id": "amf://id#34",
                                 "@type": [
                                   "http://a.ml/vocabularies/document#Example",
                                   "http://a.ml/vocabularies/document#DomainElement"
@@ -789,7 +860,7 @@
                                 ],
                                 "http://a.ml/vocabularies/document#structuredValue": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/nextPageToken/scalar/schema/example/default-example/scalar_1",
+                                    "@id": "amf://id#35",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -805,6 +876,28 @@
                                   {
                                     "@value": "CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA"
                                   }
+                                ],
+                                "http://a.ml/vocabularies/document-source-maps#sources": [
+                                  {
+                                    "@id": "amf://id#34/source-map",
+                                    "@type": [
+                                      "http://a.ml/vocabularies/document-source-maps#SourceMap"
+                                    ],
+                                    "http://a.ml/vocabularies/document-source-maps#tracked-element": [
+                                      {
+                                        "http://a.ml/vocabularies/document-source-maps#element": [
+                                          {
+                                            "@value": "amf://id#34"
+                                          }
+                                        ],
+                                        "http://a.ml/vocabularies/document-source-maps#value": [
+                                          {
+                                            "@value": "amf://id#36"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
                                 ]
                               }
                             ]
@@ -818,7 +911,7 @@
             ],
             "http://a.ml/vocabularies/http#parameter": [
               {
-                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/parameter/pathParam",
+                "@id": "amf://id#37",
                 "@type": [
                   "http://a.ml/vocabularies/http#Parameter",
                   "http://a.ml/vocabularies/document#DomainElement"
@@ -850,7 +943,7 @@
                 ],
                 "http://a.ml/vocabularies/http#schema": [
                   {
-                    "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/parameter/pathParam/scalar/schema",
+                    "@id": "amf://id#38",
                     "@type": [
                       "http://a.ml/vocabularies/shapes#ScalarShape",
                       "http://www.w3.org/ns/shacl#Shape",
@@ -879,21 +972,48 @@
                     ],
                     "http://www.w3.org/ns/shacl#in": [
                       {
-                        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/parameter/pathParam/scalar/schema/list",
+                        "@id": "amf://id#38/list",
                         "@type": "http://www.w3.org/2000/01/rdf-schema#Seq",
                         "http://www.w3.org/2000/01/rdf-schema#_1": [
                           {
-                            "@value": "value1"
+                            "@id": "amf://id#39",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "value1",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
                           }
                         ],
                         "http://www.w3.org/2000/01/rdf-schema#_2": [
                           {
-                            "@value": "value2"
+                            "@id": "amf://id#40",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "value2",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
                           }
                         ],
                         "http://www.w3.org/2000/01/rdf-schema#_3": [
                           {
-                            "@value": "value3"
+                            "@id": "amf://id#41",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "value3",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
                           }
                         ]
                       }
@@ -904,7 +1024,7 @@
             ],
             "http://a.ml/vocabularies/document#extends": [
               {
-                "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/paginated",
+                "@id": "amf://id#6",
                 "@type": [
                   "http://a.ml/vocabularies/document#ParametrizedTrait",
                   "http://a.ml/vocabularies/document#ParametrizedDeclaration",
@@ -917,7 +1037,7 @@
                 ],
                 "http://a.ml/vocabularies/document#target": [
                   {
-                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated",
+                    "@id": "amf://id#1",
                     "@type": [
                       "http://a.ml/vocabularies/document#Trait",
                       "http://a.ml/vocabularies/document#AbstractDeclaration",
@@ -930,25 +1050,25 @@
                     ],
                     "http://a.ml/vocabularies/document#dataNode": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1",
+                        "@id": "amf://id#2",
                         "@type": [
                           "http://a.ml/vocabularies/data#Object"
                         ],
                         "http://a.ml/vocabularies/data#queryParameters": [
                           {
-                            "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2",
+                            "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2",
                             "@type": [
                               "http://a.ml/vocabularies/data#Object"
                             ],
                             "http://a.ml/vocabularies/data#limit": [
                               {
-                                "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3",
+                                "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3",
                                 "@type": [
                                   "http://a.ml/vocabularies/data#Object"
                                 ],
                                 "http://a.ml/vocabularies/data#default": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_9",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_9",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -962,7 +1082,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#description": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_5",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_5",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -976,7 +1096,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#example": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_8",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_8",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -990,7 +1110,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#maximum": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_6",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_6",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1004,7 +1124,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#minimum": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_7",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_7",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1018,7 +1138,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#type": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_4",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_4",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1034,13 +1154,13 @@
                             ],
                             "http://a.ml/vocabularies/data#nextPageToken": [
                               {
-                                "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16",
+                                "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16",
                                 "@type": [
                                   "http://a.ml/vocabularies/data#Object"
                                 ],
                                 "http://a.ml/vocabularies/data#description": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_19",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_19",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1054,7 +1174,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#displayName": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_21",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_21",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1068,7 +1188,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#example": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_18",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_18",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1082,7 +1202,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#pattern": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_20",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_20",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1096,7 +1216,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#type": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_17",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_17",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1112,13 +1232,13 @@
                             ],
                             "http://a.ml/vocabularies/data#start": [
                               {
-                                "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10",
+                                "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10",
                                 "@type": [
                                   "http://a.ml/vocabularies/data#Object"
                                 ],
                                 "http://a.ml/vocabularies/data#default": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_15",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_15",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1132,7 +1252,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#description": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_12",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_12",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1146,7 +1266,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#example": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_14",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_14",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1160,7 +1280,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#minimum": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_13",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_13",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1174,7 +1294,7 @@
                                 ],
                                 "http://a.ml/vocabularies/data#type": [
                                   {
-                                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_11",
+                                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_11",
                                     "@type": [
                                       "http://a.ml/vocabularies/data#Scalar"
                                     ],
@@ -1202,7 +1322,7 @@
     ],
     "http://a.ml/vocabularies/document#declares": [
       {
-        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated",
+        "@id": "amf://id#1",
         "@type": [
           "http://a.ml/vocabularies/document#Trait",
           "http://a.ml/vocabularies/document#AbstractDeclaration",
@@ -1215,25 +1335,25 @@
         ],
         "http://a.ml/vocabularies/document#dataNode": [
           {
-            "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1",
+            "@id": "amf://id#2",
             "@type": [
               "http://a.ml/vocabularies/data#Object"
             ],
             "http://a.ml/vocabularies/data#queryParameters": [
               {
-                "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2",
+                "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2",
                 "@type": [
                   "http://a.ml/vocabularies/data#Object"
                 ],
                 "http://a.ml/vocabularies/data#limit": [
                   {
-                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3",
+                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3",
                     "@type": [
                       "http://a.ml/vocabularies/data#Object"
                     ],
                     "http://a.ml/vocabularies/data#default": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_9",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_9",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1247,7 +1367,7 @@
                     ],
                     "http://a.ml/vocabularies/data#description": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_5",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_5",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1261,7 +1381,7 @@
                     ],
                     "http://a.ml/vocabularies/data#example": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_8",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_8",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1275,7 +1395,7 @@
                     ],
                     "http://a.ml/vocabularies/data#maximum": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_6",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_6",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1289,7 +1409,7 @@
                     ],
                     "http://a.ml/vocabularies/data#minimum": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_7",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_7",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1303,7 +1423,7 @@
                     ],
                     "http://a.ml/vocabularies/data#type": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_4",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_3/scalar_4",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1319,13 +1439,13 @@
                 ],
                 "http://a.ml/vocabularies/data#nextPageToken": [
                   {
-                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16",
+                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16",
                     "@type": [
                       "http://a.ml/vocabularies/data#Object"
                     ],
                     "http://a.ml/vocabularies/data#description": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_19",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_19",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1339,7 +1459,7 @@
                     ],
                     "http://a.ml/vocabularies/data#displayName": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_21",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_21",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1353,7 +1473,7 @@
                     ],
                     "http://a.ml/vocabularies/data#example": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_18",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_18",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1367,7 +1487,7 @@
                     ],
                     "http://a.ml/vocabularies/data#pattern": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_20",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_20",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1381,7 +1501,7 @@
                     ],
                     "http://a.ml/vocabularies/data#type": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_17",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_16/scalar_17",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1397,13 +1517,13 @@
                 ],
                 "http://a.ml/vocabularies/data#start": [
                   {
-                    "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10",
+                    "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10",
                     "@type": [
                       "http://a.ml/vocabularies/data#Object"
                     ],
                     "http://a.ml/vocabularies/data#default": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_15",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_15",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1417,7 +1537,7 @@
                     ],
                     "http://a.ml/vocabularies/data#description": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_12",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_12",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1431,7 +1551,7 @@
                     ],
                     "http://a.ml/vocabularies/data#example": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_14",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_14",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1445,7 +1565,7 @@
                     ],
                     "http://a.ml/vocabularies/data#minimum": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_13",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_13",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1459,7 +1579,7 @@
                     ],
                     "http://a.ml/vocabularies/data#type": [
                       {
-                        "@id": "file://demo/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_11",
+                        "@id": "file://demo/demo-api/demo-api.raml#/declarations/traits/paginated/object_1/object_2/object_10/scalar_11",
                         "@type": [
                           "http://a.ml/vocabularies/data#Scalar"
                         ],
@@ -1479,7 +1599,7 @@
         ]
       },
       {
-        "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array",
+        "@id": "amf://id#16",
         "@type": [
           "http://a.ml/vocabularies/shapes#ArrayShape",
           "http://www.w3.org/ns/shacl#Shape",
@@ -1488,7 +1608,7 @@
         ],
         "http://a.ml/vocabularies/shapes#items": [
           {
-            "@id": "file://demo/demo-api.raml#/web-api/end-points/%2Fsimple%2F%7BpathParam%7D/get/request/parameter/items/array/schema/array/default-array/items/scalar/default-scalar",
+            "@id": "amf://id#17",
             "@type": [
               "http://a.ml/vocabularies/shapes#ScalarShape",
               "http://www.w3.org/ns/shacl#Shape",
