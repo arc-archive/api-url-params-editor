@@ -5,35 +5,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
   <title>api-url-params-editor demo</title>
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script type="module" src="../../../@webcomponents/shadycss/entrypoints/apply-shim.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/custom-style.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/dom-bind.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../../@polymer/paper-styles/shadow.js"></script>
-  <script type="module" src="../../../@polymer/paper-button/paper-button.js"></script>
-  <script type="module" src="../../../@polymer/paper-dropdown-menu/paper-dropdown-menu.js"></script>
-  <script type="module" src="../../../@polymer/paper-item/paper-item.js"></script>
-  <script type="module" src="../../../@polymer/paper-listbox/paper-listbox.js"></script>
-  <script type="module" src="../../../raml-aware/raml-aware.js"></script>
-  <script type="module" src="../../../api-view-model-transformer/api-view-model-transformer.js"></script>
-  <script type="module" src="../../../@polymer/neon-animation/web-animations.js"></script>
-  <script type="module" src="../../../api-navigation/api-navigation.js"></script>
-  <script type="module" src="../../../api-url-data-model/api-url-data-model.js"></script>
-  <script type="module" src="../../../arc-electron-default-theme/arc-electron-default-theme.js"></script>
-  <script type="module" src="../api-url-params-editor.js"></script>
-  <!-- FIXME(polymer-modulizer):
-        These imperative modules that innerHTML your HTML are
-        a hacky way to be sure that any mixins in included style
-        modules are ready before any elements that reference them are
-        instantiated, otherwise the CSS @apply mixin polyfill won't be
-        able to expand the underlying CSS custom properties.
-        See: https://github.com/Polymer/polymer-modulizer/issues/154
-        -->
-    <script type="module">
-const $_documentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<custom-style>
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
+
+  <script type="module">
+    import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+    import '@polymer/polymer/lib/elements/dom-bind.js';
+    import '@polymer/paper-styles/paper-styles.js';
+    import '@polymer/paper-button/paper-button.js';
+    import '@polymer/paper-checkbox/paper-checkbox.js';
+    import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+    import '@polymer/paper-item/paper-item.js';
+    import '@polymer/paper-listbox/paper-listbox.js';
+    import '@api-components/api-view-model-transformer/api-view-model-transformer.js';
+    import '@api-components/raml-aware/raml-aware.js';
+    import '@api-components/api-navigation/api-navigation.js';
+    import '@api-components/api-url-data-model/api-url-data-model.js';
+    import '@advanced-rest-client/arc-electron-default-theme/arc-electron-default-theme.js';
+    import '../api-url-params-editor.js';
+  </script>
+
+  <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
     html,
     body {
@@ -95,16 +88,10 @@ $_documentContainer.innerHTML = `<custom-style>
       display: block;
     }
     </style>
-  </custom-style>`;
-
-document.body.appendChild($_documentContainer.content);
-</script>
+  </custom-style>
 </head>
 <body>
-  <script type="module">
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<dom-bind id="demo">
+  <dom-bind id="demo">
     <template is="dom-bind">
       <raml-aware raml="{{amfModel}}" scope="api-console"></raml-aware>
       <api-url-data-model aware="api-console" base-uri="[[baseUri]]" selected="[[selected]]" path-model="{{pathModel}}" query-model="{{queryModel}}"></api-url-data-model>
@@ -153,114 +140,95 @@ $_documentContainer.innerHTML = `<dom-bind id="demo">
         </template>
       </main>
     </template>
-  </dom-bind>`;
-
-document.body.appendChild($_documentContainer.content);
-</script>
+  </dom-bind>
   <script type="module">
-import '../../../@webcomponents/shadycss/entrypoints/apply-shim.js';
-import '../../../@polymer/polymer/lib/elements/custom-style.js';
-import '../../../@polymer/polymer/lib/elements/dom-bind.js';
-import '../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
-import '../../../@polymer/paper-styles/shadow.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '../../../@polymer/paper-item/paper-item.js';
-import '../../../@polymer/paper-listbox/paper-listbox.js';
-import '../../../raml-aware/raml-aware.js';
-import '../../../api-view-model-transformer/api-view-model-transformer.js';
-import '../../../@polymer/neon-animation/web-animations.js';
-import '../../../api-navigation/api-navigation.js';
-import '../../../api-url-data-model/api-url-data-model.js';
-import '../../../arc-electron-default-theme/arc-electron-default-theme.js';
-import '../api-url-params-editor.js';
-(function(app) {
-  app._load = function() {
-    document.getElementById('apisList').selected = 0;
-  };
+  (function(app) {
+    app._load = function() {
+      document.getElementById('apisList').selected = 0;
+    };
 
-  app._loadFile = function(file) {
-    app.selected = undefined;
-    app.amfModel = undefined;
-    fetch('./' + file)
-    .then((response) => response.json())
-    .then((data) => {
-      app.amfModel = data;
+    app._loadFile = function(file) {
+      app.selected = undefined;
+      app.amfModel = undefined;
+      fetch('./' + file)
+      .then((response) => response.json())
+      .then((data) => {
+        app.amfModel = data;
+      });
+    };
+
+    app._apiChanged = function(e) {
+      const file = e.target.selectedItem.dataset.src;
+      app._loadFile(file);
+    };
+
+    app._navChanged = function(e) {
+      const type = e.detail.type;
+      if (type === 'method') {
+        app.setData(e.detail.selected);
+        app.hasData = true;
+      } else {
+        app.security = undefined;
+        app.hasData = false;
+      }
+    };
+
+    app.setData = function(selected) {
+      app.selected = selected;
+    };
+
+    app._computeApiParams = function(apiPrams) {
+      if (!apiPrams) {
+        return 'none';
+      }
+      return JSON.stringify(apiPrams, null, 1);
+    };
+
+    app._queryValueChanged = function(e) {
+      let queryValue = e.detail.value;
+      let result;
+      if (queryValue) {
+        result = JSON.stringify(queryValue);
+      } else {
+        result = '';
+      }
+      app.set('queryValueString', result);
+    };
+
+    app._uriValueChanged = function(e) {
+      let uriValue = e.detail.value;
+      let result;
+      if (uriValue) {
+        result = JSON.stringify(uriValue);
+      } else {
+        result = '';
+      }
+      app.set('uriValueString', result);
+    };
+
+    app._logEvent = function(type, name, value) {
+      let log = '[' + new Date().toGMTString() + ']: ';
+      log += type + ' model changed: ' + name + '=' + value + '\n';
+      let scopelog = app.eventsLog;
+      if (!scopelog) {
+        scopelog = '';
+      }
+      scopelog += log;
+      app.eventsLog = scopelog;
+    };
+
+    app.clearEventsLog = function() {
+      app.eventsLog = '';
+    };
+    window.addEventListener('uri-parameter-changed', (e) => {
+      app._logEvent('Uri', e.detail.name, e.detail.value);
     });
-  };
-
-  app._apiChanged = function(e) {
-    const file = e.target.selectedItem.dataset.src;
-    app._loadFile(file);
-  };
-
-  app._navChanged = function(e) {
-    const type = e.detail.type;
-    if (type === 'method') {
-      app.setData(e.detail.selected);
-      app.hasData = true;
-    } else {
-      app.security = undefined;
-      app.hasData = false;
-    }
-  };
-
-  app.setData = function(selected) {
-    app.selected = selected;
-  };
-
-  app._computeApiParams = function(apiPrams) {
-    if (!apiPrams) {
-      return 'none';
-    }
-    return JSON.stringify(apiPrams, null, 1);
-  };
-
-  app._queryValueChanged = function(e) {
-    let queryValue = e.detail.value;
-    let result;
-    if (queryValue) {
-      result = JSON.stringify(queryValue);
-    } else {
-      result = '';
-    }
-    app.set('queryValueString', result);
-  };
-
-  app._uriValueChanged = function(e) {
-    let uriValue = e.detail.value;
-    let result;
-    if (uriValue) {
-      result = JSON.stringify(uriValue);
-    } else {
-      result = '';
-    }
-    app.set('uriValueString', result);
-  };
-
-  app._logEvent = function(type, name, value) {
-    let log = '[' + new Date().toGMTString() + ']: ';
-    log += type + ' model changed: ' + name + '=' + value + '\n';
-    let scopelog = app.eventsLog;
-    if (!scopelog) {
-      scopelog = '';
-    }
-    scopelog += log;
-    app.eventsLog = scopelog;
-  };
-
-  app.clearEventsLog = function() {
-    app.eventsLog = '';
-  };
-  window.addEventListener('uri-parameter-changed', (e) => {
-    app._logEvent('Uri', e.detail.name, e.detail.value);
-  });
-  window.addEventListener('query-parameter-changed', (e) => {
-    app._logEvent('Query', e.detail.name, e.detail.value);
-  });
-  window.addEventListener('WebComponentsReady', app._load);
-  window.addEventListener('api-navigation-selection-changed', app._navChanged);
-})(document.getElementById('demo'));
-</script>
+    window.addEventListener('query-parameter-changed', (e) => {
+      app._logEvent('Query', e.detail.name, e.detail.value);
+    });
+    window.addEventListener('WebComponentsReady', app._load);
+    window.addEventListener('api-navigation-selection-changed', app._navChanged);
+  })(document.getElementById('demo'));
+  </script>
 </body>
 </html>

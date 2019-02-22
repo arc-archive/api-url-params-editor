@@ -5,25 +5,12 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   api-url-params-custom-input.html
+ *   api-url-params-custom-input.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
-
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-if.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-repeat.d.ts" />
-/// <reference path="../iron-flex-layout/iron-flex-layout.d.ts" />
-/// <reference path="../iron-validatable-behavior/iron-validatable-behavior.d.ts" />
-/// <reference path="../paper-checkbox/paper-checkbox.d.ts" />
-/// <reference path="../iron-form/iron-form.d.ts" />
-/// <reference path="../paper-icon-button/paper-icon-button.d.ts" />
-/// <reference path="../iron-collapse/iron-collapse.d.ts" />
-/// <reference path="../marked-element/marked-element.d.ts" />
-/// <reference path="../api-property-form-item/api-property-form-item.d.ts" />
-/// <reference path="../markdown-styles/markdown-styles.d.ts" />
 
 declare namespace ApiElements {
 
@@ -42,9 +29,7 @@ declare namespace ApiElements {
    * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
    * element documentation.
    */
-  class ApiUrlParamsCustomInput extends
-    Polymer.IronValidatableBehavior(
-    Object) {
+  class ApiUrlParamsCustomInput {
 
     /**
      * View model to use to render the form.
@@ -90,6 +75,11 @@ declare namespace ApiElements {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "api-url-params-custom-input": ApiElements.ApiUrlParamsCustomInput;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "api-url-params-custom-input": ApiElements.ApiUrlParamsCustomInput;
+  }
 }
+
+export {};

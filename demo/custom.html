@@ -5,26 +5,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
   <title>api-url-params-editor demo</title>
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
-  <script type="module" src="../../../@polymer/paper-button/paper-button.js"></script>
-  <script type="module" src="../../../api-view-model-transformer/api-view-model-transformer.js"></script>
-  <script type="module" src="../../../@polymer/paper-checkbox/paper-checkbox.js"></script>
-  <script type="module" src="../../../@polymer/paper-styles/shadow.js"></script>
-  <script type="module" src="../api-url-params-editor.js"></script>
-  <!-- FIXME(polymer-modulizer):
-        These imperative modules that innerHTML your HTML are
-        a hacky way to be sure that any mixins in included style
-        modules are ready before any elements that reference them are
-        instantiated, otherwise the CSS @apply mixin polyfill won't be
-        able to expand the underlying CSS custom properties.
-        See: https://github.com/Polymer/polymer-modulizer/issues/154
-        -->
-    <script type="module">
-const $_documentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<custom-style>
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+  <script type="module">
+    import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+    import '@polymer/polymer/lib/elements/dom-bind.js';
+    import '@polymer/paper-styles/paper-styles.js';
+    import '@polymer/paper-button/paper-button.js';
+    import '@polymer/paper-checkbox/paper-checkbox.js';
+    import '@api-components/api-view-model-transformer/api-view-model-transformer.js';
+    import '@advanced-rest-client/arc-electron-default-theme/arc-electron-default-theme.js';
+    import '../api-url-params-editor.js';
+  </script>
+
+  <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
     :root {
       --arc-font-body1: {
@@ -81,17 +76,10 @@ $_documentContainer.innerHTML = `<custom-style>
       border: 1px red dashed;
     }
     </style>
-  </custom-style>`;
-
-document.body.appendChild($_documentContainer.content);
-</script>
+  </custom-style>
 </head>
 <body>
-
-  <script type="module">
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<dom-bind id="demo">
+  <dom-bind id="demo">
     <template is="dom-bind">
       <api-view-model-transformer></api-view-model-transformer>
 
@@ -117,47 +105,37 @@ $_documentContainer.innerHTML = `<dom-bind id="demo">
         <p>Invalid: [[invalid]]</p>
       </section>
     </template>
-  </dom-bind>`;
-
-document.body.appendChild($_documentContainer.content);
-</script>
+  </dom-bind>
   <script type="module">
-import '../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
-import '../../../@polymer/iron-demo-helpers/demo-snippet.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../api-view-model-transformer/api-view-model-transformer.js';
-import '../../../@polymer/paper-checkbox/paper-checkbox.js';
-import '../../../@polymer/paper-styles/shadow.js';
-import '../api-url-params-editor.js';
-(function(scope) {
-  scope._queryValueChanged = function(e) {
-    let queryValue = e.detail.value;
-    let result;
-    if (queryValue) {
-      result = JSON.stringify(queryValue);
-    } else {
-      result = '';
-    }
-    scope.set('queryValueString', result);
-  };
-  // scope._logEvent = function(type, name, value) {
-  //   let log = '[' + new Date().toGMTString() + ']: ';
-  //   log += type + ' model changed: ' + name + '=' + value + '\n';
-  //   let scopelog = scope.eventsLog;
-  //   if (!scopelog) {
-  //     scopelog = '';
-  //   }
-  //   scopelog += log;
-  //   scope.eventsLog = scopelog;
-  // };
-  // scope.clearEventsLog = function() {
-  //   scope.eventsLog = '';
-  // };
-  // window.addEventListener('query-parameter-changed', (e) => {
-  //   console.log('query-parameter-changed', e.detail.name, e.detail.value);
-  //   scope._logEvent('Query', e.detail.name, e.detail.value);
-  // });
-})(document.getElementById('demo'));
-</script>
+  (function(scope) {
+    scope._queryValueChanged = function(e) {
+      let queryValue = e.detail.value;
+      let result;
+      if (queryValue) {
+        result = JSON.stringify(queryValue);
+      } else {
+        result = '';
+      }
+      scope.set('queryValueString', result);
+    };
+    // scope._logEvent = function(type, name, value) {
+    //   let log = '[' + new Date().toGMTString() + ']: ';
+    //   log += type + ' model changed: ' + name + '=' + value + '\n';
+    //   let scopelog = scope.eventsLog;
+    //   if (!scopelog) {
+    //     scopelog = '';
+    //   }
+    //   scopelog += log;
+    //   scope.eventsLog = scopelog;
+    // };
+    // scope.clearEventsLog = function() {
+    //   scope.eventsLog = '';
+    // };
+    // window.addEventListener('query-parameter-changed', (e) => {
+    //   console.log('query-parameter-changed', e.detail.name, e.detail.value);
+    //   scope._logEvent('Query', e.detail.name, e.detail.value);
+    // });
+  })(document.getElementById('demo'));
+  </script>
 </body>
 </html>

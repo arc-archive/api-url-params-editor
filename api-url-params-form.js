@@ -1,27 +1,77 @@
-import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
-import '../../@polymer/polymer/lib/elements/dom-if.js';
-import '../../@polymer/polymer/lib/elements/dom-repeat.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
-import { IronValidatableBehavior } from '../../@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import '../../@polymer/paper-checkbox/paper-checkbox.js';
-import '../../@polymer/iron-form/iron-form.js';
-import '../../@polymer/paper-icon-button/paper-icon-button.js';
-import '../../@polymer/iron-collapse/iron-collapse.js';
-import '../../@polymer/marked-element/marked-element.js';
-import '../../api-property-form-item/api-property-form-item.js';
-import '../../markdown-styles/markdown-styles.js';
-import '../../@polymer/paper-button/paper-button.js';
-import '../../arc-icons/arc-icons.js';
-import '../../@polymer/iron-icon/iron-icon.js';
-import '../../api-form-mixin/api-form-mixin.js';
-import '../../api-form-mixin/api-form-styles.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {ApiFormMixin} from '@api-components/api-form-mixin/api-form-mixin.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import '@api-components/api-form-mixin/api-form-styles.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@polymer/iron-form/iron-form.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-collapse/iron-collapse.js';
+import '@polymer/marked-element/marked-element.js';
+import '@api-components/api-property-form-item/api-property-form-item.js';
+import '@advanced-rest-client/markdown-styles/markdown-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '@advanced-rest-client/arc-icons/arc-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
 import './api-url-params-custom-input.js';
-import { mixinBehaviors } from '../../@polymer/polymer/lib/legacy/class.js';
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<dom-module id="api-url-params-form">
-  <template strip-whitespace="">
-    <style include="api-form-styles"></style>
+/**
+ * Renders form and input elements for query / uri model.
+ *
+ * Handles creation of form elements, validation, and rendering documentation.
+ *
+ * This element **requires** you to set `form-type` attribute to either
+ * `uri` or `query` to distinguish type of form. Also, set `form-title`
+ * property to render a title. It is useful when adding two forms right after
+ * each other.
+ *
+ * ## Optional parameters
+ *
+ * By default the element renders all form valus. For better user experience,
+ * set `allow-hide-optional` attribute to hide parameters that are optional.
+ * It also renders checkbox to toggle optional parameters.
+ *
+ * Styling
+ *
+ * Custom property | Description | Default
+ * ----------------|-------------|----------
+ * `--api-url-params-form` | Mixin applied to this element | `{}`
+ * `--api-url-params-form-row` | Mixin applied to each form row | `{}`
+ * `--api-url-params-form-required` | Mixin applied to a form row that is required | `{}`
+ * `--inline-documentation-color` | Color of the documentation when opened. | `rgba(0, 0, 0, 0.87)`
+ * `--from-row-action-icon-color` | Color of the documentation icon | `--icon-button-color` or `rgba(0, 0, 0, 0.74)`
+ * `--from-row-action-icon-color-hover` | Color of the documentation icon when hovering. Please, consider devices that do not support hovers. | `--accent-color` or `rgba(0, 0, 0, 0.74)`
+ * `--inline-documentation-background-color` | Background color of opened documentation. | `#FFF3E0`
+ * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
+ * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
+ * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
+ * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
+ * `--api-url-params-form-enable-checkbox-array-margin-top` | Margin top of the toggle checkbox when the item is an array | `40px`
+ * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
+ * `--api-url-params-form-hint-icon-array-margin-top` | Margin top of the "help" icon when the item is an array| `24px`
+ * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
+ * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
+ * `--icon-button` | Mixin applied to all icon buttons | `{}`
+ * `--icon-button-hover` | Mixin applied to all icon buttons when hovering | `{}`
+ *
+ * You can also style inputs as defined in
+ * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
+ * element documentation.
+ *
+ * @customElement
+ * @polymer
+ * @demo demo/index.html
+ * @memberof ApiElements
+ * @polymerBehavior Polymer.IronValidatableBehavior
+ * @appliesMixin ApiFormMixin
+ */
+class ApiUrlParamsForm extends
+  mixinBehaviors([IronValidatableBehavior], ApiFormMixin(PolymerElement)) {
+  static get template() {
+    return html`<style include="api-form-styles"></style>
     <style include="markdown-styles">
     :host {
       display: block;
@@ -116,7 +166,8 @@ $_documentContainer.innerHTML = `<dom-module id="api-url-params-form">
     <div class="params-title">
       <slot name="title"></slot>
       <template is="dom-if" if="[[renderOptionalCheckbox]]">
-        <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
+        <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}"
+          title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
       </template>
     </div>
     <iron-form>
@@ -126,20 +177,28 @@ $_documentContainer.innerHTML = `<dom-module id="api-url-params-form">
             <div class\$="[[computeFormRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
               <div class\$="value-input [[_computeTypeClass(item.isArray)]]">
                 <template is="dom-if" if="[[allowDisableParams]]">
-                  <paper-checkbox class="enable-checkbox" data-array\$="[[item.schema.isArray]]" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
+                  <paper-checkbox class="enable-checkbox" data-array\$="[[item.schema.isArray]]"
+                    checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
                 </template>
                 <template is="dom-if" if="[[!_computeIsCustom(item.schema)]]">
-                  <api-property-form-item model="[[item]]" name="[[item.name]]" value="{{item.value}}" required\$="[[item.required]]"></api-property-form-item>
+                  <api-property-form-item model="[[item]]" name="[[item.name]]"
+                    value="{{item.value}}" required\$="[[item.required]]"></api-property-form-item>
                 </template>
                 <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <api-url-params-custom-input model="[[item]]" name="{{item.name}}" value="{{item.value}}" required\$="[[item.required]]" narrow="[[narrow]]"></api-url-params-custom-input>
+                  <api-url-params-custom-input model="[[item]]" name="{{item.name}}"
+                    value="{{item.value}}" required\$="[[item.required]]"
+                    narrow="[[narrow]]"></api-url-params-custom-input>
                 </template>
                 <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
                   <!-- TODO: The documentation should be computed on a transformer level. -->
-                  <paper-icon-button class="hint-icon" data-array\$="[[item.schema.isArray]]" icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
+                  <paper-icon-button class="hint-icon"
+                    data-array\$="[[item.schema.isArray]]" icon="arc:help" on-click="_openDocs"
+                    title="Display documentation"></paper-icon-button>
                 </template>
                 <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <paper-icon-button title="Remove parameter" data-array\$="[[item.schema.isArray]]" class="delete-icon action-icon" icon="arc:remove-circle-outline" on-tap="_removeCustom"></paper-icon-button>
+                  <paper-icon-button title="Remove parameter" data-array\$="[[item.schema.isArray]]"
+                    class="delete-icon action-icon" icon="arc:remove-circle-outline"
+                    on-click="_removeCustom"></paper-icon-button>
                 </template>
               </div>
               <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
@@ -158,71 +217,16 @@ $_documentContainer.innerHTML = `<dom-module id="api-url-params-form">
     </iron-form>
     <template is="dom-if" if="[[allowCustom]]">
       <div class="add-action">
-        <paper-button class="action-button" on-tap="add" title="Adds new query parameter to the form">
+        <paper-button class="action-button" on-click="add" title="Adds new query parameter to the form">
           <iron-icon class="action-icon" icon="arc:add-circle-outline" alt="Add query parameter icon"></iron-icon>
           Add query parameter
         </paper-button>
       </div>
-    </template>
-  </template>
-  
-</dom-module>`;
-
-document.head.appendChild($_documentContainer.content);
-/**
- * Renders form and input elements for query / uri model.
- *
- * Handles creation of form elements, validation, and rendering documentation.
- *
- * This element **requires** you to set `form-type` attribute to either
- * `uri` or `query` to distinguish type of form. Also, set `form-title`
- * property to render a title. It is useful when adding two forms right after
- * each other.
- *
- * ## Optional parameters
- *
- * By default the element renders all form valus. For better user experience,
- * set `allow-hide-optional` attribute to hide parameters that are optional.
- * It also renders checkbox to toggle optional parameters.
- *
- * Styling
- *
- * Custom property | Description | Default
- * ----------------|-------------|----------
- * `--api-url-params-form` | Mixin applied to this element | `{}`
- * `--api-url-params-form-row` | Mixin applied to each form row | `{}`
- * `--api-url-params-form-required` | Mixin applied to a form row that is required | `{}`
- * `--inline-documentation-color` | Color of the documentation when opened. | `rgba(0, 0, 0, 0.87)`
- * `--from-row-action-icon-color` | Color of the documentation icon | `--icon-button-color` or `rgba(0, 0, 0, 0.74)`
- * `--from-row-action-icon-color-hover` | Color of the documentation icon when hovering. Please, consider devices that do not support hovers. | `--accent-color` or `rgba(0, 0, 0, 0.74)`
- * `--inline-documentation-background-color` | Background color of opened documentation. | `#FFF3E0`
- * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
- * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
- * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
- * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
- * `--api-url-params-form-enable-checkbox-array-margin-top` | Margin top of the toggle checkbox when the item is an array | `40px`
- * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
- * `--api-url-params-form-hint-icon-array-margin-top` | Margin top of the "help" icon when the item is an array| `24px`
- * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
- * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
- * `--icon-button` | Mixin applied to all icon buttons | `{}`
- * `--icon-button-hover` | Mixin applied to all icon buttons when hovering | `{}`
- *
- * You can also style inputs as defined in
- * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
- * element documentation.
- *
- * @customElement
- * @polymer
- * @demo demo/index.html
- * @memberof ApiElements
- * @appliesMixin Polymer.IronValidatableBehavior
- * @appliesMixin ArcBehaviors.ApiFormMixin
- */
-class ApiUrlParamsForm extends
-mixinBehaviors(
-  [IronValidatableBehavior], ArcBehaviors.ApiFormMixin(PolymerElement)) {
-  static get is() {return 'api-url-params-form';}
+    </template>`;
+  }
+  static get is() {
+    return 'api-url-params-form';
+  }
   static get properties() {
     return {
       /**

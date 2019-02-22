@@ -1,21 +1,41 @@
-import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
-import '../../@polymer/polymer/lib/elements/dom-if.js';
-import '../../@polymer/polymer/lib/elements/dom-repeat.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
-import { IronValidatableBehavior } from '../../@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import '../../@polymer/paper-checkbox/paper-checkbox.js';
-import '../../@polymer/iron-form/iron-form.js';
-import '../../@polymer/paper-icon-button/paper-icon-button.js';
-import '../../@polymer/iron-collapse/iron-collapse.js';
-import '../../@polymer/marked-element/marked-element.js';
-import '../../api-property-form-item/api-property-form-item.js';
-import '../../markdown-styles/markdown-styles.js';
-import { mixinBehaviors } from '../../@polymer/polymer/lib/legacy/class.js';
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<dom-module id="api-url-params-custom-input">
-  <template strip-whitespace="">
-    <style include="markdown-styles">
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@polymer/iron-form/iron-form.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-collapse/iron-collapse.js';
+import '@polymer/marked-element/marked-element.js';
+import '@api-components/api-property-form-item/api-property-form-item.js';
+import '@advanced-rest-client/markdown-styles/markdown-styles.js';
+/**
+ * Renders custom query parameter property input.
+ *
+ * Styling
+ *
+ * Custom property | Description | Default
+ * ----------------|-------------|----------
+ * `--api-url-params-custom-input` | Mixin applied to this element | `{}`
+ * `--api-request-parameters-editor-row` | Mixin applied to custom parameter form row | `{}`
+ * `--api-request-parameters-editor-row-narrow` | Mixin applied to custom parameter form row when narrow | `{}`
+ *
+ * You can also style inputs as defined in
+ * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
+ * element documentation.
+ *
+ * @customElement
+ * @polymer
+ * @demo demo/custom.html Cutom parameters
+ * @memberof ApiElements
+ * @polymerBehavior Polymer.IronValidatableBehavior
+ */
+class ApiUrlParamsCustomInput extends mixinBehaviors([IronValidatableBehavior], PolymerElement) {
+  static get template() {
+    return html`<style include="markdown-styles">
     :host {
       display: block;
       @apply --api-url-params-custom-input;
@@ -58,40 +78,16 @@ $_documentContainer.innerHTML = `<dom-module id="api-url-params-custom-input">
     </style>
     <div class\$="form-row [[_computeNarrowClass(narrow)]]">
       <div class="name-field">
-        <paper-input value="{{name}}" label="Parameter name" class="param-name" type="text" required="" auto-validate=""></paper-input>
+        <paper-input value="{{name}}" label="Parameter name"
+          class="param-name" type="text" required="" auto-validate=""></paper-input>
       </div>
       <div class="value-field">
-        <api-property-form-item model="[[model]]" name="[[name]]" value="{{value}}" required\$="[[required]]"></api-property-form-item>
+        <api-property-form-item model="[[model]]" name="[[name]]"
+          value="{{value}}" required\$="[[required]]"></api-property-form-item>
       </div>
-    </div>
-  </template>
-  
-</dom-module>`;
+    </div>`;
+  }
 
-document.head.appendChild($_documentContainer.content);
-/**
- * Renders custom query parameter property input.
- *
- * Styling
- *
- * Custom property | Description | Default
- * ----------------|-------------|----------
- * `--api-url-params-custom-input` | Mixin applied to this element | `{}`
- * `--api-request-parameters-editor-row` | Mixin applied to custom parameter form row | `{}`
- * `--api-request-parameters-editor-row-narrow` | Mixin applied to custom parameter form row when narrow | `{}`
- *
- * You can also style inputs as defined in
- * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
- * element documentation.
- *
- * @customElement
- * @polymer
- * @demo demo/custom.html Cutom parameters
- * @memberof ApiElements
- * @appliesMixin Polymer.IronValidatableBehavior
- */
-class ApiUrlParamsCustomInput extends
-mixinBehaviors([IronValidatableBehavior], PolymerElement) {
   static get is() {
     return 'api-url-params-custom-input';
   }
