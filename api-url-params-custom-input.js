@@ -1,7 +1,7 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
 import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 import '@polymer/polymer/lib/elements/dom-if.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
@@ -31,7 +31,7 @@ import '@advanced-rest-client/markdown-styles/markdown-styles.js';
  * @polymer
  * @demo demo/custom.html Cutom parameters
  * @memberof ApiElements
- * @appliesMixin Polymer.IronValidatableBehavior
+ * @polymerBehavior Polymer.IronValidatableBehavior
  */
 class ApiUrlParamsCustomInput extends mixinBehaviors([IronValidatableBehavior], PolymerElement) {
   static get template() {

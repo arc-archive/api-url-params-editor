@@ -84,12 +84,6 @@ declare namespace ApiElements {
      * description).
      */
     noDocs: boolean|null|undefined;
-
-    /**
-     * attribute automatically, which should be used for styling.
-     */
-    _getValidity(): any;
-    _computeIsCustom(schema: any): any;
     connectedCallback(): void;
 
     /**
@@ -117,11 +111,17 @@ declare namespace ApiElements {
      * @returns True if documentation can be rendered.
      */
     _computeHasDocumentation(noDocs: Boolean|null, item: object|null): Boolean|null;
+    _computeIsCustom(schema: any): any;
 
     /**
      * Adds custom property to the list.
      */
     add(): void;
+
+    /**
+     * attribute automatically, which should be used for styling.
+     */
+    _getValidity(): any;
   }
 }
 
@@ -131,3 +131,5 @@ declare global {
     "api-url-params-form": ApiElements.ApiUrlParamsForm;
   }
 }
+
+export {};

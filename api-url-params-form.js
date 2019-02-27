@@ -165,7 +165,8 @@ class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiForm
     <div class="params-title">
       <slot name="title"></slot>
       <template is="dom-if" if="[[renderOptionalCheckbox]]">
-        <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}" title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
+        <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}"
+          title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
       </template>
     </div>
     <iron-form>
@@ -175,20 +176,28 @@ class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiForm
             <div class\$="[[computeFormRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
               <div class\$="value-input [[_computeTypeClass(item.isArray)]]">
                 <template is="dom-if" if="[[allowDisableParams]]">
-                  <paper-checkbox class="enable-checkbox" data-array\$="[[item.schema.isArray]]" checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
+                  <paper-checkbox class="enable-checkbox" data-array\$="[[item.schema.isArray]]"
+                    checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
                 </template>
                 <template is="dom-if" if="[[!_computeIsCustom(item.schema)]]">
-                  <api-property-form-item model="[[item]]" name="[[item.name]]" value="{{item.value}}" required\$="[[item.required]]"></api-property-form-item>
+                  <api-property-form-item model="[[item]]" name="[[item.name]]"
+                    value="{{item.value}}" required\$="[[item.required]]"></api-property-form-item>
                 </template>
                 <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <api-url-params-custom-input model="[[item]]" name="{{item.name}}" value="{{item.value}}" required\$="[[item.required]]" narrow="[[narrow]]"></api-url-params-custom-input>
+                  <api-url-params-custom-input model="[[item]]" name="{{item.name}}"
+                    value="{{item.value}}" required\$="[[item.required]]"
+                    narrow="[[narrow]]"></api-url-params-custom-input>
                 </template>
                 <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
                   <!-- TODO: The documentation should be computed on a transformer level. -->
-                  <paper-icon-button class="hint-icon" data-array\$="[[item.schema.isArray]]" icon="arc:help" on-tap="_openDocs" title="Display documentation"></paper-icon-button>
+                  <paper-icon-button class="hint-icon"
+                    data-array\$="[[item.schema.isArray]]" icon="arc:help" on-click="_openDocs"
+                    title="Display documentation"></paper-icon-button>
                 </template>
                 <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <paper-icon-button title="Remove parameter" data-array\$="[[item.schema.isArray]]" class="delete-icon action-icon" icon="arc:remove-circle-outline" on-tap="_removeCustom"></paper-icon-button>
+                  <paper-icon-button title="Remove parameter" data-array\$="[[item.schema.isArray]]"
+                    class="delete-icon action-icon" icon="arc:remove-circle-outline"
+                    on-click="_removeCustom"></paper-icon-button>
                 </template>
               </div>
               <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
@@ -207,7 +216,7 @@ class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiForm
     </iron-form>
     <template is="dom-if" if="[[allowCustom]]">
       <div class="add-action">
-        <paper-button class="action-button" on-tap="add" title="Adds new query parameter to the form">
+        <paper-button class="action-button" on-click="add" title="Adds new query parameter to the form">
           <iron-icon class="action-icon" icon="arc:add-circle-outline" alt="Add query parameter icon"></iron-icon>
           Add query parameter
         </paper-button>

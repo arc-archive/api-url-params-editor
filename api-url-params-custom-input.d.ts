@@ -37,9 +37,7 @@ declare namespace ApiElements {
    * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
    * element documentation.
    */
-  class ApiUrlParamsCustomInput extends
-    Polymer.IronValidatableBehavior(
-    Object) {
+  class ApiUrlParamsCustomInput {
 
     /**
      * View model to use to render the form.
@@ -91,3 +89,5 @@ declare global {
     "api-url-params-custom-input": ApiElements.ApiUrlParamsCustomInput;
   }
 }
+
+export {};

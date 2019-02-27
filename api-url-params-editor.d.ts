@@ -288,3 +288,5 @@ declare global {
     "api-url-params-editor": ApiElements.ApiUrlParamsEditor;
   }
 }
+
+export {};
