@@ -5,31 +5,22 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   api-url-params-form.html
+ *   api-url-params-form.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-if.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-repeat.d.ts" />
-/// <reference path="../iron-flex-layout/iron-flex-layout.d.ts" />
-/// <reference path="../iron-validatable-behavior/iron-validatable-behavior.d.ts" />
-/// <reference path="../paper-checkbox/paper-checkbox.d.ts" />
-/// <reference path="../iron-form/iron-form.d.ts" />
-/// <reference path="../paper-icon-button/paper-icon-button.d.ts" />
-/// <reference path="../iron-collapse/iron-collapse.d.ts" />
-/// <reference path="../marked-element/marked-element.d.ts" />
-/// <reference path="../api-property-form-item/api-property-form-item.d.ts" />
-/// <reference path="../markdown-styles/markdown-styles.d.ts" />
-/// <reference path="../paper-button/paper-button.d.ts" />
-/// <reference path="../arc-icons/arc-icons.d.ts" />
-/// <reference path="../iron-icon/iron-icon.d.ts" />
-/// <reference path="../api-form-mixin/api-form-mixin.d.ts" />
-/// <reference path="../api-form-mixin/api-form-styles.d.ts" />
-/// <reference path="api-url-params-custom-input.d.ts" />
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+
+import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+
+import {ApiFormMixin} from '@api-components/api-form-mixin/api-form-mixin.js';
 
 declare namespace ApiElements {
 
@@ -77,9 +68,8 @@ declare namespace ApiElements {
    * element documentation.
    */
   class ApiUrlParamsForm extends
-    Polymer.IronValidatableBehavior(
-    ArcBehaviors.ApiFormMixin(
-    Object)) {
+    ApiFormMixin(
+    Object) {
 
     /**
      * The form can display query or URI parameters. When anything change in the form
@@ -135,6 +125,9 @@ declare namespace ApiElements {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "api-url-params-form": ApiElements.ApiUrlParamsForm;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "api-url-params-form": ApiElements.ApiUrlParamsForm;
+  }
 }

@@ -5,21 +5,24 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   api-url-params-editor.html
+ *   api-url-params-editor.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-if.d.ts" />
-/// <reference path="../polymer/types/lib/utils/render-status.d.ts" />
-/// <reference path="../iron-flex-layout/iron-flex-layout.d.ts" />
-/// <reference path="../iron-validatable-behavior/iron-validatable-behavior.d.ts" />
-/// <reference path="../paper-checkbox/paper-checkbox.d.ts" />
-/// <reference path="../events-target-behavior/events-target-behavior.d.ts" />
-/// <reference path="api-url-params-form.d.ts" />
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+
+import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
+
+import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+
+import {EventsTargetMixin} from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
+
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
 declare namespace ApiElements {
 
@@ -109,7 +112,7 @@ declare namespace ApiElements {
    * See styles for the form and custom input for more styling API.
    */
   class ApiUrlParamsEditor extends
-    Polymer.IronValidatableBehavior(
+    EventsTargetMixin(
     Object) {
 
     /**
@@ -279,6 +282,9 @@ declare namespace ApiElements {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "api-url-params-editor": ApiElements.ApiUrlParamsEditor;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "api-url-params-editor": ApiElements.ApiUrlParamsEditor;
+  }
 }

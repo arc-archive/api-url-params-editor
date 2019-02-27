@@ -1,55 +1,13 @@
-import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
-import '../../@polymer/polymer/lib/elements/dom-if.js';
-import { afterNextRender } from '../../@polymer/polymer/lib/utils/render-status.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
-import { IronValidatableBehavior } from '../../@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import '../../@polymer/paper-checkbox/paper-checkbox.js';
-import { EventsTargetBehavior } from '../../events-target-behavior/events-target-behavior.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
+import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+import {EventsTargetMixin} from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
 import './api-url-params-form.js';
-import { mixinBehaviors } from '../../@polymer/polymer/lib/legacy/class.js';
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<dom-module id="api-url-params-editor">
-  <template strip-whitespace="">
-    <style>
-    :host {
-      display: block;
-      @apply --raml-request-parameters-editor;
-      @apply --api-url-params-editor;
-    }
-
-    .empty-message {
-      @apply --raml-request-parameters-editor-no-params;
-      @apply --api-url-params-editor-no-params;
-    }
-
-    .empty-message p {
-      @apply --raml-request-parameters-editor-no-params-message;
-      @apply --api-url-params-editor-no-params-message;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-    </style>
-    <section hidden\$="[[hasParameters]]" role="region" class="empty-message">
-      <p>This endpoint doesn't require to declare query or URI parameters.</p>
-    </section>
-    <template is="dom-if" if="[[hasUriParameters]]">
-      <api-url-params-form id="uriParametersForm" role="region" form-type="uri" model="{{uriModel}}" optional-opened="" no-docs="[[noDocs]]">
-        <h3 slot="title">URI parameters</h3>
-      </api-url-params-form>
-    </template>
-    <template is="dom-if" if="[[hasQueryParameters]]">
-      <api-url-params-form id="queryParametersForm" role="region" allow-hide-optional="" allow-disable-params="" allow-custom="[[allowCustom]]" form-type="query" model="{{queryModel}}" narrow="[[narrow]]" no-docs="[[noDocs]]">
-        <h3 slot="title">Query parameters</h3>
-      </api-url-params-form>
-    </template>
-  </template>
-  
-</dom-module>`;
-
-document.head.appendChild($_documentContainer.content);
 /**
  * `api-url-params-editor`
  * An element to render query / uri parameters form from AMF schema
@@ -140,13 +98,54 @@ document.head.appendChild($_documentContainer.content);
  * @demo demo/index.html
  * @demo demo/custom.html Cutom parameters
  * @memberof ApiElements
- * @appliesMixin Polymer.IronValidatableBehavior
+ * @polymerBehavior Polymer.IronValidatableBehavior
+ * @appliesMixin EventsTargetMixin
  */
 class ApiUrlParamsEditor extends
-  mixinBehaviors(
-    [IronValidatableBehavior],
-    EventsTargetBehavior(PolymerElement)) {
-  static get is() {return 'api-url-params-editor';}
+  mixinBehaviors([IronValidatableBehavior], EventsTargetMixin(PolymerElement)) {
+  static get template() {
+    return html`<style>
+    :host {
+      display: block;
+      @apply --raml-request-parameters-editor;
+      @apply --api-url-params-editor;
+    }
+
+    .empty-message {
+      @apply --raml-request-parameters-editor-no-params;
+      @apply --api-url-params-editor-no-params;
+    }
+
+    .empty-message p {
+      @apply --raml-request-parameters-editor-no-params-message;
+      @apply --api-url-params-editor-no-params-message;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+    </style>
+    <section hidden\$="[[hasParameters]]" role="region" class="empty-message">
+      <p>This endpoint doesn't require to declare query or URI parameters.</p>
+    </section>
+    <template is="dom-if" if="[[hasUriParameters]]">
+      <api-url-params-form id="uriParametersForm" role="region"
+        form-type="uri" model="{{uriModel}}" optional-opened="" no-docs="[[noDocs]]">
+        <h3 slot="title">URI parameters</h3>
+      </api-url-params-form>
+    </template>
+    <template is="dom-if" if="[[hasQueryParameters]]">
+      <api-url-params-form id="queryParametersForm" role="region"
+        allow-hide-optional="" allow-disable-params="" allow-custom="[[allowCustom]]"
+        form-type="query" model="{{queryModel}}" narrow="[[narrow]]" no-docs="[[noDocs]]">
+        <h3 slot="title">Query parameters</h3>
+      </api-url-params-form>
+    </template>`;
+  }
+
+  static get is() {
+    return 'api-url-params-editor';
+  }
   static get properties() {
     return {
       /**
@@ -322,9 +321,6 @@ class ApiUrlParamsEditor extends
   // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
   // attribute automatically, which should be used for styling.
   _getValidity() {
-    if (!this.shadowRoot) {
-      return true;
-    }
     let validUri = true;
     let validUrl = true;
     if (this.hasUriParameters) {
