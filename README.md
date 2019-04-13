@@ -58,10 +58,6 @@ class SampleElement extends PolymerElement {
     <api-url-params-editor></api-url-params-editor>
     `;
   }
-
-  _authChanged(e) {
-    console.log(e.detail);
-  }
 }
 customElements.define('sample-element', SampleElement);
 ```
