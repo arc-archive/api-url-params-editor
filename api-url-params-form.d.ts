@@ -12,16 +12,6 @@
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-
-import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
-
-import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
-
-import {ApiFormMixin} from '@api-components/api-form-mixin/api-form-mixin.js';
-
 declare namespace ApiElements {
 
   /**
