@@ -13,7 +13,7 @@
     "url": "git://github.com/advanced-rest-client/api-url-params-editor.git"
   },
   "name": "@api-components/api-url-params-editor",
-  "version": "3.0.0-preview.1",
+  "version": "3.0.0-preview.2",
   "main": "api-url-params-editor.js",
   "license": "Apache-2.0",
   "authors": [
