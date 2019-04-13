@@ -1,17 +1,17 @@
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {IronValidatableBehavior} from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
-import '@polymer/polymer/lib/elements/dom-if.js';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/paper-checkbox/paper-checkbox.js';
-import '@polymer/iron-form/iron-form.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/iron-collapse/iron-collapse.js';
-import '@polymer/marked-element/marked-element.js';
-import '@api-components/api-property-form-item/api-property-form-item.js';
-import '@advanced-rest-client/markdown-styles/markdown-styles.js';
+import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
+import {IronValidatableBehavior} from '../../@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+import {mixinBehaviors} from '../../@polymer/polymer/lib/legacy/class.js';
+import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
+import '../../@polymer/polymer/lib/elements/dom-if.js';
+import '../../@polymer/polymer/lib/elements/dom-repeat.js';
+import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
+import '../../@polymer/paper-checkbox/paper-checkbox.js';
+import '../../@polymer/iron-form/iron-form.js';
+import '../../@polymer/paper-icon-button/paper-icon-button.js';
+import '../../@polymer/iron-collapse/iron-collapse.js';
+import '../../@polymer/marked-element/marked-element.js';
+import '../../@api-components/api-property-form-item/api-property-form-item.js';
+import '../../@advanced-rest-client/markdown-styles/markdown-styles.js';
 /**
  * Renders custom query parameter property input.
  *
