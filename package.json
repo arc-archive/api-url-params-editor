@@ -25,7 +25,7 @@
     "@api-components/api-model-generator": "^0.1.11",
     "@api-components/api-navigation": "^3.0.0-preview.2",
     "@api-components/api-url-data-model": "^3.0.0-preview.2",
-    "@api-components/api-view-model-transformer": "^3.0.0-preview.1",
+    "@api-components/api-view-model-transformer": "^3.0.0-preview.2",
     "@polymer/gen-typescript-declarations": "^1.6.1",
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-demo-helpers": "^3.1.0",
