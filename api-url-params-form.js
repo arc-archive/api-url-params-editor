@@ -1,23 +1,18 @@
-import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
-import {mixinBehaviors} from '../../@polymer/polymer/lib/legacy/class.js';
-import {IronValidatableBehavior} from '../../@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
-import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
-import '../../@polymer/polymer/lib/elements/dom-if.js';
-import '../../@polymer/polymer/lib/elements/dom-repeat.js';
-import '../../@polymer/iron-flex-layout/iron-flex-layout.js';
-import '../../@polymer/paper-checkbox/paper-checkbox.js';
-import '../../@polymer/iron-form/iron-form.js';
-import '../../@polymer/paper-icon-button/paper-icon-button.js';
-import '../../@polymer/iron-collapse/iron-collapse.js';
-import '../../@polymer/marked-element/marked-element.js';
-import '../../@api-components/api-property-form-item/api-property-form-item.js';
-import '../../@advanced-rest-client/markdown-styles/markdown-styles.js';
-import '../../@polymer/paper-button/paper-button.js';
-import '../../@advanced-rest-client/arc-icons/arc-icons.js';
-import '../../@polymer/iron-icon/iron-icon.js';
-import {ApiFormMixin} from '../../@api-components/api-form-mixin/api-form-mixin.js';
-import '../../@api-components/api-form-mixin/api-form-styles.js';
-import './api-url-params-custom-input.js';
+import { html, css, LitElement } from 'lit-element';
+import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/validatable-mixin.js';
+import { ApiFormMixin } from '@api-components/api-form-mixin/api-form-mixin.js';
+import markdownStyles from '@advanced-rest-client/markdown-styles/markdown-styles.js';
+import formStyles from '@api-components/api-form-mixin/api-form-styles.js';
+import '@advanced-rest-client/arc-marked/arc-marked.js';
+import '@advanced-rest-client/arc-icons/arc-icons.js';
+import '@api-components/api-property-form-item/api-property-form-item.js';
+import '@api-components/api-form-mixin/api-form-styles.js';
+import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
+import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
+import '@anypoint-web-components/anypoint-button/anypoint-button.js';
+import '@polymer/iron-form/iron-form.js';
+import '@polymer/iron-collapse/iron-collapse.js';
+import '@polymer/iron-icon/iron-icon.js';
 /**
  * Renders form and input elements for query / uri model.
  *
@@ -34,243 +29,306 @@ import './api-url-params-custom-input.js';
  * set `allow-hide-optional` attribute to hide parameters that are optional.
  * It also renders checkbox to toggle optional parameters.
  *
- * Styling
- *
- * Custom property | Description | Default
- * ----------------|-------------|----------
- * `--api-url-params-form` | Mixin applied to this element | `{}`
- * `--api-url-params-form-row` | Mixin applied to each form row | `{}`
- * `--api-url-params-form-required` | Mixin applied to a form row that is required | `{}`
- * `--inline-documentation-color` | Color of the documentation when opened. | `rgba(0, 0, 0, 0.87)`
- * `--from-row-action-icon-color` | Color of the documentation icon | `--icon-button-color` or `rgba(0, 0, 0, 0.74)`
- * `--from-row-action-icon-color-hover` | Color of the documentation icon when hovering. Please, consider devices that do not support hovers. | `--accent-color` or `rgba(0, 0, 0, 0.74)`
- * `--inline-documentation-background-color` | Background color of opened documentation. | `#FFF3E0`
- * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
- * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
- * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
- * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
- * `--api-url-params-form-enable-checkbox-array-margin-top` | Margin top of the toggle checkbox when the item is an array | `40px`
- * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
- * `--api-url-params-form-hint-icon-array-margin-top` | Margin top of the "help" icon when the item is an array| `24px`
- * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
- * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
- * `--icon-button` | Mixin applied to all icon buttons | `{}`
- * `--icon-button-hover` | Mixin applied to all icon buttons when hovering | `{}`
- *
  * You can also style inputs as defined in
  * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
  * element documentation.
  *
  * @customElement
- * @polymer
  * @demo demo/index.html
  * @memberof ApiElements
- * @polymerBehavior Polymer.IronValidatableBehavior
+ * @appliesMixin ValidatableMixin
  * @appliesMixin ApiFormMixin
  */
-class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiFormMixin(PolymerElement)) {
-  static get template() {
-    return html`<style include="api-form-styles"></style>
-    <style include="markdown-styles">
-    :host {
-      display: block;
-      @apply --raml-request-parameters-form;
-      @apply --api-url-params-form;
-    }
+class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
+  static get styles() {
+    return [
+      markdownStyles,
+      formStyles,
+      css`:host {
+        display: block;
+      }
 
-    .param-value {
-      @apply --raml-request-parameters-editor-row;
-      @apply --api-url-params-form-row;
-    }
+      .param-value .input {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+      }
 
-    .param-value.optional {
-      display: none;
-    }
+      .has-enable-button .docs {
+        margin-left: 32px;
+      }
 
-    .param-value.required {
-      @apply --api-url-params-form-required;
-    }
+      .value-input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex: 1;
+      }
 
-    .param-value.optional.with-optional {
-      display: block;
-    }
+      api-property-form-item,
+      api-url-params-custom-input {
+        flex: 1;
+      }
 
-    .param-value .input {
-      @apply --layout-horizontal;
-      @apply --layout-flex;
-    }
+      [hidden] {
+        display: none !important;
+      }
 
-    .has-enable-button .docs {
-      margin-left: 32px;
-    }
+      .enable-checkbox {
+        margin-right: 8px;
+      }
 
-    .value-input {
-      @apply --layout-horizontal;
-      @apply --layout-start;
-      @apply --layout-flex;
-    }
+      .params-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
 
-    .value-input.is-array {
-      @apply --layout-end;
-      @apply --raml-request-parameters-form-array-parameter;
-      @apply --api-url-params-form-array-parameter;
-    }
+      .params-title ::slotted(*) {
+        margin: 0.83em 8px;
+        letter-spacing: 0.1rem;
+        font-size: 20px;
+        font-weight: 200;
+      }
 
-    api-property-form-item,
-    api-url-params-custom-input {
-      @apply --layout-flex;
-      margin-bottom: 8px;
-    }
+      :host([legacy]) .params-title ::slotted(*) {
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: initial;
+      }
 
-    api-property-form-item[is-array] {
-      margin-top: 8px;
-    }
+      .custom-row {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+      }
 
-    [hidden] {
-      display: none !important;
-    }
+      .custom-row.narrow {
+        flex-direction: column;
+      }
 
-    .enable-checkbox {
-      margin-top: var(--api-url-params-form-enable-checkbox-margin-top, 32px);
-      margin-right: 8px;
-    }
+      .custom-row anypoint-input,
+      .custom-row api-property-form-item {
+        flex: initial;
+        width: auto;
+      }
 
-    .enable-checkbox[data-array] {
-      margin-top: var(--api-url-params-form-enable-checkbox-array-margin-top, 40px);
-    }
+      [data-optional] {
+        display: none;
+      }
 
-    .params-title {
-      @apply --layout-horizontal;
-      @apply --layout-center;
-    }
+      :host([optionalopened]) [data-optional] {
+        display: flex;
+      }
 
-    .toggle-checkbox {
-      --paper-checkbox-label-color: var(--api-url-params-editor-optional-checkbox-label-color, rgba(0, 0, 0, 0.74));
-    }
+      /* Array items */
+      .value-input.is-array {
+        align-items: flex-start;
+      }
 
-    .param-value paper-icon-button {
-      margin-top: var(--api-url-params-form-hint-icon-margin-top, 16px);
-    }
+      .is-array .enable-checkbox {
+        margin-top: 8px;
+      }
 
-    .param-value paper-icon-button[data-array] {
-      margin-top: var(--api-url-params-form-hint-icon-array-margin-top, 24px);
-    }
+      .is-array api-property-form-item {
+        margin-top: 8px;
+      }
 
-    .params-title ::slotted(h3) {
-      display: inline-block;
-      margin-right: 12px;
-      @apply --api-url-params-editor-editor-subheader;
+      .is-array .hint-icon {
+        margin-top: 8px;
+      }
+      `
+    ];
+  }
+
+  _customInputTemplate(item, index) {
+    const {
+      readOnly,
+      legacy,
+      outlined,
+      narrow
+    } = this;
+    return html`
+    <div class="custom-row${narrow ? ' narrow' : ''}">
+      <anypoint-input
+        data-index="${index}"
+        .value="${item.name}"
+        @value-changed="${this._nameChangeHandler}"
+        class="param-name"
+        type="text"
+        required
+        autovalidate
+        ?outlined="${outlined}"
+        ?legacy="${legacy}"
+        .readOnly="${readOnly}">
+        <label slot="label">Parameter name</label>
+      </anypoint-input>
+      <api-property-form-item
+        data-index="${index}"
+        .name="${item.name}"
+        .value="${item.value}"
+        @value-changed="${this._valueChangeHandler}"
+        .model="${item}"
+        .readOnly="${readOnly}"
+        ?narrow="${narrow}"
+        ?outlined="${outlined}"
+        ?legacy="${legacy}"></api-property-form-item>
+    </div>`;
+  }
+
+  _formRowTemplate(item, index) {
+    const {
+      allowHideOptional,
+      optionalOpened,
+      allowDisableParams,
+      readOnly,
+      disabled,
+      legacy,
+      outlined,
+      narrow,
+      noDocs
+    } = this;
+    const rowClass = this.computeFormRowClass(item, allowHideOptional, optionalOpened, allowDisableParams);
+    const hasDocs = this._computeHasDocumentation(noDocs, item);
+    const renderDocs = !noDocs && hasDocs && !!item.docsOpened;
+    return html`<div class="${rowClass}" ?data-optional="${!item.required}">
+      <div class="value-input${item.schema.isArray ? ' is-array' : ''}">
+      ${allowDisableParams ? html`
+        <anypoint-checkbox
+          class="enable-checkbox"
+          ?checked="${item.schema.enabled}"
+          data-index="${index}"
+          ?data-array="${item.schema.isArray}"
+          @checked-changed="${this._enableCheckedHandler}"
+          title="Enable or disable this parameter"
+          aria-label="Toggle to enable or disable this parameter"
+          ?disabled="${readOnly || disabled}"
+          ?outlined="${outlined}"
+          ?legacy="${legacy}"></anypoint-checkbox>` : undefined}
+
+        ${item.schema.isCustom ? this._customInputTemplate(item, index) :
+          html`<api-property-form-item
+            data-index="${index}"
+            name="${item.name}"
+            .value="${item.value}"
+            @value-changed="${this._valueChangeHandler}"
+            .model="${item}"
+            ?required="${item.required}"
+            .readOnly="${readOnly}"
+            .disabled=${disabled}
+            ?narrow="${narrow}"
+            .noDocs="${noDocs}"
+            ?outlined="${outlined}"
+            ?legacy="${legacy}"
+            ></api-property-form-item>`}
+        ${hasDocs ? html`<anypoint-icon-button
+          data-index="${index}"
+          class="hint-icon"
+          title="Toggle documentation"
+          ?outlined="${outlined}"
+          ?legacy="${legacy}"
+          ?disabled="${disabled}"
+          @click="${this._toggleItemDocs}">
+          <iron-icon icon="arc:help"></iron-icon>
+        </anypoint-icon-button>` : undefined}
+
+        ${item.schema.isCustom ? html`<anypoint-icon-button
+          title="Remove this parameter"
+          aria-label="Press to remove parameter ${name}"
+          class="action-icon delete-icon"
+          data-index="${index}"
+          @click="${this._removeCustom}"
+          slot="suffix"
+          ?disabled="${readOnly || disabled}"
+          ?outlined="${outlined}"
+          ?legacy="${legacy}">
+          <iron-icon icon="arc:remove-circle-outline"></iron-icon>
+        </anypoint-icon-button>` : undefined}
+      </div>
+
+      ${renderDocs ? html`<arc-marked .markdown="${this._computeDocumentation(item)}">
+        <div slot="markdown-html" class="markdown-body"></div>
+      </arc-marked>` : undefined}
+    </div>`;
+  }
+
+  render() {
+    const {
+      renderOptionalCheckbox,
+      optionalOpened,
+      allowCustom,
+      readOnly,
+      disabled
+    } = this;
+    let { model } = this;
+    if (!model) {
+      model = [];
     }
-    </style>
+    return html`
     <div class="params-title">
       <slot name="title"></slot>
-      <template is="dom-if" if="[[renderOptionalCheckbox]]">
-        <paper-checkbox class="toggle-checkbox" checked="{{optionalOpened}}"
-          title="Shows or hides optional parameters">Show optional parameters</paper-checkbox>
-      </template>
     </div>
+    ${renderOptionalCheckbox ? html`<div class="optional-checkbox">
+      <anypoint-checkbox
+        class="toggle-checkbox"
+        .checked="${optionalOpened}"
+        @checked-changed="${this._optionalHanlder}"
+        title="Toggles optional parameters">Show optional parameters</anypoint-checkbox>
+    </div>` : undefined}
     <iron-form>
       <form enctype="application/json">
-        <dom-repeat items="{{model}}" items-repeater="">
-          <template>
-            <div class\$="[[computeFormRowClass(item, allowHideOptional, optionalOpened, allowDisableParams)]]">
-              <div class\$="value-input [[_computeTypeClass(item.isArray)]]">
-                <template is="dom-if" if="[[allowDisableParams]]">
-                  <paper-checkbox class="enable-checkbox" data-array\$="[[item.schema.isArray]]"
-                    checked="{{item.schema.enabled}}" title="Enable/disable this header"></paper-checkbox>
-                </template>
-                <template is="dom-if" if="[[!_computeIsCustom(item.schema)]]">
-                  <api-property-form-item model="[[item]]" name="[[item.name]]"
-                    value="{{item.value}}" required\$="[[item.required]]"></api-property-form-item>
-                </template>
-                <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <api-url-params-custom-input model="[[item]]" name="{{item.name}}"
-                    value="{{item.value}}" required\$="[[item.required]]"
-                    narrow="[[narrow]]"></api-url-params-custom-input>
-                </template>
-                <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
-                  <!-- TODO: The documentation should be computed on a transformer level. -->
-                  <paper-icon-button class="hint-icon"
-                    data-array\$="[[item.schema.isArray]]" icon="arc:help" on-click="_openDocs"
-                    title="Display documentation"></paper-icon-button>
-                </template>
-                <template is="dom-if" if="[[_computeIsCustom(item.schema)]]">
-                  <paper-icon-button title="Remove parameter" data-array\$="[[item.schema.isArray]]"
-                    class="delete-icon action-icon" icon="arc:remove-circle-outline"
-                    on-click="_removeCustom"></paper-icon-button>
-                </template>
-              </div>
-              <template is="dom-if" if="[[_computeHasDocumentation(noDocs, item)]]">
-                <div class="docs">
-                  <iron-collapse>
-                    <marked-element markdown="[[_computeDocumentation(item)]]">
-                      <div slot="markdown-html" class="markdown-body"></div>
-                    </marked-element>
-                  </iron-collapse>
-                </div>
-              </template>
-            </div>
-          </template>
-        </dom-repeat>
+      ${model.map((item, index) => this._formRowTemplate(item, index))}
       </form>
     </iron-form>
-    <template is="dom-if" if="[[allowCustom]]">
-      <div class="add-action">
-        <paper-button class="action-button" on-click="add" title="Adds new query parameter to the form">
-          <iron-icon class="action-icon" icon="arc:add-circle-outline" alt="Add query parameter icon"></iron-icon>
-          Add query parameter
-        </paper-button>
-      </div>
-    </template>`;
+    ${allowCustom ? html`<div class="add-action">
+      <anypoint-button
+        class="action-button"
+        @click="${this.add}"
+        title="Add new parameter"
+        aria-label="Press to create a new parameter"
+        ?disabled="${readOnly || disabled}">
+        <iron-icon
+          class="action-icon"
+          icon="arc:add-circle-outline"
+          alt="Add parameter icon"></iron-icon>
+        Add parameter
+      </anypoint-button>
+    </div>` : undefined}`;
   }
 
-  static get is() {
-    return 'api-url-params-form';
-  }
   static get properties() {
     return {
-      /**
-       * The form can display query or URI parameters. When anything change in the form
-       * it will send a corresponding custom event (`query-parameter-changed` or
-       * `uri-parameter-changed`). To make this happen set the value of this property to
-       * either `query` or `uri`.
-       */
-      formType: String,
       /**
        * Prohibits rendering of the documentation (the icon and the
        * description).
        */
-      noDocs: {
-        type: Boolean,
-        value: false
-      }
+      noDocs: { type: Boolean },
+      /**
+       * Enables Anypoint legacy styling
+       */
+      legacy: { type: Boolean, reflect: true },
+      /**
+       * Enables Material Design outlined style
+       */
+      outlined: { type: Boolean },
+      /**
+       * When set the editor is in read only mode.
+       */
+      readOnly: { type: Boolean },
+      /**
+       * When set all controls are disabled in the form
+       */
+      disabled: { type: Boolean },
+      /**
+       * If set it renders a narrow layout
+       */
+      narrow: { type: Boolean, reflect: true },
+      /**
+       * When set, renders add custom parameter button in query parameters
+       * form
+       */
+      allowCustom: { type: Boolean }
     };
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this._ensureAttribute('role', 'form');
-  }
-  /**
-   * Computes array class for the input element.
-   *
-   * @param {Boolean} isArray
-   * @return {String}
-   */
-  _computeTypeClass(isArray) {
-    return isArray ? 'is-array' : '';
-  }
-  // Opens the documentation for item.
-  _openDocs(e) {
-    const form = this._getForm();
-    const template = form.querySelector('[items-repeater]');
-    const model = template.modelForElement(e.target);
-    const collapse = form.querySelector('.param-value:nth-child(' + (model.index + 1) +
-      ') iron-collapse');
-    if (!collapse) {
-      return;
-    }
-    collapse.opened = !collapse.opened;
   }
   /**
    * Computes documentation as a markdown to be placed in the `marked-element`
@@ -286,12 +344,17 @@ class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiForm
       return docs;
     }
     const schema = item.schema;
-    docs += '\n\n\n';
+    if (docs) {
+      docs += '\n\n\n';
+    }
     if (schema.pattern) {
       docs += '- Pattern: `' + schema.pattern + '`\n';
     }
     if (schema.examples && schema.examples.length) {
       schema.examples.forEach((item) => {
+        if (!item.value) {
+          return;
+        }
         docs += '- Example';
         if (item.hasName) {
           docs += ' ' + item.name;
@@ -321,17 +384,10 @@ class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiForm
     if (schema.pattern) {
       return true;
     }
-    if (schema.examples && schema.examples.length) {
+    if (schema.examples && schema.examples.length && schema.examples[0].value) {
       return true;
     }
     return false;
-  }
-
-  _computeIsCustom(schema) {
-    if (!schema || !schema.isCustom) {
-      return false;
-    }
-    return true;
   }
   /**
    * Adds custom property to the list.
@@ -340,11 +396,79 @@ class ApiUrlParamsForm extends mixinBehaviors([IronValidatableBehavior], ApiForm
     this.addCustom('query');
   }
 
-  // Overidden from Polymer.IronValidatableBehavior. Will set the `invalid`
+  // Overrides ValidatableMixin._getValidity. Will set the `invalid`
   // attribute automatically, which should be used for styling.
   _getValidity() {
     return this.shadowRoot.querySelector('iron-form').validate();
   }
+
+  _optionalHanlder(e) {
+    this.optionalOpened = e.detail.value;
+  }
+
+  _enableCheckedHandler(e) {
+    const index = Number(e.target.dataset.index);
+    /* istanbul ignore if  */
+    if (index !== index) {
+      return;
+    }
+    const { checked } = e.target;
+    const old = this.model[index].schema.enabled;
+    this.model[index].schema.enabled = checked;
+    this._notifyChange(index, 'enabled', checked, old);
+  }
+
+  _nameChangeHandler(e) {
+    if (!this.allowCustom) {
+      return;
+    }
+    const index = Number(e.target.dataset.index);
+    /* istanbul ignore if  */
+    if (index !== index) {
+      return;
+    }
+    const item = this.model[index];
+    if (!item.schema.isCustom) {
+      return;
+    }
+    const { value } = e.detail;
+    const old = this.model[index].name;
+    this.model[index].name = value;
+    this._notifyChange(index, 'name', value, old);
+  }
+
+  _valueChangeHandler(e) {
+    const index = Number(e.target.dataset.index);
+    /* istanbul ignore if  */
+    if (index !== index) {
+      return;
+    }
+    const { value } = e.detail;
+    const old = this.model[index].value;
+    this.model[index].value = value;
+    this._notifyChange(index, 'value', value, old);
+  }
+
+  _notifyChange(index, property, value, oldValue) {
+    this.dispatchEvent(new CustomEvent('change', {
+      detail: {
+        index,
+        property,
+        value,
+        oldValue
+      }
+    }));
+  }
+
+  _toggleItemDocs(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    /* istanbul ignore if  */
+    if (index !== index) {
+      return;
+    }
+    this.model[index].docsOpened = !this.model[index].docsOpened;
+    this.requestUpdate();
+  }
 }
 
-window.customElements.define(ApiUrlParamsForm.is, ApiUrlParamsForm);
+window.customElements.define('api-url-params-form', ApiUrlParamsForm);
