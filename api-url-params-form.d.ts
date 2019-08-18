@@ -5,31 +5,18 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   api-url-params-form.html
+ *   api-url-params-form.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 // tslint:disable:no-any describes the API as best we are able today
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-if.d.ts" />
-/// <reference path="../polymer/types/lib/elements/dom-repeat.d.ts" />
-/// <reference path="../iron-flex-layout/iron-flex-layout.d.ts" />
-/// <reference path="../iron-validatable-behavior/iron-validatable-behavior.d.ts" />
-/// <reference path="../paper-checkbox/paper-checkbox.d.ts" />
-/// <reference path="../iron-form/iron-form.d.ts" />
-/// <reference path="../paper-icon-button/paper-icon-button.d.ts" />
-/// <reference path="../iron-collapse/iron-collapse.d.ts" />
-/// <reference path="../marked-element/marked-element.d.ts" />
-/// <reference path="../api-property-form-item/api-property-form-item.d.ts" />
-/// <reference path="../markdown-styles/markdown-styles.d.ts" />
-/// <reference path="../paper-button/paper-button.d.ts" />
-/// <reference path="../arc-icons/arc-icons.d.ts" />
-/// <reference path="../iron-icon/iron-icon.d.ts" />
-/// <reference path="../api-form-mixin/api-form-mixin.d.ts" />
-/// <reference path="../api-form-mixin/api-form-styles.d.ts" />
-/// <reference path="api-url-params-custom-input.d.ts" />
+import {html, css, LitElement} from 'lit-element';
+
+import {ValidatableMixin} from '@anypoint-web-components/validatable-mixin/validatable-mixin.js';
+
+import {ApiFormMixin} from '@api-components/api-form-mixin/api-form-mixin.js';
 
 declare namespace ApiElements {
 
@@ -49,45 +36,14 @@ declare namespace ApiElements {
    * set `allow-hide-optional` attribute to hide parameters that are optional.
    * It also renders checkbox to toggle optional parameters.
    *
-   * Styling
-   *
-   * Custom property | Description | Default
-   * ----------------|-------------|----------
-   * `--api-url-params-form` | Mixin applied to this element | `{}`
-   * `--api-url-params-form-row` | Mixin applied to each form row | `{}`
-   * `--api-url-params-form-required` | Mixin applied to a form row that is required | `{}`
-   * `--inline-documentation-color` | Color of the documentation when opened. | `rgba(0, 0, 0, 0.87)`
-   * `--from-row-action-icon-color` | Color of the documentation icon | `--icon-button-color` or `rgba(0, 0, 0, 0.74)`
-   * `--from-row-action-icon-color-hover` | Color of the documentation icon when hovering. Please, consider devices that do not support hovers. | `--accent-color` or `rgba(0, 0, 0, 0.74)`
-   * `--inline-documentation-background-color` | Background color of opened documentation. | `#FFF3E0`
-   * `--api-url-params-form-array-parameter` | Mixin applied to a container of a parameter that is an array | `{}`
-   * `--api-url-params-editor-editor-subheader` | Mixin applied to the form header element | `{}`
-   * `--api-url-params-editor-optional-checkbox-label-color,` | Label color of toggle optional checkbox | `rgba(0, 0, 0, 0.74)`
-   * `--api-url-params-form-enable-checkbox-margin-top` | Margin top of the toggle checkbox | `32px`
-   * `--api-url-params-form-enable-checkbox-array-margin-top` | Margin top of the toggle checkbox when the item is an array | `40px`
-   * `--api-url-params-form-hint-icon-margin-top` | Margin top of the "help" icon | `16px`
-   * `--api-url-params-form-hint-icon-array-margin-top` | Margin top of the "help" icon when the item is an array| `24px`
-   * `--hint-trigger-color` | Color of the help icon | `rgba(0, 0, 0, 0.74)`
-   * `--hint-trigger-hover-color` | Color of the help icon when hovering | `rgba(0, 0, 0, 0.88)`
-   * `--icon-button` | Mixin applied to all icon buttons | `{}`
-   * `--icon-button-hover` | Mixin applied to all icon buttons when hovering | `{}`
-   *
    * You can also style inputs as defined in
    * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
    * element documentation.
    */
   class ApiUrlParamsForm extends
-    Polymer.IronValidatableBehavior(
-    ArcBehaviors.ApiFormMixin(
+    ValidatableMixin(
+    ApiFormMixin(
     Object)) {
-
-    /**
-     * The form can display query or URI parameters. When anything change in the form
-     * it will send a corresponding custom event (`query-parameter-changed` or
-     * `uri-parameter-changed`). To make this happen set the value of this property to
-     * either `query` or `uri`.
-     */
-    formType: string|null|undefined;
 
     /**
      * Prohibits rendering of the documentation (the icon and the
@@ -96,21 +52,38 @@ declare namespace ApiElements {
     noDocs: boolean|null|undefined;
 
     /**
-     * attribute automatically, which should be used for styling.
+     * Enables Anypoint legacy styling
      */
-    _getValidity(): any;
-    _computeIsCustom(schema: any): any;
-    connectedCallback(): void;
+    legacy: boolean|null|undefined;
 
     /**
-     * Computes array class for the input element.
+     * Enables Material Design outlined style
      */
-    _computeTypeClass(isArray: Boolean|null): String|null;
+    outlined: boolean|null|undefined;
 
     /**
-     * Opens the documentation for item.
+     * When set the editor is in read only mode.
      */
-    _openDocs(e: any): void;
+    readOnly: boolean|null|undefined;
+
+    /**
+     * When set all controls are disabled in the form
+     */
+    disabled: boolean|null|undefined;
+
+    /**
+     * If set it renders a narrow layout
+     */
+    narrow: boolean|null|undefined;
+
+    /**
+     * When set, renders add custom parameter button in query parameters
+     * form
+     */
+    allowCustom: boolean|null|undefined;
+    _customInputTemplate(item: any, index: any): any;
+    _formRowTemplate(item: any, index: any): any;
+    render(): any;
 
     /**
      * Computes documentation as a markdown to be placed in the `marked-element`
@@ -132,9 +105,23 @@ declare namespace ApiElements {
      * Adds custom property to the list.
      */
     add(): void;
+
+    /**
+     * attribute automatically, which should be used for styling.
+     */
+    _getValidity(): any;
+    _optionalHanlder(e: any): void;
+    _enableCheckedHandler(e: any): void;
+    _nameChangeHandler(e: any): void;
+    _valueChangeHandler(e: any): void;
+    _notifyChange(index: any, property: any, value: any, oldValue: any): void;
+    _toggleItemDocs(e: any): void;
   }
 }
 
-interface HTMLElementTagNameMap {
-  "api-url-params-form": ApiElements.ApiUrlParamsForm;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "api-url-params-form": ApiElements.ApiUrlParamsForm;
+  }
 }
