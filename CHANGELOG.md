@@ -333,3 +333,12 @@
 
 
 
+## 3.0.1 (2019-08-19)
+
+
+### Bug Fixes
+
+* adding missing import ([9970a41](https://github.com/advanced-rest-client/api-url-params-editor/commit/9970a41))
+
+
+
