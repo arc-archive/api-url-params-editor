@@ -10,6 +10,7 @@ import '@api-components/api-form-mixin/api-form-styles.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
+import '@anypoint-web-components/anypoint-input/anypoint-input.js';
 import '@polymer/iron-form/iron-form.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/iron-icon/iron-icon.js';
