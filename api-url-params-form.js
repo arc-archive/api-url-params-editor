@@ -337,33 +337,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
    * @return {String}
    */
   _computeDocumentation(item) {
-    let docs = '';
-    if (item.description) {
-      docs += item.description;
-    }
-    if (!item.schema) {
-      return docs;
-    }
-    const schema = item.schema;
-    if (docs) {
-      docs += '\n\n\n';
-    }
-    if (schema.pattern) {
-      docs += '- Pattern: `' + schema.pattern + '`\n';
-    }
-    if (schema.examples && schema.examples.length) {
-      schema.examples.forEach((item) => {
-        if (!item.value) {
-          return;
-        }
-        docs += '- Example';
-        if (item.hasName) {
-          docs += ' ' + item.name;
-        }
-        docs += ': `' + item.value + '`\n';
-      });
-    }
-    return docs;
+    return (item.extendedDescription ? item.extendedDescription : item.description) || '';
   }
   /**
    * Computes if model item has documentation to display.
@@ -375,20 +349,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
     if (noDocs) {
       return false;
     }
-    if (item.hasDescription) {
-      return true;
-    }
-    if (!item.schema) {
-      return false;
-    }
-    const schema = item.schema;
-    if (schema.pattern) {
-      return true;
-    }
-    if (schema.examples && schema.examples.length && schema.examples[0].value) {
-      return true;
-    }
-    return false;
+    return !!(item.hasDescription || item.hasExtendedDescription);
   }
   /**
    * Adds custom property to the list.

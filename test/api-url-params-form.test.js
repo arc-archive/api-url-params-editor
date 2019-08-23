@@ -172,66 +172,19 @@ describe('<api-url-params-form>', function() {
       assert.equal(result, '');
     });
 
-    it('returns description part', () => {
+    it('returns extendedDescription', () => {
+      const result = element._computeDocumentation({
+        extendedDescription: 'extended',
+        description: 'test'
+      });
+      assert.equal(result, 'extended');
+    });
+
+    it('returns description', () => {
       const result = element._computeDocumentation({
         description: 'test'
       });
       assert.equal(result, 'test');
-    });
-
-    it('returns pattern part', () => {
-      const result = element._computeDocumentation({
-        schema: {
-          pattern: 'test'
-        }
-      });
-      assert.equal(result, '- Pattern: `test`\n');
-    });
-
-    it('adds new lines after description', () => {
-      const result = element._computeDocumentation({
-        description: 'test',
-        schema: {
-          pattern: 'test'
-        }
-      });
-      assert.equal(result, 'test\n\n\n- Pattern: `test`\n');
-    });
-
-    it('adds examples', () => {
-      const result = element._computeDocumentation({
-        schema: {
-          examples: [{
-            value: 'test'
-          }]
-        }
-      });
-      assert.equal(result, '- Example: `test`\n');
-    });
-
-    it('adds title for example', () => {
-      const result = element._computeDocumentation({
-        schema: {
-          examples: [{
-            value: 'test',
-            name: 'title',
-            hasName: true
-          }]
-        }
-      });
-      assert.equal(result, '- Example title: `test`\n');
-    });
-
-    it('ignores examples without a value', () => {
-      const result = element._computeDocumentation({
-        schema: {
-          examples: [{
-            name: 'title',
-            hasName: true
-          }]
-        }
-      });
-      assert.equal(result, '');
     });
   });
 
@@ -255,54 +208,15 @@ describe('<api-url-params-form>', function() {
       assert.isTrue(result);
     });
 
-    it('returns false when no schema', () => {
+    it('returns true when hasExtendedDescription', () => {
       const result = element._computeHasDocumentation(false, {
-        hasDescription: false
-      });
-      assert.isFalse(result);
-    });
-
-    it('returns true when has a patter', () => {
-      const result = element._computeHasDocumentation(false, {
-        hasDescription: false,
-        schema: {
-          pattern: true
-        }
+        hasExtendedDescription: true
       });
       assert.isTrue(result);
-    });
-
-    it('returns true when has examples', () => {
-      const result = element._computeHasDocumentation(false, {
-        hasDescription: false,
-        schema: {
-          examples: [{
-            value: 'test',
-            name: 'title',
-            hasName: true
-          }]
-        }
-      });
-      assert.isTrue(result);
-    });
-
-    it('returns false when example has no value', () => {
-      const result = element._computeHasDocumentation(false, {
-        hasDescription: false,
-        schema: {
-          examples: [{
-            name: 'title',
-            hasName: true
-          }]
-        }
-      });
-      assert.isFalse(result);
     });
 
     it('returns false otherwise', () => {
       const result = element._computeHasDocumentation(false, {
-        hasDescription: false,
-        schema: {}
       });
       assert.isFalse(result);
     });
