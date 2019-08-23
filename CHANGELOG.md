@@ -342,3 +342,17 @@
 
 
 
+## 3.0.2 (2019-08-23)
+
+
+### Bug Fixes
+
+* adding missing import ([9970a41](https://github.com/advanced-rest-client/api-url-params-editor/commit/9970a41))
+
+
+### Features
+
+* upgrading to used viewModel's extended description ([b121b41](https://github.com/advanced-rest-client/api-url-params-editor/commit/b121b41))
+
+
+
