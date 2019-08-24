@@ -356,3 +356,20 @@
 
 
 
+## 3.0.4 (2019-08-24)
+
+
+### Bug Fixes
+
+* adding missing import ([9970a41](https://github.com/advanced-rest-client/api-url-params-editor/commit/9970a41))
+* fixing optional style - flex direction ([dc474fb](https://github.com/advanced-rest-client/api-url-params-editor/commit/dc474fb))
+* removing duplicated import ([39a3d08](https://github.com/advanced-rest-client/api-url-params-editor/commit/39a3d08))
+* setting cutom field inputs flex to 1 ([62034a9](https://github.com/advanced-rest-client/api-url-params-editor/commit/62034a9))
+
+
+### Features
+
+* upgrading to used viewModel's extended description ([b121b41](https://github.com/advanced-rest-client/api-url-params-editor/commit/b121b41))
+
+
+
