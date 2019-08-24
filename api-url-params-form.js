@@ -110,7 +110,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
 
       .custom-row anypoint-input,
       .custom-row api-property-form-item {
-        flex: initial;
+        flex: 1;
         width: auto;
       }
 
