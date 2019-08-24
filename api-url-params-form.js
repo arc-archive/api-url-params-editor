@@ -6,7 +6,6 @@ import formStyles from '@api-components/api-form-mixin/api-form-styles.js';
 import '@advanced-rest-client/arc-marked/arc-marked.js';
 import '@advanced-rest-client/arc-icons/arc-icons.js';
 import '@api-components/api-property-form-item/api-property-form-item.js';
-import '@api-components/api-form-mixin/api-form-styles.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
