@@ -119,6 +119,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
 
       :host([optionalopened]) [data-optional] {
         display: flex;
+        flex-direction: column;
       }
 
       /* Array items */
