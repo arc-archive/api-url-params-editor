@@ -129,3 +129,16 @@ securitySchemes:
 /plus:
   /{+page}:
     get:
+/required-query-parameters:
+  get:
+    queryParameters:
+      requiredString:
+        type: string
+        required: true
+
+/optional-query-parameters:
+  get:
+    queryParameters:
+      requiredString:
+        type: string
+        required: false

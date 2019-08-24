@@ -362,7 +362,11 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
   // Overrides ValidatableMixin._getValidity. Will set the `invalid`
   // attribute automatically, which should be used for styling.
   _getValidity() {
-    return this.shadowRoot.querySelector('iron-form').validate();
+    const form = this.shadowRoot.querySelector('iron-form');
+    if (!form) {
+      return true;
+    }
+    return form.validate();
   }
 
   _optionalHanlder(e) {

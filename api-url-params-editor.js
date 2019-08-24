@@ -53,6 +53,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
 
     ${_hasUriParameters ? html`<api-url-params-form
       id="uriParametersForm"
+      @change="${this._uriFormChange}"
       form-type="uri"
       optionalopened
       .model="${uriModel}"
@@ -61,12 +62,13 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       ?nodocs="${noDocs}"
       ?outlined="${outlined}"
       ?legacy="${legacy}"
-      ?narrow="${narrow}"
-      @change="${this._uriFormChange}">
+      ?narrow="${narrow}">
       <div role="heading" aria-level="1" slot="title">URI parameters</div>
     </api-url-params-form>` : undefined}
     ${_hasQueryParameters ? html`<api-url-params-form
       id="queryParametersForm"
+      @change="${this._queryFormChange}"
+      @model-changed="${this._queryModelChange}"
       form-type="query"
       allowhideoptional
       allowdisableparams
@@ -77,9 +79,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       ?nodocs="${noDocs}"
       ?outlined="${outlined}"
       ?legacy="${legacy}"
-      ?narrow="${narrow}"
-      @change="${this._queryFormChange}"
-      @model-changed="${this._queryModelChange}">
+      ?narrow="${narrow}">
       <div role="heading" aria-level="1" slot="title">Query parameters</div>
     </api-url-params-form>` : undefined}
     `;
@@ -409,6 +409,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     this.__ignoreValueProcessing = true;
     this[modelPath] = [...this[modelPath]];
     this.__ignoreValueProcessing = false;
+    this._asyncValidate();
   }
 
   _updatePropertyEnabled(model, values, detail) {
@@ -436,6 +437,14 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
 
   _queryModelChange(e) {
     this.queryModel = e.detail.value;
+    this._asyncValidate();
+  }
+
+  async _asyncValidate() {
+    await this.updateComplete;
+    setTimeout(() => {
+      this.validate();
+    });
   }
   /**
    * Fired when an URI parameter value change in this editor.

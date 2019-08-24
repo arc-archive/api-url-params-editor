@@ -2,7 +2,8 @@ import {
   fixture,
   assert,
   nextFrame,
-  html
+  html,
+  aTimeout
 } from '@open-wc/testing';
 import sinon from 'sinon/pkg/sinon-esm.js';
 import '../api-url-params-editor.js';
@@ -345,6 +346,20 @@ describe('<api-url-params-editor>', function() {
 
       const result = element.validate();
       assert.isTrue(result);
+    });
+
+    it('does not passes validation when required query paramaeters', async () => {
+      element.queryModel = [{
+        name: 'z',
+        value: '',
+        required: true,
+        schema: { enabled: true }
+      }];
+      await nextFrame();
+      await aTimeout();
+
+      const result = element.validate();
+      assert.isFalse(result);
     });
   });
 
