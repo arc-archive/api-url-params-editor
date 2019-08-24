@@ -160,7 +160,8 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
         autovalidate
         ?outlined="${outlined}"
         ?legacy="${legacy}"
-        .readOnly="${readOnly}">
+        .readOnly="${readOnly}"
+        invalidmessage="Parameter name is required">
         <label slot="label">Parameter name</label>
       </anypoint-input>
       <api-property-form-item
