@@ -471,7 +471,8 @@ describe('<api-url-params-editor>', function() {
       assert.deepEqual(spy.args[0][0].detail, {
         name: 'a',
         value: 'b',
-        enabled: true
+        enabled: true,
+        isCustom: false
       }, 'detail.has data');
     });
 
@@ -491,7 +492,8 @@ describe('<api-url-params-editor>', function() {
       assert.deepEqual(spy.args[0][0].detail, {
         name: 'a',
         value: 'b',
-        enabled: true
+        enabled: true,
+        isCustom: false
       }, 'detail.has data');
     });
 
@@ -511,7 +513,8 @@ describe('<api-url-params-editor>', function() {
       assert.deepEqual(spy.args[0][0].detail, {
         name: 'a',
         value: 'b',
-        enabled: true
+        enabled: true,
+        isCustom: false
       }, 'detail.has data');
     });
 
@@ -527,7 +530,8 @@ describe('<api-url-params-editor>', function() {
       assert.isTrue(spy.called, 'event disaptched');
       assert.deepEqual(spy.args[0][0].detail, {
         name: 'a',
-        removed: true
+        removed: true,
+        isCustom: false
       }, 'detail.has data');
     });
 
@@ -547,7 +551,8 @@ describe('<api-url-params-editor>', function() {
       assert.deepEqual(spy.args[0][0].detail, {
         name: 'c',
         value: 'd',
-        enabled: true
+        enabled: true,
+        isCustom: false
       }, 'detail.has data');
     });
 
@@ -567,7 +572,8 @@ describe('<api-url-params-editor>', function() {
       assert.deepEqual(spy.args[0][0].detail, {
         name: 'c',
         value: 'd',
-        enabled: true
+        enabled: true,
+        isCustom: false
       }, 'detail.has data');
     });
   });

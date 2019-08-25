@@ -534,7 +534,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       enabled = true;
     }
     if (typeof isCustom !== 'boolean') {
-      isCustom = true;
+      isCustom = false;
     }
     const detail = {
       name: item.name,
