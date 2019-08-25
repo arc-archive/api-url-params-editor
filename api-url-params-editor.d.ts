@@ -120,6 +120,23 @@ declare namespace ApiElements {
      * @param value The handler to register
      */
     _registerCallback(eventType: String|null, value: Function|null): void;
+    _attachListeners(node: any): void;
+    _detachListeners(node: any): void;
+
+    /**
+     * Handler for the `query-parameter-changed` custom event.
+     * Updates model value from the event
+     */
+    _queryParamChangeHandler(e: CustomEvent|null): void;
+    _uriParamChangeHandler(e: any): void;
+
+    /**
+     * Applies values from the change event to a model.
+     *
+     * @param detail Detail event object
+     * @param type `uri` or `query`
+     */
+    _appyEventValues(detail: object|null, type: String|null): void;
 
     /**
      * Computes boolean value if the argument exists and has items.
@@ -156,6 +173,21 @@ declare namespace ApiElements {
     _updatePropertyName(values: any, detail: any): void;
     _updatePropertyValue(values: any, model: any, detail: any): void;
     _queryModelChange(e: any): void;
+    _asyncValidate(): any;
+
+    /**
+     * Handler for the `query` event dispatchd from the query form.
+     */
+    _queryDeleted(e: CustomEvent|null): void;
+
+    /**
+     * Dispatches uri/query-parameter-changed custom event when model property change.
+     *
+     * @param type Model type, `uri` or `query`
+     * @param item Changed item
+     * @param removed True if the item has been removed from the UI
+     */
+    _notifyChange(type: String|null, item: object|null, removed: Boolean|null): void;
   }
 }
 

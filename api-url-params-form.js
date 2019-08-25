@@ -436,6 +436,28 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
     this.model[index].docsOpened = !this.model[index].docsOpened;
     this.requestUpdate();
   }
+  /**
+   * Overrides `ApiFormMixin._removeCustom`.
+   * Calls the super method and dispatches `delete` event.
+   * @param {Event} e
+   */
+  _removeCustom(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    if (index !== index) {
+      return;
+    }
+    const model = this.model;
+    if (!model || !model.length) {
+      return;
+    }
+    const item = model[index];
+    super._removeCustom(e);
+    this.dispatchEvent(new CustomEvent('delete', {
+      detail: {
+        name: item.name
+      }
+    }));
+  }
 }
 
 window.customElements.define('api-url-params-form', ApiUrlParamsForm);

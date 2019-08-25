@@ -68,6 +68,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     ${_hasQueryParameters ? html`<api-url-params-form
       id="queryParametersForm"
       @change="${this._queryFormChange}"
+      @delete="${this._queryDeleted}"
       @model-changed="${this._queryModelChange}"
       form-type="query"
       allowhideoptional
@@ -308,6 +309,65 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     this[key] = value;
     this.addEventListener(eventType, value);
   }
+
+  constructor() {
+    super();
+    this._queryParamChangeHandler = this._queryParamChangeHandler.bind(this);
+    this._uriParamChangeHandler = this._uriParamChangeHandler.bind(this);
+  }
+
+  _attachListeners(node) {
+    node.addEventListener('uri-parameter-changed', this._uriParamChangeHandler);
+    node.addEventListener('query-parameter-changed', this._queryParamChangeHandler);
+  }
+
+  _detachListeners(node) {
+    node.removeEventListener('uri-parameter-changed', this._uriParamChangeHandler);
+    node.removeEventListener('query-parameter-changed', this._queryParamChangeHandler);
+  }
+
+  /**
+   * Handler for the `query-parameter-changed` custom event.
+   * Updates model value from the event
+   *
+   * @param {CustomEvent} e
+   */
+  _queryParamChangeHandler(e) {
+    if (e.composedPath()[0] === this || e.defaultPrevented) {
+      return;
+    }
+    this._appyEventValues(e.detail, 'query');
+  }
+
+  _uriParamChangeHandler(e) {
+    if (e.composedPath()[0] === this || e.defaultPrevented) {
+      return;
+    }
+    this._appyEventValues(e.detail, 'uri');
+  }
+  /**
+   * Applies values from the change event to a model.
+   *
+   * @param {Object} detail Detail event object
+   * @param {String} type `uri` or `query`
+   */
+  _appyEventValues(detail, type) {
+    const modelPath = `${type}Model`;
+    const model = this[modelPath];
+    if (!model || !model.length) {
+      return;
+    }
+    const index = model.findIndex((item) => item.name === detail.name);
+    if (index === -1) {
+      return;
+    }
+    const item = model[index];
+    item.value = detail.value;
+    if (item.schema.enabled === false) {
+      item.schema.enabled = true;
+    }
+    this[modelPath] = [...this[modelPath]];
+  }
   /**
    * Computes boolean value if the argument exists and has items.
    *
@@ -378,6 +438,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       result[item.name] = item.value;
     });
     this[valuePath] = result;
+    this._asyncValidate();
   }
 
   _uriFormChange(e) {
@@ -393,7 +454,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     const modelPath = `${type}Model`;
     const model = this[modelPath];
     const values = this[valuePath] || {};
-    const { property } = detail;
+    const { property, index } = detail;
     switch (property) {
       case 'enabled':
         this._updatePropertyEnabled(model, values, detail);
@@ -410,6 +471,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     this[modelPath] = [...this[modelPath]];
     this.__ignoreValueProcessing = false;
     this._asyncValidate();
+    this._notifyChange(type, model[index]);
   }
 
   _updatePropertyEnabled(model, values, detail) {
@@ -445,6 +507,47 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     setTimeout(() => {
       this.validate();
     });
+  }
+  /**
+   * Handler for the `query` event dispatchd from the query form.
+   * @param {CustomEvent} e
+   */
+  _queryDeleted(e) {
+    const item = {
+      name: e.detail.name,
+      schema: {
+        enabled: false
+      }
+    };
+    this._notifyChange('query', item, true);
+  }
+  /**
+   * Dispatches uri/query-parameter-changed custom event when model property change.
+   * @param {String} type Model type, `uri` or `query`
+   * @param {Object} item Changed item
+   * @param {?Boolean} removed True if the item has been removed from the UI
+   */
+  _notifyChange(type, item, removed) {
+    let enabled = item.schema && item.schema.enabled;
+    if (typeof enabled !== 'boolean') {
+      enabled = true;
+    }
+    const detail = {
+      name: item.name
+    };
+    if (removed) {
+      detail.removed = true;
+    } else {
+      detail.value = item.value;
+      detail.enabled = enabled;
+    }
+    const ev = new CustomEvent(type + '-parameter-changed', {
+      detail,
+      cancelable: true,
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(ev);
   }
   /**
    * Fired when an URI parameter value change in this editor.

@@ -4,7 +4,7 @@ import {
   nextFrame,
   html
 } from '@open-wc/testing';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon/pkg/sinon-esm.js';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import '../api-url-params-form.js';
 
@@ -410,6 +410,64 @@ describe('<api-url-params-form>', function() {
       assert.equal(detail.property, 'value', 'property is set');
       assert.equal(detail.value, 'new-value', 'new value is set');
       assert.equal(detail.oldValue, 'test', 'old value is set');
+    });
+  });
+
+  describe('deleting custom items', () => {
+    async function allowCustomFixture() {
+      const model = [{
+        binding: 'query',
+        name: 'i1',
+        value: 'test',
+        required: true,
+        schema: {
+          enabled: false,
+          inputLabel: 'test',
+          isCustom: false
+        }
+      }, {
+        binding: 'query',
+        name: 'i2',
+        value: '',
+        required: false,
+        schema: {
+          isCustom: true,
+          enabled: false,
+          inputLabel: 'test2'
+        }
+      }];
+      return await fixture(html `
+        <api-url-params-form allowcustom .model="${model}">
+          <div slot="title">Test title</div>
+        </api-url-params-form>
+      `);
+    }
+
+    let element;
+    beforeEach(async () => {
+      element = await allowCustomFixture();
+    });
+
+    it('renders delete icon with custom item', () => {
+      const buttons = element.shadowRoot.querySelectorAll('.delete-icon');
+      assert.lengthOf(buttons, 1, 'has single button for custom item');
+      assert.equal(buttons[0].dataset.index, '1', 'has data-index set');
+    });
+
+    it('removes the item when clicked', async () => {
+      const button = element.shadowRoot.querySelector('.delete-icon');
+      MockInteractions.tap(button);
+      await nextFrame();
+      const nodes = element.shadowRoot.querySelectorAll('.value-input');
+      assert.lengthOf(nodes, 1);
+    });
+
+    it('dispaches delete event', () => {
+      const button = element.shadowRoot.querySelector('.delete-icon');
+      const spy = sinon.spy();
+      element.addEventListener('delete', spy);
+      MockInteractions.tap(button);
+      assert.equal(spy.args[0][0].detail.name, 'i2');
     });
   });
 

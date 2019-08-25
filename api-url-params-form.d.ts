@@ -116,6 +116,12 @@ declare namespace ApiElements {
     _valueChangeHandler(e: any): void;
     _notifyChange(index: any, property: any, value: any, oldValue: any): void;
     _toggleItemDocs(e: any): void;
+
+    /**
+     * Overrides `ApiFormMixin._removeCustom`.
+     * Calls the super method and dispatches `delete` event.
+     */
+    _removeCustom(e: Event|null): void;
   }
 }
 

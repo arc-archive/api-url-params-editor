@@ -5,7 +5,7 @@ import {
   html,
   aTimeout
 } from '@open-wc/testing';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../api-url-params-editor.js';
 
 describe('<api-url-params-editor>', function() {
@@ -360,6 +360,215 @@ describe('<api-url-params-editor>', function() {
 
       const result = element.validate();
       assert.isFalse(result);
+    });
+  });
+
+  describe('events API', () => {
+    async function basicFixture() {
+      const queryModel = [{
+        name: 'a',
+        value: 'b',
+        required: true,
+        schema: { enabled: true }
+      }];
+      const uriModel = [{
+        name: 'c',
+        value: 'd',
+        required: true,
+        schema: { enabled: true }
+      }];
+      return await fixture(html `
+        <api-url-params-editor
+        .queryModel="${queryModel}"
+        .uriModel="${uriModel}"></api-url-params-editor>
+      `);
+    }
+
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('updates uri model value from uri-parameter-changed event', () => {
+      document.body.dispatchEvent( new CustomEvent('uri-parameter-changed', {
+        detail: { name: 'c', value: 'updated' },
+        cancelable: true,
+        bubbles: true,
+        composed: true
+      }));
+      assert.equal(element.uriModel[0].value, 'updated');
+    });
+
+    it('ignores unknown uri parameters', () => {
+      document.body.dispatchEvent( new CustomEvent('uri-parameter-changed', {
+        detail: { name: 'e', value: 'new' },
+        cancelable: true,
+        bubbles: true,
+        composed: true
+      }));
+      assert.equal(element.uriModel[0].value, 'd');
+      assert.lengthOf(element.uriModel, 1);
+    });
+
+    it('does not dispatch uri-parameter-changed event', () => {
+      const spy = sinon.spy();
+      element.addEventListener('uri-parameter-changed', spy);
+      document.body.dispatchEvent( new CustomEvent('uri-parameter-changed', {
+        detail: { name: 'c', value: 'updated' },
+        cancelable: true,
+        bubbles: true,
+        composed: true
+      }));
+      assert.isFalse(spy.called);
+    });
+
+    it('updates query model value from query-parameter-changed event', () => {
+      document.body.dispatchEvent( new CustomEvent('query-parameter-changed', {
+        detail: { name: 'a', value: 'updated' },
+        cancelable: true,
+        bubbles: true,
+        composed: true
+      }));
+      assert.equal(element.queryModel[0].value, 'updated');
+    });
+
+    it('ignores unknown query parameters', () => {
+      document.body.dispatchEvent( new CustomEvent('query-parameter-changed', {
+        detail: { name: 'e', value: 'new' },
+        cancelable: true,
+        bubbles: true,
+        composed: true
+      }));
+      assert.equal(element.queryModel[0].value, 'b');
+      assert.lengthOf(element.queryModel, 1);
+    });
+
+    it('does not dispatch query-parameter-changed event', () => {
+      const spy = sinon.spy();
+      element.addEventListener('query-parameter-changed', spy);
+      document.body.dispatchEvent( new CustomEvent('query-parameter-changed', {
+        detail: { name: 'a', value: 'updated' },
+        cancelable: true,
+        bubbles: true,
+        composed: true
+      }));
+      assert.isFalse(spy.called);
+    });
+
+    it('dispatches query-parameter-changed event after enabled property change', () => {
+      const spy = sinon.spy();
+      element.addEventListener('query-parameter-changed', spy);
+      const form = element.shadowRoot.querySelector('#queryParametersForm');
+      form.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          index: 0,
+          property: 'enabled',
+          value: true,
+          oldValue: false
+        }
+      }));
+      assert.isTrue(spy.called, 'event disaptched');
+      assert.deepEqual(spy.args[0][0].detail, {
+        name: 'a',
+        value: 'b',
+        enabled: true
+      }, 'detail.has data');
+    });
+
+    it('dispatches query-parameter-changed event after value property change', () => {
+      const spy = sinon.spy();
+      element.addEventListener('query-parameter-changed', spy);
+      const form = element.shadowRoot.querySelector('#queryParametersForm');
+      form.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          index: 0,
+          property: 'value',
+          value: 'updated',
+          oldValue: 'a'
+        }
+      }));
+      assert.isTrue(spy.called, 'event disaptched');
+      assert.deepEqual(spy.args[0][0].detail, {
+        name: 'a',
+        value: 'b',
+        enabled: true
+      }, 'detail.has data');
+    });
+
+    it('dispatches query-parameter-changed event after name property change', () => {
+      const spy = sinon.spy();
+      element.addEventListener('query-parameter-changed', spy);
+      const form = element.shadowRoot.querySelector('#queryParametersForm');
+      form.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          index: 0,
+          property: 'name',
+          value: 'updated',
+          oldValue: 'a'
+        }
+      }));
+      assert.isTrue(spy.called, 'event disaptched');
+      assert.deepEqual(spy.args[0][0].detail, {
+        name: 'a',
+        value: 'b',
+        enabled: true
+      }, 'detail.has data');
+    });
+
+    it('dispatches query-parameter-changed event item has been deleted', () => {
+      const spy = sinon.spy();
+      element.addEventListener('query-parameter-changed', spy);
+      const form = element.shadowRoot.querySelector('#queryParametersForm');
+      form.dispatchEvent(new CustomEvent('delete', {
+        detail: {
+          name: 'a'
+        }
+      }));
+      assert.isTrue(spy.called, 'event disaptched');
+      assert.deepEqual(spy.args[0][0].detail, {
+        name: 'a',
+        removed: true
+      }, 'detail.has data');
+    });
+
+    it('dispatches uri-parameter-changed event after value property change', () => {
+      const spy = sinon.spy();
+      element.addEventListener('uri-parameter-changed', spy);
+      const form = element.shadowRoot.querySelector('#uriParametersForm');
+      form.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          index: 0,
+          property: 'value',
+          value: 'updated',
+          oldValue: 'a'
+        }
+      }));
+      assert.isTrue(spy.called, 'event disaptched');
+      assert.deepEqual(spy.args[0][0].detail, {
+        name: 'c',
+        value: 'd',
+        enabled: true
+      }, 'detail.has data');
+    });
+
+    it('dispatches uri-parameter-changed event after name property change', () => {
+      const spy = sinon.spy();
+      element.addEventListener('uri-parameter-changed', spy);
+      const form = element.shadowRoot.querySelector('#uriParametersForm');
+      form.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          index: 0,
+          property: 'name',
+          value: 'updated',
+          oldValue: 'a'
+        }
+      }));
+      assert.isTrue(spy.called, 'event disaptched');
+      assert.deepEqual(spy.args[0][0].detail, {
+        name: 'c',
+        value: 'd',
+        enabled: true
+      }, 'detail.has data');
     });
   });
 
