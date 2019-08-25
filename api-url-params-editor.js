@@ -529,11 +529,16 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
    */
   _notifyChange(type, item, removed) {
     let enabled = item.schema && item.schema.enabled;
+    let isCustom = item.schema && item.schema.isCustom;
     if (typeof enabled !== 'boolean') {
       enabled = true;
     }
+    if (typeof isCustom !== 'boolean') {
+      isCustom = true;
+    }
     const detail = {
-      name: item.name
+      name: item.name,
+      isCustom
     };
     if (removed) {
       detail.removed = true;
