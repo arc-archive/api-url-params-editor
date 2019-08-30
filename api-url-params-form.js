@@ -91,7 +91,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
         font-weight: 200;
       }
 
-      :host([legacy]) .params-title ::slotted(*) {
+      :host([compatibility]) .params-title ::slotted(*) {
         font-size: 18px;
         font-weight: 400;
         letter-spacing: initial;
@@ -145,7 +145,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
   _customInputTemplate(item, index) {
     const {
       readOnly,
-      legacy,
+      compatibility,
       outlined,
       narrow
     } = this;
@@ -160,7 +160,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
         required
         autovalidate
         ?outlined="${outlined}"
-        ?legacy="${legacy}"
+        ?compatibility="${compatibility}"
         .readOnly="${readOnly}"
         invalidmessage="Parameter name is required">
         <label slot="label">Parameter name</label>
@@ -174,7 +174,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
         .readOnly="${readOnly}"
         ?narrow="${narrow}"
         ?outlined="${outlined}"
-        ?legacy="${legacy}"></api-property-form-item>
+        ?compatibility="${compatibility}"></api-property-form-item>
     </div>`;
   }
 
@@ -185,7 +185,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       allowDisableParams,
       readOnly,
       disabled,
-      legacy,
+      compatibility,
       outlined,
       narrow,
       noDocs
@@ -206,7 +206,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
           aria-label="Toggle to enable or disable this parameter"
           ?disabled="${readOnly || disabled}"
           ?outlined="${outlined}"
-          ?legacy="${legacy}"></anypoint-checkbox>` : undefined}
+          ?compatibility="${compatibility}"></anypoint-checkbox>` : undefined}
 
         ${item.schema.isCustom ? this._customInputTemplate(item, index) :
           html`<api-property-form-item
@@ -221,14 +221,14 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
             ?narrow="${narrow}"
             .noDocs="${noDocs}"
             ?outlined="${outlined}"
-            ?legacy="${legacy}"
+            ?compatibility="${compatibility}"
             ></api-property-form-item>`}
         ${hasDocs ? html`<anypoint-icon-button
           data-index="${index}"
           class="hint-icon"
           title="Toggle documentation"
           ?outlined="${outlined}"
-          ?legacy="${legacy}"
+          ?compatibility="${compatibility}"
           ?disabled="${disabled}"
           @click="${this._toggleItemDocs}">
           <iron-icon icon="arc:help"></iron-icon>
@@ -243,7 +243,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
           slot="suffix"
           ?disabled="${readOnly || disabled}"
           ?outlined="${outlined}"
-          ?legacy="${legacy}">
+          ?compatibility="${compatibility}">
           <iron-icon icon="arc:remove-circle-outline"></iron-icon>
         </anypoint-icon-button>` : undefined}
       </div>
@@ -306,9 +306,13 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
        */
       noDocs: { type: Boolean },
       /**
-       * Enables Anypoint legacy styling
+       * Enables compatibility with Anypoint components.
        */
-      legacy: { type: Boolean, reflect: true },
+      compatibility: { type: Boolean, reflect: true },
+      /**
+       * @deprecated Use `compatibility` instead
+       */
+      legacy: { type: Boolean },
       /**
        * Enables Material Design outlined style
        */
@@ -331,6 +335,14 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
        */
       allowCustom: { type: Boolean }
     };
+  }
+
+  get legacy() {
+    return this.compatibility;
+  }
+
+  set legacy(value) {
+    this.compatibility = value;
   }
   /**
    * Computes documentation as a markdown to be placed in the `marked-element`

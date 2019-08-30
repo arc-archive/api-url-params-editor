@@ -746,6 +746,21 @@ describe('<api-url-params-editor>', function() {
     });
   });
 
+  describe('compatibility mode', () => {
+    it('sets compatibility on item when setting legacy', async () => {
+      const element = await basicFixture();
+      element.legacy = true;
+      assert.isTrue(element.legacy, 'legacy is set');
+      assert.isTrue(element.compatibility, 'compatibility is set');
+    });
+
+    it('returns compatibility value from item when getting legacy', async () => {
+      const element = await basicFixture();
+      element.compatibility = true;
+      assert.isTrue(element.legacy, 'legacy is set');
+    });
+  });
+
   describe('a11y', () => {
     it('is accessible for uri parameters form', async () => {
       const element = await basicFixture();

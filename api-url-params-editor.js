@@ -38,7 +38,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       noDocs,
       readOnly,
       disabled,
-      legacy,
+      compatibility,
       outlined,
       narrow,
       allowCustom,
@@ -61,7 +61,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       .disabled="${disabled}"
       ?nodocs="${noDocs}"
       ?outlined="${outlined}"
-      ?legacy="${legacy}"
+      ?compatibility="${compatibility}"
       ?narrow="${narrow}">
       <div role="heading" aria-level="1" slot="title">URI parameters</div>
     </api-url-params-form>` : undefined}
@@ -79,7 +79,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       .disabled="${disabled}"
       ?nodocs="${noDocs}"
       ?outlined="${outlined}"
-      ?legacy="${legacy}"
+      ?compatibility="${compatibility}"
       ?narrow="${narrow}">
       <div role="heading" aria-level="1" slot="title">Query parameters</div>
     </api-url-params-form>` : undefined}
@@ -138,7 +138,11 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
        */
       noDocs: { type: Boolean },
       /**
-       * Enables Anypoint legacy styling
+       * Enables compatibility with Anypoint components.
+       */
+      compatibility: { type: Boolean, reflect: true },
+      /**
+       * @deprecated Use `compatibility` instead
        */
       legacy: { type: Boolean },
       /**
@@ -154,6 +158,14 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
        */
       disabled: { type: Boolean }
     };
+  }
+
+  get legacy() {
+    return this.compatibility;
+  }
+
+  set legacy(value) {
+    this.compatibility = value;
   }
 
   get allowCustom() {
