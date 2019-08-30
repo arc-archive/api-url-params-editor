@@ -1,6 +1,6 @@
 {
   "name": "@api-components/api-url-params-editor",
-  "description": "HTTP headers form build from AMF json/ld model",
+  "description": "URL parameters form build from AMF json/ld model",
   "version": "3.0.9",
   "main": "api-url-params-editor.js",
   "license": "Apache-2.0",
