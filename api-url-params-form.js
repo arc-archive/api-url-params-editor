@@ -4,7 +4,7 @@ import { ApiFormMixin } from '@api-components/api-form-mixin/api-form-mixin.js';
 import markdownStyles from '@advanced-rest-client/markdown-styles/markdown-styles.js';
 import formStyles from '@api-components/api-form-mixin/api-form-styles.js';
 import '@advanced-rest-client/arc-marked/arc-marked.js';
-import '@advanced-rest-client/arc-icons/arc-icons.js';
+import { help, removeCircleOutline, addCircleOutline } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 import '@api-components/api-property-form-item/api-property-form-item.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
@@ -12,7 +12,6 @@ import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@anypoint-web-components/anypoint-input/anypoint-input.js';
 import '@polymer/iron-form/iron-form.js';
 import '@polymer/iron-collapse/iron-collapse.js';
-import '@polymer/iron-icon/iron-icon.js';
 /**
  * Renders form and input elements for query / uri model.
  *
@@ -138,6 +137,13 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       .is-array .hint-icon {
         margin-top: 8px;
       }
+
+      .icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+      }
       `
     ];
   }
@@ -232,7 +238,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
           ?disabled="${disabled}"
           @click="${this._toggleItemDocs}"
         >
-          <iron-icon icon="arc:help"></iron-icon>
+          <span class="icon">${help}</span>
         </anypoint-icon-button>` : undefined}
 
         ${item.schema.isCustom ? html`<anypoint-icon-button
@@ -246,7 +252,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
           ?outlined="${outlined}"
           ?compatibility="${compatibility}"
         >
-          <iron-icon icon="arc:remove-circle-outline"></iron-icon>
+          <span class="icon">${removeCircleOutline}</span>
         </anypoint-icon-button>` : undefined}
       </div>
 
@@ -290,11 +296,9 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
         @click="${this.add}"
         title="Add new parameter"
         aria-label="Press to create a new parameter"
-        ?disabled="${readOnly || disabled}">
-        <iron-icon
-          class="action-icon"
-          icon="arc:add-circle-outline"
-          alt="Add parameter icon"></iron-icon>
+        ?disabled="${readOnly || disabled}"
+      >
+        <span class="icon action-icon">${addCircleOutline}</span>
         Add parameter
       </anypoint-button>
     </div>` : undefined}`;
