@@ -217,7 +217,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
             .model="${item}"
             ?required="${item.required}"
             .readOnly="${readOnly}"
-            .disabled=${disabled}
+            .disabled="${disabled}"
             ?narrow="${narrow}"
             .noDocs="${noDocs}"
             ?outlined="${outlined}"
@@ -230,7 +230,8 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
           ?outlined="${outlined}"
           ?compatibility="${compatibility}"
           ?disabled="${disabled}"
-          @click="${this._toggleItemDocs}">
+          @click="${this._toggleItemDocs}"
+        >
           <iron-icon icon="arc:help"></iron-icon>
         </anypoint-icon-button>` : undefined}
 
@@ -243,12 +244,13 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
           slot="suffix"
           ?disabled="${readOnly || disabled}"
           ?outlined="${outlined}"
-          ?compatibility="${compatibility}">
+          ?compatibility="${compatibility}"
+        >
           <iron-icon icon="arc:remove-circle-outline"></iron-icon>
         </anypoint-icon-button>` : undefined}
       </div>
 
-      ${renderDocs ? html`<arc-marked .markdown="${this._computeDocumentation(item)}">
+      ${renderDocs ? html`<arc-marked .markdown="${this._computeDocumentation(item)}" sanitize>
         <div slot="markdown-html" class="markdown-body"></div>
       </arc-marked>` : undefined}
     </div>`;
