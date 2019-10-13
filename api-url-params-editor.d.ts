@@ -28,6 +28,7 @@ declare namespace ApiElements {
     ValidatableMixin(
     EventsTargetMixin(
     Object)) {
+    legacy: boolean|null|undefined;
 
     /**
      * When set, renders add custom parameter button in query parameters
@@ -93,9 +94,9 @@ declare namespace ApiElements {
     noDocs: boolean|null|undefined;
 
     /**
-     * Enables Anypoint legacy styling
+     * Enables compatibility with Anypoint components.
      */
-    legacy: boolean|null|undefined;
+    compatibility: boolean|null|undefined;
 
     /**
      * Enables Material Design outlined style

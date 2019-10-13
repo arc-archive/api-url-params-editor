@@ -19,6 +19,11 @@ The main task of the element is to produce / update view model for both query / 
 ></api-url-params-editor>
 ```
 
+## Version compatibility
+
+This version only works with AMF model version 2 (AMF parser >= 4.0.0).
+For compatibility with previous model version use `3.x.x` version of the component.
+
 ## Usage
 
 ### Installation

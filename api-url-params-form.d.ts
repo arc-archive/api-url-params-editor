@@ -44,6 +44,7 @@ declare namespace ApiElements {
     ValidatableMixin(
     ApiFormMixin(
     Object)) {
+    legacy: boolean|null|undefined;
 
     /**
      * Prohibits rendering of the documentation (the icon and the
@@ -52,9 +53,9 @@ declare namespace ApiElements {
     noDocs: boolean|null|undefined;
 
     /**
-     * Enables Anypoint legacy styling
+     * Enables compatibility with Anypoint components.
      */
-    legacy: boolean|null|undefined;
+    compatibility: boolean|null|undefined;
 
     /**
      * Enables Material Design outlined style
