@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit-element';
 import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/validatable-mixin.js';
 import { EventsTargetMixin } from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
@@ -14,23 +14,6 @@ import './api-url-params-form.js';
  * @appliesMixin EventsTargetMixin
  */
 class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement)) {
-  static get styles() {
-    return css`:host {
-      display: block;
-      margin: 8px 12px;
-    }
-
-    .empty-message {
-      font-style: var(--no-info-message-font-style, italic);
-      font-size: var(--no-info-message-font-size, 16px);
-      color: var(--no-info-message-color, rgba(0, 0, 0, 0.74));
-    }
-
-    [hidden] {
-      display: none !important;
-    }`;
-  }
-
   render() {
     const {
       uriModel,
@@ -46,7 +29,22 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       _hasUriParameters,
       _hasQueryParameters
     } = this;
-    return html`
+    return html`<style>
+:host {
+      display: block;
+      margin: 8px 12px;
+    }
+
+    .empty-message {
+      font-style: var(--no-info-message-font-style, italic);
+      font-size: var(--no-info-message-font-size, 16px);
+      color: var(--no-info-message-color, rgba(0, 0, 0, 0.74));
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+</style>
     ${_hasParameters ? undefined : html`<section class="empty-message">
       <p>This endpoint doesn't declare query or URI parameters.</p>
     </section>`}
