@@ -114,6 +114,16 @@ class ApiDemo extends ApiDemoPageBase {
     this.selectedOverrideBase = e.detail.value;
   }
 
+  _apiListTemplate() {
+    return [
+      ['demo-api', 'ARC demo api'],
+      ['APIC-289', 'OAS param names'],
+    ].map(([file, label]) => html`
+    <paper-item data-src="${file}-compact.json">${label} - compact model</paper-item>
+    <paper-item data-src="${file}.json">${label}</paper-item>
+    `);
+  }
+
   _demoTemplate() {
     const {
       mainReadOnly,
