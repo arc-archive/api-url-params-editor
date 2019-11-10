@@ -775,7 +775,9 @@ describe('<api-url-params-editor>', function() {
         }
       }];
       await nextFrame();
-      await assert.isAccessible(element);
+      await assert.isAccessible(element, {
+        ignoredRules: ['color-contrast']
+      });
     });
 
     it('is accessible for query parameters form', async () => {
@@ -791,14 +793,18 @@ describe('<api-url-params-editor>', function() {
         }
       }];
       await nextFrame();
-      await assert.isAccessible(element);
+      await assert.isAccessible(element, {
+        ignoredRules: ['color-contrast']
+      });
     });
 
     it('is accessible for custom parameters', async () => {
       const element = await basicFixture();
       element.allowCustom = true;
       await nextFrame();
-      await assert.isAccessible(element);
+      await assert.isAccessible(element, {
+        ignoredRules: ['color-contrast']
+      });
     });
   });
 });

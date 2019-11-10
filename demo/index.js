@@ -20,7 +20,7 @@ class ApiDemo extends ApiDemoPageBase {
       'mainReadOnly', 'mainDisabled', 'demoOutlined', 'demoCompatibility',
       'baseUri', 'endpointPath', 'queryModel', 'pathModel', 'selectedShape',
       'mainNoLabelFloat', 'selectedOverrideBase', 'narrow', 'allowCustom',
-      'noDocs', 'queryModelResult', 'uriModelResult', 'urlResult'
+      'noDocs', 'queryModelResult', 'uriModelResult', 'urlResult', 'allowHideOptional'
     ]);
 
     this.componentName = 'api-url-params-editor';
@@ -140,6 +140,7 @@ class ApiDemo extends ApiDemoPageBase {
       mainNoLabelFloat,
       narrow,
       allowCustom,
+      allowHideOptional,
       noDocs,
       queryModelResult,
       uriModelResult,
@@ -171,6 +172,7 @@ class ApiDemo extends ApiDemoPageBase {
               .uriModel="${pathModel}"
               ?narrow="${narrow}"
               ?allowCustom="${allowCustom}"
+              ?allowHideOptional="${allowHideOptional}"
               ?nodocs="${noDocs}"
               @queryvalue-changed="${this._queryValueChanged}"
               @urivalue-changed="${this._uriValueChanged}"
@@ -213,6 +215,14 @@ class ApiDemo extends ApiDemoPageBase {
               name="allowCustom"
               @change="${this._toggleMainOption}"
               >Allow custom</anypoint-checkbox
+            >
+
+            <anypoint-checkbox
+              aria-describedby="mainOptionsLabel"
+              slot="options"
+              name="allowHideOptional"
+              @change="${this._toggleMainOption}"
+              >Allow hide optional</anypoint-checkbox
             >
           </arc-interactive-demo>
 
