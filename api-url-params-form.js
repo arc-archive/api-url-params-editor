@@ -155,7 +155,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       outlined,
       narrow
     } = this;
-    return html`<style>${this.styles}</style>
+    return html`
     <div class="custom-row${narrow ? ' narrow' : ''}">
       <anypoint-input
         data-index="${index}"
@@ -268,13 +268,15 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       optionalOpened,
       allowCustom,
       readOnly,
-      disabled
+      disabled,
+      styles
     } = this;
     let { model } = this;
     if (!model) {
       model = [];
     }
     return html`
+    <style>${styles}</style>
     <div class="params-title">
       <slot name="title"></slot>
     </div>
