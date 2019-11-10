@@ -477,3 +477,25 @@
 
 
 
+## 4.0.1 (2019-11-10)
+
+
+### Bug Fixes
+
+* adding missing import ([9970a41](https://github.com/advanced-rest-client/api-url-params-editor/commit/9970a414d0a0edcdc07d2a547203022846f9387b))
+* changging `isCustom` event property default value to false ([11528ff](https://github.com/advanced-rest-client/api-url-params-editor/commit/11528ffe45b45eb4bb60c7faa1fd36093aaaa64e))
+* fixes validation states for query parameetrs ([a92d224](https://github.com/advanced-rest-client/api-url-params-editor/commit/a92d224a3362757eb21d172ac835c2efb3ffe655))
+* fixing optional style - flex direction ([dc474fb](https://github.com/advanced-rest-client/api-url-params-editor/commit/dc474fb43403b0e111b6f5b714eb9e18fb199866))
+* fixing package description ([90e7981](https://github.com/advanced-rest-client/api-url-params-editor/commit/90e7981bfd3561252b002f8a38ab9a9acb334269))
+* fixing styles setting ([98eafda](https://github.com/advanced-rest-client/api-url-params-editor/commit/98eafda7632e68d8d17a9c5787d07239529a99f4))
+* removing duplicated import ([39a3d08](https://github.com/advanced-rest-client/api-url-params-editor/commit/39a3d08ae185ad4c186f4aa16ed174a072c11f13))
+* setting cutom field inputs flex to 1 ([62034a9](https://github.com/advanced-rest-client/api-url-params-editor/commit/62034a941fe26e002bc92b3077078849768ca23a))
+
+
+### Features
+
+* adding ebvents API for changed properties ([4375606](https://github.com/advanced-rest-client/api-url-params-editor/commit/437560623e28414b98f4c17c42bd23e999000775))
+* upgrading to used viewModel's extended description ([b121b41](https://github.com/advanced-rest-client/api-url-params-editor/commit/b121b41b9b4e0b77bdec9fb74a73c7496f63f95a))
+
+
+
