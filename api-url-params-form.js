@@ -39,7 +39,7 @@ import '@polymer/iron-collapse/iron-collapse.js';
  * @appliesMixin ApiFormMixin
  */
 class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
-  static get styles() {
+  get styles() {
     return [
       markdownStyles,
       formStyles,
@@ -155,7 +155,7 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       outlined,
       narrow
     } = this;
-    return html`
+    return html`<style>${this.styles}</style>
     <div class="custom-row${narrow ? ' narrow' : ''}">
       <anypoint-input
         data-index="${index}"

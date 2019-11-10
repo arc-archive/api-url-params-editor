@@ -14,7 +14,7 @@ import './api-url-params-form.js';
  * @appliesMixin EventsTargetMixin
  */
 class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement)) {
-  static get styles() {
+  get styles() {
     return css`:host {
       display: block;
       margin: 8px 12px;
@@ -46,7 +46,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       _hasUriParameters,
       _hasQueryParameters
     } = this;
-    return html`
+    return html`<style>${this.styles}</style>
     ${_hasParameters ? undefined : html`<section class="empty-message">
       <p>This endpoint doesn't declare query or URI parameters.</p>
     </section>`}
