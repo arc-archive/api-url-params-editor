@@ -1,6 +1,6 @@
 [![Published on NPM](https://img.shields.io/npm/v/@api-components/api-url-params-editor.svg)](https://www.npmjs.com/package/@api-components/api-url-params-editor)
 
-[![Build Status](https://travis-ci.org/advanced-rest-client/api-url-params-editor.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/api-url-params-editor)
+[![Build Status](https://travis-ci.com/advanced-rest-client/api-url-params-editor.svg)](https://travis-ci.org/advanced-rest-client/api-url-params-editor)
 
 ## &lt;api-url-params-editor&gt;
 
@@ -158,7 +158,3 @@ npm start
 ```sh
 npm test
 ```
-
-### API components
-
-This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)
