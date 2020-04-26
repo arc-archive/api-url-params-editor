@@ -1,8 +1,7 @@
 import { html, css, LitElement } from 'lit-element';
 import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/validatable-mixin.js';
-import { ApiFormMixin } from '@api-components/api-form-mixin/api-form-mixin.js';
+import { ApiFormMixin, apiFormStyles } from '@api-components/api-form-mixin/index.js';
 import markdownStyles from '@advanced-rest-client/markdown-styles/markdown-styles.js';
-import formStyles from '@api-components/api-form-mixin/api-form-styles.js';
 import '@advanced-rest-client/arc-marked/arc-marked.js';
 import { help, removeCircleOutline, addCircleOutline } from '@advanced-rest-client/arc-icons/ArcIcons.js';
 import '@api-components/api-property-form-item/api-property-form-item.js';
@@ -12,6 +11,10 @@ import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@anypoint-web-components/anypoint-input/anypoint-input.js';
 import '@polymer/iron-form/iron-form.js';
 import '@polymer/iron-collapse/iron-collapse.js';
+
+/** @typedef {import('@api-components/api-view-model-transformer/src/ApiViewModel').ModelItem} ModelItem */
+/** @typedef {import('@polymer/iron-form').IronFormElement} IronFormElement */
+
 /**
  * Renders form and input elements for query / uri model.
  *
@@ -32,17 +35,15 @@ import '@polymer/iron-collapse/iron-collapse.js';
  * [api-property-form-item](https://github.com/advanced-rest-client/api-property-form-item)
  * element documentation.
  *
- * @customElement
- * @demo demo/index.html
- * @memberof ApiElements
- * @appliesMixin ValidatableMixin
- * @appliesMixin ApiFormMixin
+ * @mixin ValidatableMixin
+ * @mixin ApiFormMixin
+ * @extends LitElement
  */
 class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
   get styles() {
     return [
       markdownStyles,
-      formStyles,
+      apiFormStyles,
       css`:host {
         display: block;
       }
@@ -269,12 +270,9 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       allowCustom,
       readOnly,
       disabled,
-      styles
+      styles,
+      model=[],
     } = this;
-    let { model } = this;
-    if (!model) {
-      model = [];
-    }
     return html`
     <style>${styles}</style>
     <div class="params-title">
@@ -352,6 +350,21 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
   set legacy(value) {
     this.compatibility = value;
   }
+
+  constructor() {
+    super();
+
+    this.noDocs = false;
+    this.readOnly = false;
+    this.disabled = false;
+    this.compatibility = false;
+    this.outlined = false;
+    this.narrow = false;
+    this.allowHideOptional = false;
+    this.allowDisableParams = false;
+    this.allowCustom = false;
+  }
+
   /**
    * Computes documentation as a markdown to be placed in the `marked-element`
    * @param {Object} item View model
@@ -376,13 +389,14 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
    * Adds custom property to the list.
    */
   add() {
+    // URI form has no add button.
     this.addCustom('query');
   }
 
   // Overrides ValidatableMixin._getValidity. Will set the `invalid`
   // attribute automatically, which should be used for styling.
   _getValidity() {
-    const form = this.shadowRoot.querySelector('iron-form');
+    const form = /** @type IronFormElement */ (this.shadowRoot.querySelector('iron-form'));
     if (!form) {
       return true;
     }
@@ -400,8 +414,9 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       return;
     }
     const { checked } = e.target;
-    const old = this.model[index].schema.enabled;
-    this.model[index].schema.enabled = checked;
+    const item = /** @type ModelItem */ (this.model[index]);
+    const old = item.schema.enabled;
+    item.schema.enabled = checked;
     this._notifyChange(index, 'enabled', checked, old);
   }
 
@@ -414,13 +429,13 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
     if (index !== index) {
       return;
     }
-    const item = this.model[index];
+    const item = /** @type ModelItem */ (this.model[index]);
     if (!item.schema.isCustom) {
       return;
     }
     const { value } = e.detail;
-    const old = this.model[index].name;
-    this.model[index].name = value;
+    const old = item.name;
+    item.name = value;
     this._notifyChange(index, 'name', value, old);
   }
 
@@ -431,8 +446,9 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
       return;
     }
     const { value } = e.detail;
-    const old = this.model[index].value;
-    this.model[index].value = value;
+    const item = /** @type ModelItem */ (this.model[index]);
+    const old = item.value;
+    item.value = value;
     this._notifyChange(index, 'value', value, old);
   }
 
@@ -447,8 +463,13 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
     }));
   }
 
+  /**
+   * Handler for the docs toggle click.
+   * @param {CustomEvent} e
+   */
   _toggleItemDocs(e) {
-    const index = Number(e.currentTarget.dataset.index);
+    const target = /** @type HTMLElement */ (e.currentTarget);
+    const index = Number(target.dataset.index);
     /* istanbul ignore if  */
     if (index !== index) {
       return;
@@ -456,17 +477,19 @@ class ApiUrlParamsForm extends ValidatableMixin(ApiFormMixin(LitElement)) {
     this.model[index].docsOpened = !this.model[index].docsOpened;
     this.requestUpdate();
   }
+
   /**
    * Overrides `ApiFormMixin._removeCustom`.
    * Calls the super method and dispatches `delete` event.
-   * @param {Event} e
+   * @param {CustomEvent} e
    */
   _removeCustom(e) {
-    const index = Number(e.currentTarget.dataset.index);
+    const target = /** @type HTMLElement */ (e.currentTarget);
+    const index = Number(target.dataset.index);
     if (index !== index) {
       return;
     }
-    const model = this.model;
+    const model = /** @type ModelItem[] */ (this.model);
     if (!model || !model.length) {
       return;
     }
