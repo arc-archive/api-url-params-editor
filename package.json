@@ -2,7 +2,8 @@
   "name": "@api-components/api-url-params-editor",
   "description": "URL parameters form build from AMF json/ld model",
   "version": "4.0.2",
-  "main": "api-url-params-editor.js",
+  "main": "index.js",
+  "module": "index.js",
   "license": "Apache-2.0",
   "keywords": [
     "web-components",
