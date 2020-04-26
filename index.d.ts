@@ -5,10 +5,12 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   api-url-params-editor.js
+ *   index.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 
-import {ApiUrlParamsEditor} from './src/ApiUrlParamsEditor.js';
+export {ApiUrlParamsEditor} from './src/ApiUrlParamsEditor.js';
+
+export {ApiUrlParamsForm} from './src/ApiUrlParamsForm.js';
