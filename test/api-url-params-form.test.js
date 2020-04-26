@@ -519,7 +519,9 @@ describe('<api-url-params-form>', function() {
         }
       }];
       await nextFrame();
-      await assert.isAccessible(element);
+      await assert.isAccessible(element, {
+        ignoredRules: ['color-contrast']
+      });
     });
   });
 });

@@ -3,15 +3,17 @@ import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/val
 import { EventsTargetMixin } from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
 import './api-url-params-form.js';
+
+/** @typedef {import('@api-components/api-view-model-transformer/src/ApiViewModel').ModelItem} ModelItem */
+
 /**
  * `api-url-params-editor`
  * An element to render query / uri parameters form from AMF schema
  *
- * @customElement
- * @demo demo/index.html
- * @memberof ApiElements
- * @appliesMixin ValidatableMixin
- * @appliesMixin EventsTargetMixin
+ *
+ * @mixes EventsTargetMixin
+ * @mixes ValidatableMixin
+ * @extends LitElement
  */
 class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement)) {
   get styles() {
@@ -69,7 +71,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
       id="queryParametersForm"
       @change="${this._queryFormChange}"
       @delete="${this._queryDeleted}"
-      @model-changed="${this._queryModelChange}"
+      @model-changed="${this._queryModelHandler}"
       form-type="query"
       allowhideoptional
       allowdisableparams
@@ -173,12 +175,16 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   }
 
   set allowCustom(value) {
-    /* istanbul ignore else  */
-    if (this._sop('allowCustom', value)) {
-      this._hasQueryParameters = this._computeHasData(this.queryModel, value);
-      this._hasParameters = this._computeHasParameters(
-          this._hasQueryParameters, this._hasUriParameters, value);
+    const old = this._allowCustom;
+    /* istanbul ignore if  */
+    if (old === value) {
+      return;
     }
+    this._allowCustom = value;
+    this.requestUpdate();
+    this._hasQueryParameters = this._computeHasData(this.queryModel, value);
+    this._hasParameters = this._computeHasParameters(
+        this._hasQueryParameters, this._hasUriParameters, value);
   }
 
   get queryModel() {
@@ -186,18 +192,17 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   }
 
   set queryModel(value) {
-    /* istanbul ignore else  */
-    if (this._sop('queryModel', value)) {
-      this._hasQueryParameters = this._computeHasData(value, this.allowCustom);
-      this._hasParameters = this._computeHasParameters(
-          this._hasQueryParameters, this._hasUriParameters, this.allowCustom);
-      this._updateModelValue('query', value);
-      this.dispatchEvent(new CustomEvent('querymodel-changed', {
-        detail: {
-          value
-        }
-      }));
+    const old = this._queryModel;
+    /* istanbul ignore if  */
+    if (old === value) {
+      return;
     }
+    this._queryModel = value;
+    this.requestUpdate();
+    this._hasQueryParameters = this._computeHasData(value, this.allowCustom);
+    this._hasParameters = this._computeHasParameters(
+        this._hasQueryParameters, this._hasUriParameters, this.allowCustom);
+    this._updateModelValue('query');
   }
 
   get uriModel() {
@@ -205,18 +210,17 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   }
 
   set uriModel(value) {
-    /* istanbul ignore else  */
-    if (this._sop('uriModel', value)) {
-      this._hasUriParameters = this._computeHasData(value);
-      this._hasParameters = this._computeHasParameters(
-          this._hasQueryParameters, this._hasUriParameters, this.allowCustom);
-      this._updateModelValue('uri', value);
-      this.dispatchEvent(new CustomEvent('urimodel-changed', {
-        detail: {
-          value
-        }
-      }));
+    const old = this._uriModel;
+    /* istanbul ignore if  */
+    if (old === value) {
+      return;
     }
+    this._uriModel = value;
+    this.requestUpdate();
+    this._hasUriParameters = this._computeHasData(value);
+    this._hasParameters = this._computeHasParameters(
+        this._hasQueryParameters, this._hasUriParameters, this.allowCustom);
+    this._updateModelValue('uri');
   }
 
   get uriValue() {
@@ -224,14 +228,18 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   }
 
   set uriValue(value) {
-    /* istanbul ignore else  */
-    if (this._sop('uriValue', value)) {
-      this.dispatchEvent(new CustomEvent('urivalue-changed', {
-        detail: {
-          value
-        }
-      }));
+    const old = this._uriValue;
+    /* istanbul ignore if  */
+    if (old === value) {
+      return;
     }
+    this._uriValue = value;
+    this.requestUpdate();
+    this.dispatchEvent(new CustomEvent('urivalue-changed', {
+      detail: {
+        value
+      }
+    }));
   }
 
   get queryValue() {
@@ -239,66 +247,71 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   }
 
   set queryValue(value) {
-    /* istanbul ignore else  */
-    if (this._sop('queryValue', value)) {
-      this.dispatchEvent(new CustomEvent('queryvalue-changed', {
-        detail: {
-          value
-        }
-      }));
+    const old = this._queryValue;
+    /* istanbul ignore if  */
+    if (old === value) {
+      return;
     }
+    this._queryValue = value;
+    this.requestUpdate();
+
+    this.dispatchEvent(new CustomEvent('queryvalue-changed', {
+      detail: {
+        value
+      }
+    }));
   }
   /**
-   * @return {Function} Previously registered handler for `urivalue-changed` event
+   * @return {EventListener} Previously registered handler for `urivalue-changed` event
    */
   get onurivalue() {
     return this['_onurivalue-changed'];
   }
   /**
    * Registers a callback function for `urivalue-changed` event
-   * @param {Function} value A callback to register. Pass `null` or `undefined`
+   * @param {EventListener} value A callback to register. Pass `null` or `undefined`
    * to clear the listener.
    */
   set onurivalue(value) {
     this._registerCallback('urivalue-changed', value);
   }
   /**
-   * @return {Function} Previously registered handler for `queryvalue-changed` event
+   * @return {EventListener} Previously registered handler for `queryvalue-changed` event
    */
   get onqueryvalue() {
     return this['_onqueryvalue-changed'];
   }
   /**
    * Registers a callback function for `queryvalue-changed` event
-   * @param {Function} value A callback to register. Pass `null` or `undefined`
+   * @param {EventListener} value A callback to register. Pass `null` or `undefined`
    * to clear the listener.
    */
   set onqueryvalue(value) {
     this._registerCallback('queryvalue-changed', value);
   }
   /**
-   * @return {Function} Previously registered handler for `urimodel-changed` event
+   * @return {EventListener} Previously registered handler for `urimodel-changed` event
    */
   get onurimodel() {
     return this['_onurimodel-changed'];
   }
   /**
    * Registers a callback function for `urimodel-changed` event
-   * @param {Function} value A callback to register. Pass `null` or `undefined`
+   * @param {EventListener} value A callback to register. Pass `null` or `undefined`
    * to clear the listener.
    */
   set onurimodel(value) {
     this._registerCallback('urimodel-changed', value);
   }
   /**
-   * @return {Function} Previously registered handler for `querymodel-changed` event
+   * @return {EventListener} Previously registered handler for `querymodel-changed` event
    */
   get onquerymodel() {
     return this['_onquerymodel-changed'];
   }
   /**
    * Registers a callback function for `querymodel-changed` event
-   * @param {Function} value A callback to register. Pass `null` or `undefined`
+   * @param {EventListener} value A callback to register. Pass `null` or `undefined`
    * to clear the listener.
    */
   set onquerymodel(value) {
@@ -307,7 +320,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   /**
    * Registers an event handler for given type
    * @param {String} eventType Event type (name)
-   * @param {Function} value The handler to register
+   * @param {EventListener} value The handler to register
    */
   _registerCallback(eventType, value) {
     const key = `_on${eventType}`;
@@ -326,6 +339,13 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     super();
     this._queryParamChangeHandler = this._queryParamChangeHandler.bind(this);
     this._uriParamChangeHandler = this._uriParamChangeHandler.bind(this);
+
+    this.noDocs = false;
+    this.readOnly = false;
+    this.disabled = false;
+    this.compatibility = false;
+    this.outlined = false;
+    this.narrow = false;
   }
 
   _attachListeners(node) {
@@ -365,7 +385,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
    */
   _appyEventValues(detail, type) {
     const modelPath = `${type}Model`;
-    const model = this[modelPath];
+    const model = /** @type ModelItem[] */ (this[modelPath]);
     if (!model || !model.length) {
       return;
     }
@@ -378,13 +398,31 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     if (item.schema.enabled === false) {
       item.schema.enabled = true;
     }
-    this[modelPath] = [...this[modelPath]];
+    this[modelPath] = [...model];
+    this._notifyModelChange(type);
   }
+
+  /**
+   * Dispatches an event to inform that the uri/query model changed.
+   * @param {String} type `uri` or `query`
+   */
+  _notifyModelChange(type) {
+    const etype = `${type}model-changed`;
+    const modelPath = `${type}Model`;
+    const value = /** @type ModelItem[] */ (this[modelPath]);
+
+    this.dispatchEvent(new CustomEvent(etype, {
+      detail: {
+        value
+      }
+    }));
+  }
+
   /**
    * Computes boolean value if the argument exists and has items.
    *
-   * @param {Array} model Current url model.
-   * @param {Boolean} allowCustom
+   * @param {Array<any>} model Current url model.
+   * @param {Boolean=} allowCustom
    * @return {Boolean}
    */
   _computeHasData(model, allowCustom) {
@@ -415,10 +453,12 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     let validUrl = true;
     if (this._hasUriParameters) {
       const uriForm = this.shadowRoot.querySelector('#uriParametersForm');
+      // @ts-ignore
       validUri = uriForm ? uriForm.validate() : true;
     }
     if (this._hasQueryParameters) {
       const urlForm = this.shadowRoot.querySelector('#queryParametersForm');
+      // @ts-ignore
       validUrl = urlForm ? urlForm.validate() : true;
     }
     return validUri && validUrl;
@@ -435,7 +475,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     }
     const valuePath = `${type}Value`;
     const modelPath = `${type}Model`;
-    const model = this[modelPath];
+    const model = /** @type ModelItem[] */ (this[modelPath]);
 
     if (!model || !model.length) {
       this[valuePath] = undefined;
@@ -464,7 +504,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
   _formChange(type, detail) {
     const valuePath = `${type}Value`;
     const modelPath = `${type}Model`;
-    const model = this[modelPath];
+    const model = /** @type ModelItem[] */ (this[modelPath]);
     const values = this[valuePath] || {};
     const { property, index } = detail;
     switch (property) {
@@ -480,15 +520,16 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
     }
     this[valuePath] = Object.assign({}, values);
     this.__ignoreValueProcessing = true;
-    this[modelPath] = [...this[modelPath]];
+    this[modelPath] = /** @type ModelItem[] */ ([...model]);
     this.__ignoreValueProcessing = false;
     this._asyncValidate();
     this._notifyChange(type, model[index]);
+    this._notifyModelChange(type);
   }
 
   _updatePropertyEnabled(model, values, detail) {
     const { index, value } = detail;
-    const item = model[index];
+    const item = /** @type ModelItem */ (model[index]);
     if (value) {
       values[item.name] = item.value;
     } else {
@@ -505,18 +546,24 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
 
   _updatePropertyValue(values, model, detail) {
     const { index, value } = detail;
-    const item = model[index];
+    const item = /** @type ModelItem */ (model[index]);
     values[item.name] = value;
   }
 
-  _queryModelChange(e) {
-    this.queryModel = e.detail.value;
+  /**
+   * Handler for the query model change from the editor.
+   * @param {CustomEvent} e
+   */
+  _queryModelHandler(e) {
+    this.queryModel = /** @type ModelItem[] */ (e.detail.value);
     this._asyncValidate();
+    this._notifyModelChange('query');
   }
 
   async _asyncValidate() {
     await this.updateComplete;
     setTimeout(() => {
+      // @ts-ignore
       this.validate();
     });
   }
@@ -537,7 +584,7 @@ class ApiUrlParamsEditor extends ValidatableMixin(EventsTargetMixin(LitElement))
    * Dispatches uri/query-parameter-changed custom event when model property change.
    * @param {String} type Model type, `uri` or `query`
    * @param {Object} item Changed item
-   * @param {?Boolean} removed True if the item has been removed from the UI
+   * @param {Boolean=} removed True if the item has been removed from the UI
    */
   _notifyChange(type, item, removed) {
     let enabled = item.schema && item.schema.enabled;

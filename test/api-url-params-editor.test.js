@@ -5,7 +5,7 @@ import {
   html,
   aTimeout
 } from '@open-wc/testing';
-import * as sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon';
 import '../api-url-params-editor.js';
 
 describe('<api-url-params-editor>', function() {
@@ -44,15 +44,6 @@ describe('<api-url-params-editor>', function() {
       const model = [{ name: 'x', schema: {} }];
       element.queryModel = model;
       assert.deepEqual(spy.args[0][0], 'query');
-      assert.deepEqual(spy.args[0][1], model);
-    });
-
-    it('dispatches querymodel-changed', () => {
-      const spy = sinon.spy();
-      element.addEventListener('querymodel-changed', spy);
-      const model = [{ name: 'x', schema: {} }];
-      element.queryModel = model;
-      assert.deepEqual(spy.args[0][0].detail.value, model);
     });
   });
 
@@ -85,15 +76,6 @@ describe('<api-url-params-editor>', function() {
       const model = [{ name: 'x', schema: {} }];
       element.uriModel = model;
       assert.deepEqual(spy.args[0][0], 'uri');
-      assert.deepEqual(spy.args[0][1], model);
-    });
-
-    it('dispatches urimodel-changed', () => {
-      const spy = sinon.spy();
-      element.addEventListener('urimodel-changed', spy);
-      const model = [{ name: 'x', schema: {} }];
-      element.uriModel = model;
-      assert.deepEqual(spy.args[0][0].detail.value, model);
     });
   });
 
@@ -356,7 +338,7 @@ describe('<api-url-params-editor>', function() {
         schema: { enabled: true }
       }];
       await nextFrame();
-      await aTimeout();
+      await aTimeout(0);
 
       const result = element.validate();
       assert.isFalse(result);
@@ -681,7 +663,7 @@ describe('<api-url-params-editor>', function() {
         called = true;
       };
       element.onurimodel = f;
-      element.uriModel = [];
+      element._notifyModelChange('uri');
       element.onurimodel = null;
       assert.isTrue(called);
     });
@@ -697,7 +679,7 @@ describe('<api-url-params-editor>', function() {
       };
       element.onurimodel = f1;
       element.onurimodel = f2;
-      element.uriModel = [];
+      element._notifyModelChange('uri');
       element.onurimodel = null;
       assert.isFalse(called1);
       assert.isTrue(called2);
@@ -723,7 +705,7 @@ describe('<api-url-params-editor>', function() {
         called = true;
       };
       element.onquerymodel = f;
-      element.queryModel = [];
+      element._notifyModelChange('query');
       element.onquerymodel = null;
       assert.isTrue(called);
     });
@@ -739,7 +721,7 @@ describe('<api-url-params-editor>', function() {
       };
       element.onquerymodel = f1;
       element.onquerymodel = f2;
-      element.queryModel = [];
+      element._notifyModelChange('query');
       element.onquerymodel = null;
       assert.isFalse(called1);
       assert.isTrue(called2);
